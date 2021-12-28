@@ -20,12 +20,12 @@ what you need to do:
 
 1) Create a file called appSettings.json and save it to .\AocSolutions\
 2) Copy the following contents into that file:
-
+```
   {
-  "session": "<session_id>",
-  "advent_of_code_url": "https://adventofcode.com/{0}/day/{1}/input"
+     "session": "<session_id>",
+     "advent_of_code_url": "https://adventofcode.com/{0}/day/{1}/input"
   }
-  
+```  
 3) Visit https://adventofcode.com and sign in with your own account, or a github/FB/google account. 
 4) Once logged in, visit any event/day problem set, so as an example: https://adventofcode.com/2021/day/1/input
 5) The next steps may differ based on your browser, but right click on the page and select "Inspect"
