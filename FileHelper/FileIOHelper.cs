@@ -1,5 +1,8 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
+=======
+>>>>>>> 091f7d13c9f3f6df45d83e5973eb2568edd2e404
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
@@ -63,6 +66,7 @@ namespace AdventFileIO
             return Array.ConvertAll(File.ReadAllLines(file), int.Parse);
         }
 
+<<<<<<< HEAD
         public List<(string,string)> ReadDataAsTupleList(string file)
         {
             List<(string, string)> tupleList = new();
@@ -85,6 +89,8 @@ namespace AdventFileIO
             return tupleList;
         }
 
+=======
+>>>>>>> 091f7d13c9f3f6df45d83e5973eb2568edd2e404
 
         private void GetFileInputFromAOC(int year, int day, string saveFileLocation)
         {
