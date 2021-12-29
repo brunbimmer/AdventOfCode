@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
@@ -60,6 +61,28 @@ namespace AdventFileIO
         public int[] ReadDataToIntArray(string file)
         {
             return Array.ConvertAll(File.ReadAllLines(file), int.Parse);
+        }
+
+        public List<(string,string)> ReadDataAsTupleList(string file)
+        {
+            List<(string, string)> tupleList = new();
+            try
+            {
+                string[] lines = File.ReadAllLines(file);
+
+                foreach (string line in lines)
+                {
+                    string[] dataInput = line.Split(' ');
+
+                    tupleList.Add((dataInput[0], dataInput[1]));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return tupleList;
         }
 
 
