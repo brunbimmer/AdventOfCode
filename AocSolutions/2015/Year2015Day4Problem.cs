@@ -38,8 +38,8 @@ namespace AdventOfCode
 
             //no need to retrieve input from AOC. The input is a simple string
 
-            string md5Test1 = "abcdef";
-            string md5Test2 = "pqrstuv";
+            //string md5Test1 = "abcdef";
+            //string md5Test2 = "pqrstuv";
 
             string md5Secret = "bgvyzdsv";
 
