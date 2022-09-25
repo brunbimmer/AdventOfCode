@@ -32,3 +32,6 @@ what you need to do:
 6) Go to the network tab, and reload the page.
 7) Go to the section which will display your "Request Headers" and look for the "cookie" header. Within that header,
    you should see a "session" variable. Copy this variable and replace the "<session_id" token above.
+
+
+More info to follow.
