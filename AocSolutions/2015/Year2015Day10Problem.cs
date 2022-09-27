@@ -11,8 +11,8 @@ using CommonAlgorithms;
 
 namespace AdventOfCode
 {
-    [AdventOfCode(Year = 2015, Day = 8)]
-    public class Year2015Day8Problem : IAdventOfCode
+    [AdventOfCode(Year = 2015, Day = 10)]
+    public class Year2015Day10Problem : IAdventOfCode
     {
         private int _Year;
         private int _Day;
@@ -20,9 +20,8 @@ namespace AdventOfCode
 
         public Stopwatch SW { get; set; }
 
-
-
-        public Year2015Day8Problem()
+        
+        public Year2015Day10Problem()
         {
             //Get Attributes
             AdventOfCodeAttribute ca = (AdventOfCodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(AdventOfCodeAttribute));
@@ -40,36 +39,38 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //no need to retrieve input from AOC. The input is a simple string
-            string filename = _OverrideFile ?? path;
+            //simple input, file access not required
 
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            var words = FileIOHelper.getInstance().ReadDataAsLines(file);
-
-         
             if (trackTime) SW.Start();
-          
-            
-            //simple regular expression replacements will accurately and conveniently provide expected results.
-            int value = words.Sum(w => w.Length - Regex.Replace(w.Trim('"').Replace("\\\"", "A").Replace("\\\\", "B"), "\\\\x[a-f0-9]{2}", "C").Length);
 
+            string sequence = "3113322113";
+                
+            foreach (int i in Enumerable.Range(1, 40))
+            {
+                sequence = LookAndSay(sequence);
+            }
+                           
 
-            if (trackTime) SW.Stop();
+            if (trackTime) SW.Stop();            
 
-            Console.WriteLine("  Part 1: Difference between string literals and # of actual characters: {0}", value);
+            Console.WriteLine("  Part 1: When applying the Look And Say Sequence 40 times, the length of the final number is: {0}", sequence.Length);
             if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
             if (trackTime) SW.Reset();
             if (trackTime) SW.Start();
 
+            sequence = "3113322113";
 
-            //simple regular expressions to simulate encoding without performing the actual encoding.
+            foreach (int i in Enumerable.Range(1, 50))
+            {
+                sequence = LookAndSay(sequence);
+            }
 
-            int newValue = words.Sum(w => w.Replace("\\", "AA").Replace("\"", "BB").Length + 2 - w.Length);
+            if (trackTime) SW.Stop();
 
-            Console.WriteLine("  Part 2: Difference between encoded strings and original # of string literals: {0}", newValue);
+            Console.WriteLine("  Part 1: When applying the Look And Say Sequence 50 times, the length of the final number is: {0}", sequence.Length);
             if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            
 
             Console.WriteLine("");
             Console.WriteLine("===========================================");
@@ -77,5 +78,30 @@ namespace AdventOfCode
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }
+
+        private string LookAndSay(string input)
+        {
+            StringBuilder result = new StringBuilder();
+
+            char repeat = input[0];
+            input = input.Substring(1, input.Length-1)+" ";
+            int times = 1;
+      
+            foreach (char actual in input)
+            {
+                if (actual != repeat)
+                {
+                    result.Append(Convert.ToString(times)+repeat);
+                    times = 1;
+                    repeat = actual;
+                }
+                else
+                {
+                    times += 1;
+                }
+            }
+            return result.ToString();
+        }
+
     }
 }

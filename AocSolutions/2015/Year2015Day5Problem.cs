@@ -37,8 +37,6 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //no need to retrieve input from AOC. The input is a simple string
-
             string filename = _OverrideFile ?? path;
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
