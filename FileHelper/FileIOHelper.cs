@@ -63,6 +63,11 @@ namespace AdventFileIO
             return Array.ConvertAll(File.ReadAllLines(file), int.Parse);
         }
 
+        public long[] ReadDataToLongArray(string file)
+        {
+            return Array.ConvertAll(File.ReadAllLines(file), long.Parse);
+        }
+
         public List<(string,string)> ReadDataAsTupleList(string file)
         {
             List<(string, string)> tupleList = new();
