@@ -16,7 +16,7 @@ namespace PuzzleMain
     {
         private static Dictionary<int, KeyValuePair<AdventOfCodeAttribute, IAdventOfCode>> SolutionCache;
 
-        static int tableWidth = 140;
+        static int tableWidth = 136;
         static void Main(string[] args)
         {
             try
@@ -68,7 +68,7 @@ namespace PuzzleMain
             }
 
             Console.WriteLine("ADVENT OF CODE (December Christmas Puzzles)");
-            Console.WriteLine("For description of Daily puzzles, please visit ==> https://adventofcode.com/2015/events");
+            Console.WriteLine("For description of Daily puzzles, please visit ==> https://adventofcode.com/");
             PrintLine();
             PrintRow(yearsToPrint.ToArray());
             PrintLine();

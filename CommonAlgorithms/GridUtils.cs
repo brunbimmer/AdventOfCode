@@ -12,7 +12,7 @@ namespace Common
         public int Magnitude() => Math.Abs(X) + Math.Abs(Y);
         public Coordinate2D Vector(Coordinate2D other) => new(other.X - X, other.Y - Y);
 
-        public List<Coordinate2D> NeighboursIncludingSelf(bool diagonals, bool self)
+        public List<Coordinate2D> Neighbours(bool diagonals, bool self)
         {
             var tmp = new List<Coordinate2D>();
 
@@ -27,6 +27,14 @@ namespace Common
             if (diagonals) tmp.Add(new Coordinate2D(X + 1, Y + 1));     //bottom right            
             return tmp;
         }
+    }
+
+    public record Coordinate3D(int X, int Y, int Z)
+    {
+        public int ManhattenDistance(Coordinate3D other) => (int)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y) + Math.Abs(Z - other.Z));
+        public int Magnitude() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
+        public Coordinate3D Vector(Coordinate3D other) => new(other.X - X, other.Y - Y, other.Z - Z);
+        public Coordinate3D Translate(Coordinate3D translation) => new(X + translation.X, Y + translation.Y, Z + translation.Z);
     }
 
 }

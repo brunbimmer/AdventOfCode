@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace AdventFileIO
@@ -66,6 +67,23 @@ namespace AdventFileIO
         public long[] ReadDataToLongArray(string file)
         {
             return Array.ConvertAll(File.ReadAllLines(file), long.Parse);
+        }
+
+        public Dictionary<(int, int), int> GetDataAsMap(string file)
+        {
+            Dictionary<(int, int), int> grid = new Dictionary<(int, int), int>();
+
+            //read in the
+            string[] lines = ReadDataAsLines(file);
+
+            //Read the data
+            var mapData = lines.Select(x => x.ToArray()).ToArray();
+
+            for (int x = 0; x < mapData.Length; x++)
+                for (int y = 0; y < mapData[x].Length; y++)
+                    grid.Add((x, y), int.Parse(mapData[x][y].ToString()));
+
+            return grid;
         }
 
         public List<(string,string)> ReadDataAsTupleList(string file)
