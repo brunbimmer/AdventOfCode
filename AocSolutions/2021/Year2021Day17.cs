@@ -47,29 +47,26 @@ namespace AdventOfCode
             
             (x1, x2, y1, y2) = ReadTargetCoordinates(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             int yMax = CalculateParabolicVertex(y1);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Highest Y position is {0}", yMax);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             int nHits = CalculateInitialVelocityValuesOptimized(x1, x2, y1, y2);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Number of distinct initial velocity values that cause probe to hit target area: {0}", nHits);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

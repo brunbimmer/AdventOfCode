@@ -45,19 +45,16 @@ namespace AdventOfCode
 
             string[] _Instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }              

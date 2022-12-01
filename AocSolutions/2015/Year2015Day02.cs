@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             //Part 1
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             int wrappingPaperArea = 0;
             int ribbonLength = 0;
@@ -63,14 +63,12 @@ namespace AdventOfCode
                 ribbonLength += (2 * extra[0] + 2 * extra[1]) + l * w * h;
             }
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Required wrapping paper: {0}", wrappingPaperArea);
             Console.WriteLine("  Part 2: Total Ribben Length: {0}", ribbonLength);
-            if (trackTime) Console.WriteLine("   Execution Time: {0} ms", SW.ElapsedMilliseconds);
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("   Execution Time: {0} ms", SW.ElapsedMilliseconds);
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

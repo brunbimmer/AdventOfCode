@@ -42,33 +42,30 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             List<(int, int)> graphMap;
             List<string> instructions;
             (graphMap, instructions) = BuildInstructionMap(lines);
             List<(int, int)> graphMapPart1 = TransformGraphMap(graphMap, instructions, 1);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Number of Points after First Fold: {0}", graphMapPart1.Count);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             List<(int, int)> graphMapFinal = TransformGraphMap(graphMap, instructions, instructions.Count);
             string code = BuildCode(graphMapFinal.OrderBy(x => x.Item2).ToList());
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
              Console.WriteLine("Part 2: The code\n\n{0}", code);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

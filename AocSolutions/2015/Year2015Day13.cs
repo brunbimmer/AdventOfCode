@@ -49,7 +49,7 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);         
-            if (trackTime) SW.Start();
+            SW.Start();
           
             foreach (string line in input)
                 AddToMap(line);
@@ -59,19 +59,17 @@ namespace AdventOfCode
             (shortestRoute, longestRoute) = ProcessDistancePermutations();
 
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Shortest route: {0}", shortestRoute);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
             Console.WriteLine("  Part 2: Longest route: {0}", longestRoute);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
             
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

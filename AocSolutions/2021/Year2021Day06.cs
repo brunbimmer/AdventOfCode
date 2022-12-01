@@ -47,28 +47,25 @@ namespace AdventOfCode
 
             long[] fishInput = Array.ConvertAll(input.Split(','), s => long.Parse(s));
 
-            if (trackTime) SW.Start();            
+            SW.Start();            
             long fish = CountFish(fishInput, 80);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Number of Fish after 50 days: {0}", fish);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             long fish2 = CountFish(fishInput, 256);           
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Number of Fish after 256 days: {0}", fish2);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }        

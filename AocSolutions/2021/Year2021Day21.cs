@@ -51,20 +51,19 @@ namespace AdventOfCode
             rolls = 0;
             scores = new();
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             scores.Add(1, (6, 0));      //Player 1 (Position 7, Score: 0), but make position 0-based and adjust.
             scores.Add(2, (0, 0));      //Player 2 (Position 1, Score: 0), but make position 0-based and adjust.
 
             long lowestScore = Part1();
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Lowest Score: {0}", lowestScore);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             //actual Data
             int player1Loc = 7;
@@ -74,15 +73,13 @@ namespace AdventOfCode
 
             long maxWins = result.Max(x => x.Value);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Number of Universes in which the winning player won: {0}", maxWins);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

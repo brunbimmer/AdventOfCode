@@ -44,26 +44,23 @@ namespace AdventOfCode
             string md5Secret = "bgvyzdsv";
 
             //Build BasePath and retrieve input. 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             int lowestNumber = Part1(md5Secret);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with five leading zero's: {1}", md5Secret, lowestNumber);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             lowestNumber = Part2(md5Secret);
 
             Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with six leading zero's: {1}", md5Secret, lowestNumber);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

@@ -44,34 +44,31 @@ namespace AdventOfCode
 
             Dictionary<(int, int), int> caveMap = FileIOHelper.getInstance().GetDataAsMap(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             var pathPart1 = MapLowestPathScoreAStar(caveMap, ( 0, 0), (caveMap.Keys.Max(x => x.Item1), caveMap.Keys.Max(x => x.Item2)));
             int pathScore1 = pathPart1.Skip(1).Sum(x => caveMap[x]);
 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Lowest Total Risk from top left to bottom right: {0}", pathScore1);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             GrowMap(caveMap);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             var pathPart2 = MapLowestPathScoreAStar(caveMap, ( 0, 0), (caveMap.Keys.Max(x => x.Item1), caveMap.Keys.Max(x => x.Item2)));
             int pathScore2 = pathPart2.Skip(1).Sum(x => caveMap[x]);
 
             Console.WriteLine("Part 2: Lowest Total Risk from top left to bottom right in larger map: {0}", pathScore2);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

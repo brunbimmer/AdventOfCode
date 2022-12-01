@@ -45,22 +45,20 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();        
+            SW.Start();        
             
             int totalDigits, sumSequences = 0;
 
             (totalDigits, sumSequences) = DecodeSequences(input);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Sequence of Easy Decipherable Digits: {0}", totalDigits);
             Console.WriteLine("Part 2: Sum of Output Values: {0}", sumSequences);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }        

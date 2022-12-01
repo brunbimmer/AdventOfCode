@@ -45,31 +45,28 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             var graph = BuildGraphMap(lines);
             int paths = CountPaths(graph, "start", "end", new HashSet<string> { "start" });
 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Number of Paths through cave system Part 1: {0}", paths);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             int pathsPart2 = CountSmallCavesVisitTwice(graph, "start", "end", new Dictionary<string, int> { ["start"] = 1 });
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Number of Paths through cave system Part 2: {0}", pathsPart2);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

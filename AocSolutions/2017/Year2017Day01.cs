@@ -43,27 +43,24 @@ namespace AdventOfCode
 
             int[] measurements = FileIOHelper.getInstance().ReadDataToIntArray(file);
             
-            if (trackTime) SW.Start();
+            SW.Start();
             int increases = Part1(measurements);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
 
 
             Console.WriteLine("  Part 1: Number of increases (Actual Measurements): {0}", increases);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             increases = Part2(measurements);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

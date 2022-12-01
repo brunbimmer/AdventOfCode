@@ -48,32 +48,29 @@ namespace AdventOfCode
             int magnitude = 0;
             string finalString = "";
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             (magnitude, finalString) = Part1(snailFish);
 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1 - Magnitude of addition problem: ");
             Console.WriteLine("    Solution Answer: {0}", finalString);
             Console.WriteLine("    Final Magnitude: {0}", magnitude);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
            int magnitudeMax = Part2(snailFish);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Max Magnitude from Permutations: {0}", magnitudeMax);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }    

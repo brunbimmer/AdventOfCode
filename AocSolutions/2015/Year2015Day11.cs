@@ -41,34 +41,31 @@ namespace AdventOfCode
 
             //simple input, file access not required
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             string currentPassword = "cqjxjnds";
 
             string nextPassword = GenerateNewPassword(currentPassword);
                           
 
-            if (trackTime) SW.Stop();            
+            SW.Stop();            
 
             Console.WriteLine("  Part 1: The next password after [{0}]: {1}", currentPassword, nextPassword);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             currentPassword = nextPassword;
 
             nextPassword = GenerateNewPassword(currentPassword);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 2: The next password after [{0}]: {1}", currentPassword, nextPassword);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

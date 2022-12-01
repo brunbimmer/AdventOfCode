@@ -62,29 +62,26 @@ namespace AdventOfCode
 
             ReadFile(file);
 
-            if (trackTime) SW.Start();
+            SW.Start();
             
             ParseInputForOverlappingPoints(true);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Number of overlapping points for horizontal and vertical lines: {0}", OverlappingPoints);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             ParseInputForOverlappingPoints();
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Number of overlapping points for horizontal/vertical and diagonal lines: {0}", OverlappingPoints);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

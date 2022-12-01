@@ -46,18 +46,17 @@ namespace AdventOfCode
 
             //Part 1
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             int countUp = CommonAlgorithms.StringUtils.CountCharacters(line, '(');
             int countDown = CommonAlgorithms.StringUtils.CountCharacters(line, ')');
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: What floor is Santa on: {0}", countUp - countDown);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             //Part 2
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
             SW.Start();
 
             int floor = 0;
@@ -73,13 +72,11 @@ namespace AdventOfCode
 
                 pos++;
             }
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 2: Position of character when Santa enters basement: {0}", pos);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("\n===========================================\n");
         }
     }
 }

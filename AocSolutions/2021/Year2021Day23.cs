@@ -69,18 +69,17 @@ namespace AdventOfCode
             string input = FileIOHelper.getInstance().ReadDataAsString(file);
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
 
             int cost = CalculateEnergyCost(input);      //input in 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Energy Cost to organize the amphipods (depth 2): {0}", cost);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             //add the two new lines
 
@@ -96,15 +95,13 @@ namespace AdventOfCode
            
             cost = CalculateEnergyCost(newInput.ToString());            
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Energy Cost to organize the amphipods (depth 4): {0}", cost);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

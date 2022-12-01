@@ -51,20 +51,18 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             InitializeDataSet(file);
 
             int steps = Part1();
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("SeaCucumbers stop moving at Step #:  {0}", steps);     
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

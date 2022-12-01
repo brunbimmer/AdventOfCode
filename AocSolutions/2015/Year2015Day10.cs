@@ -41,7 +41,7 @@ namespace AdventOfCode
 
             //simple input, file access not required
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             string sequence = "3113322113";
                 
@@ -51,13 +51,12 @@ namespace AdventOfCode
             }
                            
 
-            if (trackTime) SW.Stop();            
+            SW.Stop();            
 
             Console.WriteLine("  Part 1: When applying the Look And Say Sequence 40 times, the length of the final number is: {0}", sequence.Length);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             sequence = "3113322113";
 
@@ -66,15 +65,13 @@ namespace AdventOfCode
                 sequence = LookAndSay(sequence);
             }
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: When applying the Look And Say Sequence 50 times, the length of the final number is: {0}", sequence.Length);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

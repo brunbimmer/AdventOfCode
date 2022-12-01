@@ -44,33 +44,29 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
            
-            if (trackTime) SW.Start();
+            SW.Start();
             
             ParseInput(lines);
 
             int maxElfSum = calorieCollection.Max(x => x.Sum());
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Total calories carried by an elf: {0}", maxElfSum);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             
-            if (trackTime) SW.Reset();
-
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             var orderedSumList = calorieCollection.OrderByDescending(x => x.Sum()).ToList().Take(3).ToList();
 
             int topThreeElfSum = orderedSumList.Sum(x => x.Sum());
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Total calories carried by three elves: {0}", topThreeElfSum);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

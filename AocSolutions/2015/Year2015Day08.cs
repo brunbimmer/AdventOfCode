@@ -48,20 +48,19 @@ namespace AdventOfCode
             var words = FileIOHelper.getInstance().ReadDataAsLines(file);
 
          
-            if (trackTime) SW.Start();
+            SW.Start();
           
             
             //simple regular expression replacements will accurately and conveniently provide expected results.
             int value = words.Sum(w => w.Length - Regex.Replace(w.Trim('"').Replace("\\\"", "A").Replace("\\\\", "B"), "\\\\x[a-f0-9]{2}", "C").Length);
 
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Difference between string literals and # of actual characters: {0}", value);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
 
             //simple regular expressions to simulate encoding without performing the actual encoding.
@@ -69,11 +68,9 @@ namespace AdventOfCode
             int newValue = words.Sum(w => w.Replace("\\", "AA").Replace("\"", "BB").Length + 2 - w.Length);
 
             Console.WriteLine("  Part 2: Difference between encoded strings and original # of string literals: {0}", newValue);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

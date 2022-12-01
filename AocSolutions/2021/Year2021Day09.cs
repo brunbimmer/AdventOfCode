@@ -48,30 +48,27 @@ namespace AdventOfCode
             List<(int,int)> lowDataPoints = new List<(int,int)>();
             List<int> basins = new List<int>();
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
             lowDataPoints = GetLowPoints(caveData);                            
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Sum of Risk Levels of Low Points: {0}", lowDataPoints.Select(lp => caveData[lp] + 1).Sum());
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             basins = GetBasins(caveData, lowDataPoints);
 
             //Take the largest 3 datapoints only to calculate the required result set.
             var maxDataPoints = basins.OrderByDescending(x => x).Take(3).ToArray();
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Largest Three Basins Multiplied: {0}", maxDataPoints[0] * maxDataPoints[1] * maxDataPoints[2]);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }        

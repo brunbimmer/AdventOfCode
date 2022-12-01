@@ -46,28 +46,25 @@ namespace AdventOfCode
             Dictionary<Coordinate2D, int> grid = new Dictionary<Coordinate2D, int>();
 
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             int lightsOn = Part1(lines, grid);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: The number of lights that are turned on after Santa's instruction: {0}", lightsOn);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             grid.Clear();
 
             long brightness = Part2(lines, grid);
 
             Console.WriteLine("  Part 2: Total brightness of lights as per Santa's instructions: {0}", brightness);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

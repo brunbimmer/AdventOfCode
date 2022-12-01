@@ -53,7 +53,7 @@ namespace AdventOfCode
 
             var input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             //took some time to visually review the operations. Operation order is similar for all digit locations
             //with only minor, minor differences with the operands. Extract the operations that are unique per
@@ -76,15 +76,13 @@ namespace AdventOfCode
             string largestNumber = ValidModelNumbers.Last();        //Part 1
             string smallestNumber = ValidModelNumbers.First();      //Part 2
            
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Largest Model Number accepted by Monad:  {0}", largestNumber);
             Console.WriteLine("Smallest Model Number accepted by Monad: {0}", smallestNumber);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       

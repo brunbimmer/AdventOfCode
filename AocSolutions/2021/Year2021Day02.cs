@@ -45,27 +45,24 @@ namespace AdventOfCode
 
             int distanceX, distanceY;
 
-            if (trackTime) SW.Start();
+            SW.Start();
             (distanceX, distanceY) = Part1(directions);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
 
 
             Console.WriteLine("  Part 1: Final Horizontal Position ({0}) * Final Depth ({1}): {2}", distanceX, distanceY, distanceX * distanceY);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             (distanceX, distanceY) = Part2(directions);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Final Horizontal Position ({0}) * Final Depth ({1}): {2}", distanceX, distanceY, distanceX * distanceY);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

@@ -50,17 +50,16 @@ namespace AdventOfCode
             instructionSet = BuildInstructions(lines);
             cachedValues = new Dictionary<string, int>();
 
-            if (trackTime) SW.Start();
+            SW.Start();
           
             int value = RunSimulation();
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Signal that is sent to Wire A: {0}", value);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             cachedValues.Clear();
 
@@ -70,11 +69,9 @@ namespace AdventOfCode
             int newValue = RunSimulation();
 
             Console.WriteLine("  Part 2: Update signal B to {0}. New value at Wire A: {1}", value, newValue);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

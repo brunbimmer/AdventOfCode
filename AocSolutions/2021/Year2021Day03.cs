@@ -51,28 +51,25 @@ namespace AdventOfCode
                 binaryInputStream.Add(inputLine);
             }
 
-            if (trackTime) SW.Start();
+            SW.Start();
             int powerOutput = Part1(binaryInputStream);
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Power Output: {0}", powerOutput);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             int lifeSupport = Part2(binaryInputStream);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 2: Life Support Rating Output: {0}", lifeSupport);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

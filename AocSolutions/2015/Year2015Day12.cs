@@ -48,31 +48,28 @@ namespace AdventOfCode
 
             string content = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             long[] numbersOnly = Regex.Matches(content, "(-?[0-9]+)").OfType<Match>().Select(m => long.Parse(m.Value)).ToArray();
                          
 
-            if (trackTime) SW.Stop();            
+            SW.Stop();            
 
             Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence is: {0}", numbersOnly.Sum());
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             long sum = Part2Algorithm(content);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence with RED removed is: {0}", sum);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

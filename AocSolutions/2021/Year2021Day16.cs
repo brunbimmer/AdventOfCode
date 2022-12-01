@@ -66,19 +66,17 @@ namespace AdventOfCode
 
             string transmission = FileIOHelper.getInstance().ReadDataAsString(file).Trim();
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             var OuterPacket = ParseStream(transmission);  
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Sum of all the Version Numbers: {0}", OuterPacket.VersionSum);
             Console.WriteLine("Part 1: Final Value: {0}", OuterPacket.Value);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }      

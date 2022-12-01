@@ -52,17 +52,16 @@ namespace AdventOfCode
             int centerOfMass = GetCenterOfMass(crabPositions);
             double fuelCost = 0;
 
-            if (trackTime) SW.Start();            
+            SW.Start();            
 
             fuelCost = GetFuelCost(median, crabPositions, true); 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Fuel Cost - Part 1 (Median: {0}): {1}", centerOfMass, fuelCost);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             fuelCost = GetFuelCost(average, crabPositions, false);
 
@@ -72,16 +71,14 @@ namespace AdventOfCode
 
             Console.WriteLine("Fuel Cost - Part 2 (Center of Mass: {0}): {1}", centerOfMass, fuelCost);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
             Console.WriteLine("");
             Console.WriteLine("I am showing two possible fuel cost answers to the Part 2. One using average and another using center of mass.");
             Console.WriteLine("One of these options will result in the lower fuel cost. I am displaying both for comparision purposes.");
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }        

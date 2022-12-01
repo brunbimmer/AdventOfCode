@@ -43,26 +43,23 @@ namespace AdventOfCode
 
             string elfDirections = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            if (trackTime) SW.Start();
+            SW.Start();
 
             int housesVisited = Part1(elfDirections);
 
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("  Part 1: Number of houses visited by Santa Prime: {0}", housesVisited);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             housesVisited = Part2(elfDirections);
 
             Console.WriteLine("  Part 2: Number of houses visited by twin Santa's: {0}", housesVisited);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }

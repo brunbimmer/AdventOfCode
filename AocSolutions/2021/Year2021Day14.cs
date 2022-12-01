@@ -45,7 +45,7 @@ namespace AdventOfCode
             Dictionary<string, long> polymerTemplate;
             List<(string, string)> rules;
 
-            if (trackTime) SW.Start();                       
+            SW.Start();                       
 
             string originalPolymer = "";
             (polymerTemplate, rules) = ReadData(file, ref originalPolymer);
@@ -53,25 +53,22 @@ namespace AdventOfCode
             long part1 = GrowPolymer(polymerTemplate, rules, 10, originalPolymer);
 
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Difference between most common and least common element after 10 steps: {0}", part1);
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            if (trackTime) SW.Reset();
-            if (trackTime) SW.Start();
+            SW.Restart();
 
             long part2 = GrowPolymer(polymerTemplate, rules, 40, originalPolymer);
             
-            if (trackTime) SW.Stop();
+            SW.Stop();
 
             Console.WriteLine("Part 1: Difference between most common and least common element after 40 steps: {0}", part2);
 
-            if (trackTime) Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("");
-            Console.WriteLine("===========================================");
-            Console.WriteLine("");
+            Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       
