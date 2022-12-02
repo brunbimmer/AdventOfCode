@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 using CommonAlgorithms;
+using Microsoft.VisualBasic;
 
 namespace AdventOfCode
 {
@@ -23,6 +25,14 @@ namespace AdventOfCode
         
         private Dictionary<Tuple<string, string>, int> locations = new Dictionary<Tuple<string, string>, int>();
         private List<string> allTowns = new List<string>();
+
+        struct Guest
+        {
+            public string person;
+            public string nextTo;
+            public int gain;
+            public int lose;
+        }
 
         public Year2015Day13Problem()
         {
@@ -42,31 +52,31 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
- 
-
-            //
+             
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);         
+            string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);         
             SW.Start();
           
-            foreach (string line in input)
-                AddToMap(line);
-            
-            long shortestRoute, longestRoute;
-                
-            (shortestRoute, longestRoute) = ProcessDistancePermutations();
+            List<Guest> guests = ParseSeatingChart(instructions);
 
+            List<string> persons = guests.Select(s => s.person).GroupBy(s => s).Select(s => s.Key).ToList();
+            int totalChange = GetSittingHappiness(guests, persons);
 
             SW.Stop();
 
-            Console.WriteLine("  Part 1: Shortest route: {0}", shortestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("  Part 1: Total Change of Happiness for optimal seating: {0}, Execution Time: {1}", totalChange, StopwatchUtil.getInstance().GetTimestamp(SW));
+            
+            SW.Restart();
+                       
+            AddMe(guests, persons);
+            persons.Add("Me");
+            int newTotalChange = GetSittingHappiness(guests, persons);
 
-            Console.WriteLine("  Part 2: Longest route: {0}", longestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
-
+            SW.Stop();
+            
+            Console.WriteLine("  Part 2: Total Change of Happiness for optimal seating with me: {0}, Execution Time: {1}", newTotalChange, StopwatchUtil.getInstance().GetTimestamp(SW));
             
 
             Console.WriteLine("\n===========================================\n");
@@ -74,47 +84,75 @@ namespace AdventOfCode
             Console.ReadLine();
         }
 
-        private void AddToMap(string line)
+       
+        List<Guest> ParseSeatingChart(string[] instructions)
         {
-            string[] sides = line.Split(new []{" = "}, StringSplitOptions.None);
+            List<Guest> guests = new List<Guest>();
 
-            string lhs = sides[0];
-            
-            int rhs = Int16.Parse(sides[1]);
-            
-            string[] towns = lhs.Split(new[] { " to " }, StringSplitOptions.None);
+            foreach (string line in instructions)
+            {
+                var data = line.Split(' ');
+                Guest guest = new();
 
-            locations[new Tuple<string, string>(towns[0], towns[1])] = rhs;
-            
-            locations[new Tuple<string, string>(towns[1], towns[0])] = rhs;
+                guest.person = data[0];
+                guest.nextTo = data[10].Replace(".", "");
+                
+                if (data[2] == "gain")
+                    guest.gain = Convert.ToInt32(data[3]);
+                else
+                    guest.lose = Convert.ToInt32(data[3]);
+                
+                guests.Add(guest);
+            }
 
-            if (!allTowns.Contains(towns[0]))
-                allTowns.Add(towns[0]);
-
-            if (!allTowns.Contains(towns[1]))
-                allTowns.Add(towns[1]);
-
+            return guests;
         }
 
-        private (long, long) ProcessDistancePermutations()
+        private void AddMe(List<Guest> guests, List<String> persons)
         {
-            long minTripLength = long.MaxValue;
-            long maxTripLength = 0;
-
-            List<List<string>> allPermutations = BuildPermutations(allTowns);
-            
-            foreach (List<string> thisPermutation in allPermutations)
+            foreach (string person in persons)
             {
-                long tripLength = 0;
-                for (int i = 0; i < thisPermutation.Count - 1; i++)
-                    tripLength += locations[new Tuple<string, string>(thisPermutation[i], thisPermutation[i + 1])];
-
-                minTripLength = Math.Min(tripLength, minTripLength);
-                maxTripLength = Math.Max(tripLength, maxTripLength);
+                Guest guest = new Guest();
+                guest.person = person;
+                guest.nextTo = "Me";
+                guests.Add(guest);
+                guest = new Guest();
+                guest.person = "Me";
+                guest.nextTo = person;
+                guests.Add(guest);
             }
-            //Console.WriteLine("Max: {0}", maxTripLength);
+        }
+        
+        
+        private int GetSittingHappiness(List<Guest> guests, List<string> persons)
+        {
+            var sittingsPerms = BuildPermutations(persons);
+            var sittingsValues = new Dictionary<string, int>();
 
-            return (minTripLength, maxTripLength);
+            foreach (List<string> perm in sittingsPerms)
+            {
+                int happiness = 0;
+                Guest sitting;
+                perm.Add(perm[0]);
+                for (int i = 0; i < perm.Count - 1; i++)
+                {
+                    if (guests.Any(s => s.person == perm[i] && s.nextTo == perm[i + 1]))
+                    {
+                        sitting = guests.First(s => s.person == perm[i] && s.nextTo == perm[i + 1]);
+                        happiness += sitting.gain - sitting.lose;
+                    }
+                    if (guests.Any(s => s.person == perm[i + 1] && s.nextTo == perm[i]))
+                    {
+                        sitting = guests.First(s => s.person == perm[i + 1] && s.nextTo == perm[i]);
+                        happiness += sitting.gain - sitting.lose;
+                    }
+                }
+                if (happiness > 0)
+                    sittingsValues.Add(String.Join("->", perm), happiness);
+            }
+            var happiestSitting = sittingsValues.OrderByDescending(v => v.Value).First();
+         
+            return happiestSitting.Value;
         }
 
         public List<List<string>> BuildPermutations(List<string> items)

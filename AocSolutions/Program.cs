@@ -56,8 +56,6 @@ namespace PuzzleMain
         private static void DisplayInitScreen()
         {
 
-            //var years = SolutionCache.Values.GroupBy(x => x.Key.Year).Select(x => x.Key.Year).ToArray();
-
             var years = SolutionCache.Values.Select(x => x.Key.Year).Distinct().ToList();
 
             List<string> yearsToPrint = new List<string>();

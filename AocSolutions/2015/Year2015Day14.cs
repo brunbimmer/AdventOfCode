@@ -20,6 +20,24 @@ namespace AdventOfCode
 
         public Stopwatch SW { get; set; }
 
+        private class ReinderStat
+        {
+            public string name;
+            public int speed;
+            public int flyingTime;
+            public int restTime;
+            public int distancePart1;
+            public int totalPoints;
+
+            public int GetDistance(int time)
+            {
+                return (flyingTime * (time / (flyingTime + restTime)) 
+                                        + Math.Min(flyingTime, time % (flyingTime + restTime))) * speed;
+
+            }
+        }
+
+
         public Year2015Day14()
         {
             //Get Attributes
@@ -43,28 +61,79 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             SW.Start();                       
 
+            List<ReinderStat> stats = ParseReinderStats(instructions);
 
+            RunSimulation1(stats);
 
+            int reinderMaxDistance = stats.Max(x => x.distancePart1);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Distance winning deer travelled {0}, Execution Time: {1}", reinderMaxDistance, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
+            int reinderMaxPoints = RunSimulation2(stats);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Points winning deer is {0}, Execution Time: {1}", reinderMaxPoints, StopwatchUtil.getInstance().GetTimestamp(SW));
+
 
             Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       
+
+        List<ReinderStat> ParseReinderStats(string[] instructions)
+        {
+            List<ReinderStat> stats = new List<ReinderStat>();
+
+            foreach (string line in instructions)
+            {
+                var data = line.Split(' ');
+                ReinderStat stat = new();
+
+                stat.name = data[0];
+                stat.speed = Convert.ToInt32(data[3]);
+                stat.flyingTime = Convert.ToInt32(data[6]);
+                stat.restTime = Convert.ToInt32(data[13]);
+                               
+                stats.Add(stat);
+            }
+
+            return stats;
+        }
+
+        private void RunSimulation1(List<ReinderStat> stats)
+        {
+            int totalTime = 2503;
+
+            stats.ForEach(stat =>
+            {
+                stat.distancePart1 = stat.GetDistance(totalTime);
+            });
+        }
+
+        private int RunSimulation2(List<ReinderStat> stats)
+        {
+            var points = new Dictionary<string, int>(stats.Count);
+            stats.ToList().ForEach(r => points[r.name] = 0);
+
+            int totalTime = 2503;
+
+            for(int t = 1; t <= totalTime; t++)
+            {
+                var maxDistance = stats.Select (r => r.GetDistance(t)).Max();
+
+                stats.Where(r => r.GetDistance(t) == maxDistance).ToList().ForEach(r => points[r.name]++);
+            }
+
+            return points.Values.Max();
+        }
     }
 }
