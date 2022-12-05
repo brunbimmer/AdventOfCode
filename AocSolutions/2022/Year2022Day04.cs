@@ -45,7 +45,7 @@ namespace AdventOfCode
 
             List<string> input = FileIOHelper.getInstance().ReadDataAsLines(file).ToList();
 
-            SW.Restart();                       
+            SW.Start();                       
 
             int inclusivePairs, overlapPairs;
 
