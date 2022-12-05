@@ -43,28 +43,102 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             SW.Start();                       
 
-
-
+            int totalScore = 0;            
+            foreach (string instruction in instructions)
+            {
+                string[] play = instruction.Split(" ");
+                totalScore += PlayRound1(play);
+            }
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Total Score for all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
+            totalScore = 0;
 
-           
+            foreach (string instruction in instructions)
+            {
+                string[] play = instruction.Split(" ");
+                totalScore += PlayRound2(play);                
+            }           
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Total Score after all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       
+
+        int PlayRound1(string[] play)
+        {
+            if (play[1] == "X" && play[0] == "C")
+                return 6 + 1;
+            
+            if (play[1] == "X" && play[0] == "B")
+                return 0 + 1;
+
+            if (play[1] == "X" && play[0] == "A")
+                return 3 + 1;
+
+            if (play[1] == "Y" && play[0] == "C")
+                return 0 + 2;
+            
+            if (play[1] == "Y" && play[0] == "B")
+                return 3 + 2;
+
+            if (play[1] == "Y" && play[0] == "A")
+                return 6 + 2;
+
+            if (play[1] == "Z" && play[0] == "C")
+                return 3 + 3;
+            
+            if (play[1] == "Z" && play[0] == "B")
+                return 6 + 3;
+
+            if (play[1] == "Z" && play[0] == "A")
+                return 0 + 3;
+
+            return 0;
+        }
+
+        int PlayRound2(string[] play)
+        {
+            if (play[1] == "X" && play[0] == "C")
+                return 0 + 2;
+
+            if (play[1] == "X" && play[0] == "B")
+                return 0 + 1;
+
+            if (play[1] == "X" && play[0] == "A")
+                return 0 + 3;
+
+            if (play[1] == "Y" && play[0] == "C")
+                return 3 + 3;
+            
+            if (play[1] == "Y" && play[0] == "B")
+                return 3 + 2;
+
+            if (play[1] == "Y" && play[0] == "A")
+                return 3 + 1;
+
+            if (play[1] == "Z" && play[0] == "C")
+                return 6 + 1;
+            
+            if (play[1] == "Z" && play[0] == "B")
+                return 6 + 3;
+
+            if (play[1] == "Z" && play[0] == "A")
+                return 6 + 2;
+
+            return 0;
+        }
+
     }
 }

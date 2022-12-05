@@ -43,28 +43,52 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            List<string> input = FileIOHelper.getInstance().ReadDataAsLines(file).ToList();
 
-            SW.Start();                       
+            SW.Restart();                       
 
+            int inclusivePairs, overlapPairs;
 
-
+            (inclusivePairs, overlapPairs) = FindPairs(input);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
-
-            SW.Restart();
-
-           
-            
-            SW.Stop();
-
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Inclusive Assignment Pairs {0}, Execution Time: {1}", inclusivePairs, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Overlap Assignment Pairs {0}, Execution Time: {1}", overlapPairs, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             Console.WriteLine("\n===========================================\n");
             Console.WriteLine("Please hit any key to continue");
             Console.ReadLine();
         }       
+
+        private (int,int) FindPairs(List<string> input)
+        {
+            int inclusivePairs = 0;
+            int overlappingPairs = 0;
+
+            foreach (string pair in input)
+            {
+                string[] sectionRanges = pair.Split(new char[] {',','-'});
+
+                int minPair1 = Convert.ToInt32(sectionRanges[0]);
+                int maxPair1 = Convert.ToInt32(sectionRanges[1]);
+                int minPair2 = Convert.ToInt32(sectionRanges[2]);
+                int maxPair2 = Convert.ToInt32(sectionRanges[3]);
+
+
+                int[] section1 = Enumerable.Range(minPair1, maxPair1 - minPair1 + 1).ToArray();
+                int[] section2 = Enumerable.Range(minPair2, maxPair2 - minPair2 + 1).ToArray();
+
+                int[] intersection = section1.Intersect(section2).ToArray();
+
+                if (intersection.Length == section1.Length || intersection.Length == section2.Length)
+                    inclusivePairs += 1;
+
+                if (intersection.Length > 0)
+                    overlappingPairs+= 1;
+
+            }
+            return (inclusivePairs, overlappingPairs);
+        }
     }
 }
