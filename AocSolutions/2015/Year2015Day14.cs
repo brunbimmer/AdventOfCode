@@ -27,7 +27,6 @@ namespace AdventOfCode
             public int flyingTime;
             public int restTime;
             public int distancePart1;
-            public int totalPoints;
 
             public int GetDistance(int time)
             {
