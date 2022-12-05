@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
 namespace AdventFileIO
@@ -110,12 +114,22 @@ namespace AdventFileIO
 
         private void GetFileInputFromAOC(int year, int day, string saveFileLocation)
         {
-            System.Net.WebClient wc = new System.Net.WebClient();
+            string data = "";
 
-            wc.Headers.Add(System.Net.HttpRequestHeader.Cookie, "session=" + _session);
+            using (HttpClient hc = new HttpClient(new HttpClientHandler {UseCookies = false}))
+            {
+                hc.DefaultRequestHeaders.Add("Cookie", "session=" + _session);
 
-            string url = string.Format(_url, year, day);
-            string data = wc.DownloadString(url);
+                string url = string.Format(_url, year, day);
+
+                var webRequest = new HttpRequestMessage(HttpMethod.Get, url);
+
+                HttpResponseMessage response = hc.Send(webRequest);
+             
+                using var reader = new StreamReader(response.Content.ReadAsStream());
+            
+                data = reader.ReadToEnd();
+            }
 
             File.WriteAllText(saveFileLocation, data);
         }
