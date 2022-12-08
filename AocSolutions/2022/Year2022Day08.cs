@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -43,28 +47,81 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            int[][] treeGrid = FileIOHelper.getInstance().GetDataAsDoubleIntArray(file);
 
-            SW.Start();                       
+            SW.Restart();                       
 
-
+            (int visibleTrees, int scenicScore) = CalculateVisibleTreesAndScenicScore(treeGrid);
 
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
-
-            SW.Restart();
-
+            Console.WriteLine("Part 1: Visible Trees {0}, Top Scenic Score {1}, Execution Time: {2}", visibleTrees, scenicScore, StopwatchUtil.getInstance().GetTimestamp(SW));
            
-            
-            SW.Stop();
-
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
-
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
         }       
+
+        private (int, int) CalculateVisibleTreesAndScenicScore(int[][] treeGrid)
+        {
+            int visibleTrees = 0;
+            int scenicScore = 0;
+
+            int maxX = treeGrid.Length;
+            int maxY = treeGrid[0].Length;
+
+            for(int x = 0; x < maxX; x++)
+            {
+                for (int y = 0; y < maxY; y++)
+                {
+                    if (x == 0 || x == (maxX - 1) || y == 0 || y == (maxY - 1))
+                    {
+                        visibleTrees += 1;
+                        continue;
+                    }
+
+                    int height = treeGrid[x][y];
+
+                    int [] horizontalLeft = treeGrid[x].Take(y).Reverse().ToArray();
+                    int [] horizontalRight = treeGrid[x].Skip(y + 1).ToArray();
+
+                    int [] verticalTop = treeGrid.Take(x).Reverse().Select(i => i[y]).ToArray();                    
+                    int [] verticalBottom = treeGrid.Skip(x + 1).Select( i => i[y]).ToArray();
+
+
+                    
+                    if (    horizontalLeft.Max() < height 
+                        ||  horizontalRight.Max() < height
+                        ||  verticalTop.Max() < height
+                        ||  verticalBottom.Max() < height
+                        )
+                        visibleTrees += 1; 
+
+
+                    int _tempScore =   CalculateScenicScore(horizontalLeft, height) 
+                                     * CalculateScenicScore(horizontalRight, height)
+                                     * CalculateScenicScore(verticalTop, height)
+                                     * CalculateScenicScore(verticalBottom, height);                  
+
+                    if (_tempScore > scenicScore)
+                        scenicScore = _tempScore;
+
+                }
+            }                       
+
+            return (visibleTrees, scenicScore);
+        }
+
+        private int CalculateScenicScore(int[] range, int height)
+        {
+            int score = 0;
+            foreach (int i in range)
+            {
+                score += 1;
+
+                if (i >= height)
+                    break;
+            }
+
+            return score;
+        }
     }
 }
