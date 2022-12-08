@@ -60,9 +60,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         private int Part1(int[] measurements)

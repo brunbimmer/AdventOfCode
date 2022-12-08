@@ -62,9 +62,7 @@ namespace AdventOfCode
             Console.WriteLine("SeaCucumbers stop moving at Step #:  {0}", steps);     
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private  void InitializeDataSet(string filename)

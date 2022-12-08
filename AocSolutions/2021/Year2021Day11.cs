@@ -58,9 +58,7 @@ namespace AdventOfCode
             Console.WriteLine("Part 2: First Step Count when all Octopus are lit: {0}", stepCount);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }    
         
         private (int, int) OctopusSimulation(Dictionary<(int, int), int> octopusGrid, int stepCount)

@@ -68,9 +68,7 @@ namespace AdventOfCode
 
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private (Dictionary<string, long> pairs, List<(string, string)>) ReadData(string filename, ref string originalPolymer)

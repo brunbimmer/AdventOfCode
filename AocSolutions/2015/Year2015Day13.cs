@@ -79,9 +79,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 2: Total Change of Happiness for optimal seating with me: {0}, Execution Time: {1}", newTotalChange, StopwatchUtil.getInstance().GetTimestamp(SW));
             
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
        

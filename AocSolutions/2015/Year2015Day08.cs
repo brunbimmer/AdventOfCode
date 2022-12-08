@@ -70,9 +70,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 2: Difference between encoded strings and original # of string literals: {0}", newValue);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
     }
 }

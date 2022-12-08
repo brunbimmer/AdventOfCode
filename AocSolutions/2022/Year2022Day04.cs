@@ -56,9 +56,7 @@ namespace AdventOfCode
             Console.WriteLine("Part 1: Inclusive Assignment Pairs {0}, Execution Time: {1}", inclusivePairs, StopwatchUtil.getInstance().GetTimestamp(SW));
             Console.WriteLine("Part 2: Overlap Assignment Pairs {0}, Execution Time: {1}", overlapPairs, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private (int,int) FindPairs(List<string> input)

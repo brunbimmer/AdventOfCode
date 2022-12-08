@@ -68,9 +68,7 @@ namespace AdventOfCode
 
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private int MapLowestPathScore(Dictionary<(int, int), int> caveMap, (int, int) point, (int, int) MaxPoint)

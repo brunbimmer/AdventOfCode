@@ -43,28 +43,65 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            SW.Start();                       
-
-
-
-            
-            SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            String input = FileIOHelper.getInstance().ReadDataAsString(file);
 
             SW.Restart();
 
-           
+            int startOfPacket = FindStart(input, 4);            
+
+            SW.Stop();            
+            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Original", startOfPacket, StopwatchUtil.getInstance().GetTimestamp(SW));
             
+            SW.Restart();
+            
+            int startOfPacket2 = ScanAsSpan(input, 4);                                    
+            SW.Stop();
+            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Scan", startOfPacket2, StopwatchUtil.getInstance().GetTimestamp(SW));            
+
+            SW.Restart();
+
+            int startOfMessage = FindStart(input, 14);
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Original", startOfMessage, StopwatchUtil.getInstance().GetTimestamp(SW));
+            SW.Restart();
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+            int startOfMessage2 = ScanAsSpan(input, 14);                        
+            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Scan", startOfMessage2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            
+            SW.Stop();
         }       
+
+        private int FindStart(string input, int length)
+        {
+            int markerPosition = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                string sequence = input.Substring(i, length);
+
+                if (sequence.Distinct().ToArray().Length == length)
+                {
+                    markerPosition = i + length;
+                    break;
+                }
+                    
+                    
+            }
+            return markerPosition;
+        }
+
+
+        private int ScanAsSpan(string stream, int n)
+        {
+            var content = stream.ToCharArray().AsSpan();
+            int i;
+            for(i=n; i< content.Length; i++)
+            {
+                if(content.Slice(i-n,n).ToArray().Distinct().Count() == n)
+                    break;
+            }
+            return i;
+        }
     }
 }

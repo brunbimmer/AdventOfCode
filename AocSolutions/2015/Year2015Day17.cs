@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,6 +20,8 @@ namespace AdventOfCode
         private string _OverrideFile;
 
         public Stopwatch SW { get; set; }
+
+        private const int _TotalLiters = 150;
 
         public Year2015Day17()
         {
@@ -43,28 +46,39 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            int[] containers = FileIOHelper.getInstance().ReadDataToIntArray(file);
 
             SW.Start();                       
 
-
-
-            
+            var query = CalculateSum(containers);
+                        
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Combinations of Containers totalling 150: {0}, Execution Time: {1}", query.Count(), StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
+            
+           int minContainers = query.GroupBy(x => x.Count())
+                                    .OrderBy(x => x.Key)
+                                    .First()
+                                    .Count();
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Min # of Containers to fill 150L of Egg Nog: {0}, Execution Time: {1}", minContainers, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
+
+        public IEnumerable<IEnumerable<int>> CalculateSum(int[] input)
+        {
+            var query = Enumerable
+            .Range(1, (1 << input.Count()) - 1)
+            .Select(index => input.Where((item, idx) => ((1 << idx) & index) != 0))
+            .Where(x => x.Sum() == 150);
+
+            return query;
+        }
     }
 }

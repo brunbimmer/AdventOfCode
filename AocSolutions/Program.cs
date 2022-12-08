@@ -38,9 +38,12 @@ namespace PuzzleMain
         {
             string input = "";
 
+            DisplayInitScreen();
+
             while (true)
             {
-                DisplayInitScreen();
+                Console.WriteLine("");
+                Console.Write("What solution do you want to run (type \"X\" to quit program)? ");
                 input = Console.ReadLine();
 
                 if (input.ToLower() == "x") break;
@@ -65,6 +68,7 @@ namespace PuzzleMain
                 yearsToPrint.Add(year.ToString());
             }
 
+
             Console.WriteLine("ADVENT OF CODE (December Christmas Puzzles)");
             Console.WriteLine("For description of Daily puzzles, please visit ==> https://adventofcode.com/");
             PrintLine();
@@ -77,9 +81,6 @@ namespace PuzzleMain
             }
 
             PrintLine();
-            Console.WriteLine("");
-            Console.Write("What solution do you want to run (type \"X\" to quit program)? ");
-
         }
 
         #region Console Helper Routines

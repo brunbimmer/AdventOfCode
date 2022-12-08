@@ -291,9 +291,7 @@ namespace AdventOfCode
             
             SW.Stop();
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
     }
 }

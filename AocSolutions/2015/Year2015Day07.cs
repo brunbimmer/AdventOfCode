@@ -71,9 +71,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 2: Update signal B to {0}. New value at Wire A: {1}", value, newValue);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         private Dictionary<string, string> BuildInstructions(string[] lines)

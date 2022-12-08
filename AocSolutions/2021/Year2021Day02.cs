@@ -62,9 +62,7 @@ namespace AdventOfCode
             Console.WriteLine("Part 2: Final Horizontal Position ({0}) * Final Depth ({1}): {2}", distanceX, distanceY, distanceX * distanceY);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         private (int, int) Part1(List<(string, string)> directions)

@@ -71,9 +71,7 @@ namespace AdventOfCode
 
             Console.WriteLine("Part 2: Total Score after all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         int PlayRound1(string[] play)

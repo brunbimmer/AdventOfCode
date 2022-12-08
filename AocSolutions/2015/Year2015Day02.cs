@@ -68,9 +68,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 1: Required wrapping paper: {0}", wrappingPaperArea);
             Console.WriteLine("  Part 2: Total Ribben Length: {0}", ribbonLength);
             Console.WriteLine("   Execution Time: {0} ms", SW.ElapsedMilliseconds);
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
     }
 }

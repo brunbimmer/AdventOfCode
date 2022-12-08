@@ -64,9 +64,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 2: Total brightness of lights as per Santa's instructions: {0}", brightness);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         public int Part1(string[] list, Dictionary<Coordinate2D, int> grid)

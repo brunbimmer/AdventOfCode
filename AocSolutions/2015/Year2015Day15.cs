@@ -56,9 +56,7 @@ namespace AdventOfCode
 
             Console.WriteLine("Part 1: Total score of highest-scoring cookie with 500 calories {0}, Execution Time: {1}", maxSumCalorie, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private long FindMaximum(bool calorieCount = false)

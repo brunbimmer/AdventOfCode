@@ -78,9 +78,7 @@ namespace AdventOfCode
             Console.WriteLine("I am showing two possible fuel cost answers to the Part 2. One using average and another using center of mass.");
             Console.WriteLine("One of these options will result in the lower fuel cost. I am displaying both for comparision purposes.");
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }        
 
         private   int GetMedian(int[] crabs)

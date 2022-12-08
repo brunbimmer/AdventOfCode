@@ -62,9 +62,7 @@ namespace AdventOfCode
 
             Console.WriteLine("Part 2: Sum of the priorities: {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }      
         
         private int CalculateSumOfPriorities(string[] lines)

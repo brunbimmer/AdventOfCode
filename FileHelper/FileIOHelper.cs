@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using Microsoft.Extensions.Configuration;
 
 namespace AdventFileIO
@@ -86,6 +87,15 @@ namespace AdventFileIO
             for (int x = 0; x < mapData.Length; x++)
                 for (int y = 0; y < mapData[x].Length; y++)
                     grid.Add((x, y), int.Parse(mapData[x][y].ToString()));
+
+            return grid;
+        }
+
+        public int[][] GetDataAsDoubleIntArray(string file)
+        {
+            string[] lines = ReadDataAsLines(file);
+
+            int[][] grid = lines.Select(x => x.Select(y => int.Parse(y.ToString())).ToArray()).ToArray();
 
             return grid;
         }

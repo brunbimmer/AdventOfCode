@@ -59,9 +59,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 2: The number of nice strings in the sequence input are: {0}", numNiceStrings);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         public int Part1(string[] list)

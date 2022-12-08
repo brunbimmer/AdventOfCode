@@ -82,9 +82,7 @@ namespace AdventOfCode
             Console.WriteLine("Smallest Model Number accepted by Monad: {0}", smallestNumber);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
          private  long RunALUOperation(int modelNumberPosition, long prevZ, long input)

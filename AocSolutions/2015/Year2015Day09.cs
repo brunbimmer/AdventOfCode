@@ -69,9 +69,7 @@ namespace AdventOfCode
 
             
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         private void AddToMap(string line)

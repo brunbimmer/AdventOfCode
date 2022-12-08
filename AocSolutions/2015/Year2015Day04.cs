@@ -60,9 +60,7 @@ namespace AdventOfCode
             Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with six leading zero's: {1}", md5Secret, lowestNumber);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         public int Part1(string secret)

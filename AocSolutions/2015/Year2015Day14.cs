@@ -83,9 +83,7 @@ namespace AdventOfCode
             Console.WriteLine("Part 2: Points winning deer is {0}, Execution Time: {1}", reinderMaxPoints, StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         List<ReinderStat> ParseReinderStats(string[] instructions)

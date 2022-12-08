@@ -81,9 +81,7 @@ namespace AdventOfCode
             Console.WriteLine("Part 2: Sum of Unmarked Cards in Last Winning Board ({0}) * Last Number Called ({1}): {2}", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }
 
         private void ReadFile(string filename)

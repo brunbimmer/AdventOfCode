@@ -65,9 +65,7 @@ namespace AdventOfCode
 
             Console.WriteLine("Part 2: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            Console.WriteLine("\n===========================================\n");
-            Console.WriteLine("Please hit any key to continue");
-            Console.ReadLine();
+
         }       
 
         private Dictionary<int, Stack<char>> SetupStacks()
