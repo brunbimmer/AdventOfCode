@@ -15,6 +15,29 @@ using Common;
 
 namespace AdventOfCode
 {
+    public static class Extensions
+    {
+	    public static T[] SubArray<T>(this T[] array, int offset, int length)
+	    {
+		    T[] result = new T[length];
+		    Array.Copy(array, offset, result, 0, length);
+		    return result;
+	    }
+
+        public static T[] Column<T>(this T[][] jaggedArray,int wanted_column)
+        {
+            T[] columnArray = new T[jaggedArray.Length];
+            T[] rowArray;
+            for(int i=0;i<jaggedArray.Length;i++)
+            {
+                rowArray=jaggedArray[i];
+                if(wanted_column<rowArray.Length)
+                    columnArray[i]=rowArray[wanted_column];
+            }
+            return columnArray;
+        }
+    }
+
     [AdventOfCode(Year = 2022, Day = 8)]
     public class Year2022Day08 : IAdventOfCode
     {
@@ -52,7 +75,6 @@ namespace AdventOfCode
             SW.Restart();                       
 
             (int visibleTrees, int scenicScore) = CalculateVisibleTreesAndScenicScore(treeGrid);
-
             
             SW.Stop();
 
@@ -69,10 +91,16 @@ namespace AdventOfCode
             int maxY = treeGrid[0].Length;
 
             for(int x = 0; x < maxX; x++)
-            {
+            {                
+                if (x == 0 || x == (maxX - 1))
+                {
+                    visibleTrees += maxY;
+                    continue;
+                }
+                    
                 for (int y = 0; y < maxY; y++)
                 {
-                    if (x == 0 || x == (maxX - 1) || y == 0 || y == (maxY - 1))
+                    if (y == 0 || y == (maxY - 1))
                     {
                         visibleTrees += 1;
                         continue;
@@ -80,20 +108,20 @@ namespace AdventOfCode
 
                     int height = treeGrid[x][y];
 
-                    int [] horizontalLeft = treeGrid[x].Take(y).Reverse().ToArray();
-                    int [] horizontalRight = treeGrid[x].Skip(y + 1).ToArray();
+                    int [] horizontalLeft = DoReversal(treeGrid[x].SubArray(0, y));
+                    int [] horizontalRight = treeGrid[x].SubArray(y + 1, (maxY - 1) - y);
 
-                    int [] verticalTop = treeGrid.Take(x).Reverse().Select(i => i[y]).ToArray();                    
-                    int [] verticalBottom = treeGrid.Skip(x + 1).Select( i => i[y]).ToArray();
-
+                    int [] verticalTop = DoReversal(treeGrid.SubArray(0, x).Column(y));                                                  
+                    int [] verticalBottom = treeGrid.SubArray(x + 1, (maxX - 1) - x).Column(y);
 
                     
-                    if (    horizontalLeft.Max() < height 
-                        ||  horizontalRight.Max() < height
-                        ||  verticalTop.Max() < height
-                        ||  verticalBottom.Max() < height
-                        )
-                        visibleTrees += 1; 
+                    if (   IsTreeVisibleToEdge(horizontalLeft, height)
+                        || IsTreeVisibleToEdge(horizontalRight, height)
+                        || IsTreeVisibleToEdge(verticalTop, height)
+                        || IsTreeVisibleToEdge(verticalBottom, height))
+                    {
+                        visibleTrees += 1;
+                    }
 
 
                     int _tempScore =   CalculateScenicScore(horizontalLeft, height) 
@@ -108,6 +136,42 @@ namespace AdventOfCode
             }                       
 
             return (visibleTrees, scenicScore);
+        }
+
+        public int[] DoReversal(int[] theArray)
+        {
+            int tempHolder = 0;
+
+            if (theArray.Length > 0)
+            {
+                for (int counter = 0; counter < (theArray.Length / 2); counter++)
+                {
+                    tempHolder = theArray[counter];                        
+                    theArray[counter] = theArray[theArray.Length - counter - 1];   
+                    theArray[theArray.Length - counter - 1] = tempHolder;      
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nothing to reverse");
+            }
+            return theArray;
+        }
+
+
+        private bool IsTreeVisibleToEdge(int[] range, int height)
+        {
+            bool visible = true;
+
+            foreach (int i in range)
+            {
+                if (i >= height)
+                {
+                    visible = false;
+                    break;
+                }
+            }
+            return visible;
         }
 
         private int CalculateScenicScore(int[] range, int height)
