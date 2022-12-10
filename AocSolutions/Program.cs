@@ -46,7 +46,7 @@ namespace PuzzleMain
                 Console.Write("What solution do you want to run (type \"X\" to quit program)? ");
                 input = Console.ReadLine();
 
-                if (input.ToLower() == "x") break;
+                if (input.ToLower() == "x" || input.ToLower() == "") break;
 
                 int index = int.Parse(input);
                 

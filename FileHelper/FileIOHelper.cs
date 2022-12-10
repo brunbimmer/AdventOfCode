@@ -74,7 +74,7 @@ namespace AdventFileIO
             return Array.ConvertAll(File.ReadAllLines(file), long.Parse);
         }
 
-        public Dictionary<(int, int), int> GetDataAsMap(string file)
+        public Dictionary<(int, int), int> GetDataAsIntegerMap(string file)
         {
             Dictionary<(int, int), int> grid = new Dictionary<(int, int), int>();
 
@@ -87,6 +87,23 @@ namespace AdventFileIO
             for (int x = 0; x < mapData.Length; x++)
                 for (int y = 0; y < mapData[x].Length; y++)
                     grid.Add((x, y), int.Parse(mapData[x][y].ToString()));
+
+            return grid;
+        }
+
+        public Dictionary<Coordinate2D, char> GetDataAsCoordinates(string file)
+        {
+            Dictionary<Coordinate2D, char> grid = new Dictionary<Coordinate2D, char>();
+
+            //read in the
+            string[] lines = ReadDataAsLines(file);
+
+            //Read the data
+            var mapData = lines.Select(x => x.ToArray()).ToArray();
+
+            for (int x = 0; x < mapData.Length; x++)
+                for (int y = 0; y < mapData[x].Length; y++)
+                    grid.Add(new Coordinate2D(x , y), mapData[x][y]);
 
             return grid;
         }

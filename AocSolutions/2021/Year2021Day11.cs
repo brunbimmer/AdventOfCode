@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsIntegerMap(file);
 
             SW.Start();                       
 

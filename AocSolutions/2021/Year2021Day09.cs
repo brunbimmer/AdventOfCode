@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            Dictionary<(int, int), int> caveData = FileIOHelper.getInstance().GetDataAsMap(file);
+            Dictionary<(int, int), int> caveData = FileIOHelper.getInstance().GetDataAsIntegerMap(file);
 
             List<(int,int)> lowDataPoints = new List<(int,int)>();
             List<int> basins = new List<int>();
