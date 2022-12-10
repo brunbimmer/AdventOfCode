@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
+using static AdventOfCode.Year2015Day16;
 
 namespace AdventOfCode
 {
@@ -19,6 +20,17 @@ namespace AdventOfCode
         private string _OverrideFile;
 
         public Stopwatch SW { get; set; }
+
+        int sum = 0;         
+        int cycle = 0;
+        int x = 1;
+
+        int printPosition = 0;
+        
+        StringBuilder buffer;
+        List<char> currentLine;
+        int statusCheck = 20;
+        int newLineStart = 41;
 
         public Year2022Day10()
         {
@@ -38,31 +50,77 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //Build BasePath and retrieve input. 
- 
+            //Reset starting parameters if solution is run consecutively in same session. 
+            sum = 0;         
+            cycle = 0;
+            x = 1;
+            statusCheck = 20;
+            newLineStart = 41;
+
+            printPosition = 0;
+        
+            buffer = new StringBuilder();
+            currentLine = new List<char>();
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            SW.Restart();                       
 
+            foreach (string instruction in instructions)
+            {
+                if (instruction.StartsWith("noop"))
+                {
+                    DoCycleOperation();                    
+                }
+                else
+                {
+                    //Add instruction is a 2-cycle operation, so run it twice.
+                    DoCycleOperation();
+                    DoCycleOperation();
+                    
+                    int value = Convert.ToInt32(instruction.Split(' ').Last());                    
+                    x += value;     //update the X value.                   
+                }
+            }
+            //add the last line to the buffer.
+            buffer.AppendLine(new string(currentLine.ToArray()));
 
-
-            
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Sum of Signal Strengths {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            SW.Restart();
+            Console.WriteLine("Part 2:");
 
-           
-            
-            SW.Stop();
+            Console.WriteLine(buffer.ToString());
+        }     
+        
+        private void DoCycleOperation()
+        {
+            cycle += 1;
+                    
+            if (cycle == newLineStart)
+            {
+                buffer.AppendLine(new string(currentLine.ToArray()));
+                currentLine.Clear();
+                printPosition = 0;
+                newLineStart += 40;
+            }
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            if (printPosition >= x - 1 && printPosition <= (x + 1)) 
+                currentLine.Add('#');
+            else 
+                currentLine.Add(' ');
+                                        
+            if (cycle == statusCheck)
+            {
+                sum = sum + cycle * x;
+                statusCheck += 40;
+            }
+                
 
-
-        }       
+            printPosition += 1;
+        }
     }
 }
