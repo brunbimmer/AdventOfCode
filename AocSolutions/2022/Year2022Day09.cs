@@ -8,6 +8,7 @@ using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Xml.XPath;
 using AdventFileIO;
 using Common;
@@ -22,8 +23,6 @@ namespace AdventOfCode
         private string _OverrideFile;
 
         public Stopwatch SW { get; set; }
-
-        List<Coordinate2D> tPosVisited;
 
         public Year2022Day09()
         {
@@ -50,92 +49,23 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            tPosVisited = new List<Coordinate2D>();
+            Dictionary<Coordinate2D, bool> visitedPart1 = new Dictionary<Coordinate2D, bool>();
+            Dictionary<Coordinate2D, bool> visitedPart2 = new Dictionary<Coordinate2D, bool>();
 
             Coordinate2D hPos = new Coordinate2D(0,0);
-            Coordinate2D tPos = new Coordinate2D(0,0);
 
-            tPosVisited.Add(tPos);
-            
-
-            SW.Start();                       
-
-            foreach (string instruction in instructions)
-            {
-                string direction = instruction.Split(' ').First();
-                int steps = Convert.ToInt32(instruction.Split(' ').Last().Trim());
-
-                switch(direction)
-                {
-                    case "R":
-
-                        for(int i = 1; i <= steps; i++)
-                        {
-                            hPos = new Coordinate2D(hPos.X + 1, hPos.Y);
-                            
-                            tPos = DoMoveTail(tPos, hPos); 
-                            
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-
-                    case "U":
-                        for(int i = 1; i <= steps; i++)
-                        {
-                            hPos = new Coordinate2D(hPos.X, hPos.Y + 1);
-                            
-                            tPos = DoMoveTail(tPos, hPos);                            
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-
-                    case "L":
-                        for(int i = 1; i <= steps; i++)
-                        {
-                            hPos = new Coordinate2D(hPos.X - 1, hPos.Y);
-                            
-                            tPos = DoMoveTail(tPos, hPos);                            
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-                    case "D":
-                        for(int i = 1; i <= steps; i++)
-                        {
-                            hPos = new Coordinate2D(hPos.X, hPos.Y - 1);
-                            
-                            tPos = DoMoveTail(tPos, hPos);                            
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-                }
-            }
-
-            
-            SW.Stop();
-
-            Console.WriteLine("Part 1: Number of Visited Positions {0}, Execution Time: {1}", tPosVisited.Count, StopwatchUtil.getInstance().GetTimestamp(SW));
-
-            tPosVisited.Clear();
 
             hPos = new Coordinate2D(0,0);
 
             Coordinate2D[] rope = new Coordinate2D[8];
 
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++)                 //in Part 1, rope[0] is the tail as there is only two knots.
                 rope[i] = new Coordinate2D(0,0);
-            }
 
-            tPos = new Coordinate2D(0,0);
+            Coordinate2D tPos = new Coordinate2D(0,0);
 
-            tPosVisited.Add(tPos);
+            visitedPart1[rope[0]] = true;
+            visitedPart2[tPos] = true;
 
             SW.Restart();    
             
@@ -144,131 +74,69 @@ namespace AdventOfCode
                 string direction = instruction.Split(' ').First();
                 int steps = Convert.ToInt32(instruction.Split(' ').Last().Trim());
 
-                switch(direction)
+                for(int i = 1; i <= steps; i++)
                 {
-                    case "R":
 
-                        for(int i = 1; i <= steps; i++)
-                        {
+                    switch (direction)
+                    {
+                       case "R":
                             hPos = new Coordinate2D(hPos.X + 1, hPos.Y);
-                            
-                            rope[0] = DoMoveTail(rope[0], hPos);
-
-                            for (int x = 1; x < rope.Length; x++)
-                            {
-                                rope[x] = DoMoveTail(rope[x], rope[x - 1]);
-                            }
-
-                            tPos = DoMoveTail(tPos, rope[7]); 
-                            
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-
-                    case "U":
-                        for(int i = 1; i <= steps; i++)
-                        {
-                            hPos = new Coordinate2D(hPos.X, hPos.Y + 1);
-                            
-                            rope[0] = DoMoveTail(rope[0], hPos);
-                            
-                            for (int x = 1; x < rope.Length; x++)
-                            {
-                                rope[x] = DoMoveTail(rope[x], rope[x - 1]);
-                            }
-                            
-                            tPos = DoMoveTail(tPos, rope[7]); 
-
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-
-                    case "L":
-                        for(int i = 1; i <= steps; i++)
-                        {
+                            break;
+                        case "L":
                             hPos = new Coordinate2D(hPos.X - 1, hPos.Y);
-                            
-                            rope[0] = DoMoveTail(rope[0], hPos);
-                            
-                            for (int x = 1; x < rope.Length; x++)
-                            {
-                                rope[x] = DoMoveTail(rope[x], rope[x - 1]);
-                            }
-
-                            tPos = DoMoveTail(tPos, rope[7]); 
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
-                    case "D":
-                        for(int i = 1; i <= steps; i++)
-                        {
+                            break;
+                        case "U":
+                            hPos = new Coordinate2D(hPos.X, hPos.Y + 1);
+                            break;
+                        case "D":
                             hPos = new Coordinate2D(hPos.X, hPos.Y - 1);
+                            break;
+                    }    
+                    
+                    bool _bMove;
+                    (rope[0], _bMove) = DoMoveTail(rope[0], hPos);
+                    visitedPart1[rope[0]] = true;
+
+                    if (_bMove == false) continue;      //continue to next step. No more moves to make with the train.
+
+                    for (int x = 1; x < rope.Length; x++)
+                    {
+                        (rope[x], _bMove) = DoMoveTail(rope[x], rope[x - 1]);
+                        if (_bMove == false) break;  //continue to next step. No more moves to make with the train.
+                    }
+                        
+                    (tPos, _bMove) = DoMoveTail(tPos, rope[7]); 
                             
-                            rope[0] = DoMoveTail(rope[0], hPos);
-
-                            for (int x = 1; x < rope.Length; x++)
-                            {
-                                rope[x] = DoMoveTail(rope[x], rope[x-1]);
-                            }
-
-                            tPos = DoMoveTail(tPos, rope[7]); 
-
-                            if (!tPosVisited.Contains(tPos))
-                                tPosVisited.Add(tPos);
-                        }
-                        break;
+                    visitedPart2[tPos] = true;
                 }
             }
-
             
             SW.Stop();
 
-            Console.WriteLine("Part 2: Number of Visited Positions {0}, Execution Time: {1}", tPosVisited.Count, StopwatchUtil.getInstance().GetTimestamp(SW));
-
+            Console.WriteLine("Part 1: Number of Positions Tail visited (Two Knots) -> {0}", visitedPart1.Count);
+            Console.WriteLine("Part 2: Number of Positions Tail visited (10 knots)  -> {0}", visitedPart2.Count);
+            Console.WriteLine("  Total Execution Time: {0}" , StopwatchUtil.getInstance().GetTimestamp(SW));
 
         }   
         
-        private Coordinate2D DoMoveTail(Coordinate2D tail, Coordinate2D head)
+        private (Coordinate2D, bool) DoMoveTail(Coordinate2D tail, Coordinate2D head)
         {
-            int xDiff = head.X - tail.X;
-            int yDiff = head.Y - tail.Y;
+            (int xDiff, int yDiff) = head.Difference(tail);
 
             if (Math.Abs(xDiff) <= 1 && Math.Abs(yDiff) <= 1)
-                return tail; //no move
+                return (tail, false); //no move
             
             Coordinate2D newTail = null;
             //we are out of step in one or more directions.
 
-            if (   (xDiff == 2 && yDiff == 1)
-                || (xDiff == 1 && yDiff == 2)
-                || (xDiff == 2 && yDiff == 2))
-                
-            {
+            if (xDiff >= 1 && yDiff >= 1)
                 newTail = new Coordinate2D(tail.X + 1, tail.Y + 1);
-            }
-            else if ( (xDiff == -2 && yDiff == -1)
-                 ||   (xDiff == -1 && yDiff == -2)
-                 ||   (xDiff == -2 && yDiff == -2) )
-            {
+            else if (xDiff <= -1 && yDiff <= -1)
                 newTail = new Coordinate2D(tail.X - 1, tail.Y - 1);
-            }
-            else if ( (xDiff == 2 && yDiff == -1)
-                ||    (xDiff == 1 && yDiff == -2)
-                ||    (xDiff == 2 && yDiff == -2) )
-            {
+            else if (xDiff >= 1 && yDiff <= -1)
                 newTail = new Coordinate2D(tail.X + 1, tail.Y - 1);
-            }
-            else if ( (xDiff == -2 && yDiff == 1)
-                ||    (xDiff == -1 && yDiff == 2)
-                ||    (xDiff == -2 && yDiff == 2) )
-            {
+            else if (xDiff <= -1 && yDiff >= 1)
                 newTail = new Coordinate2D(tail.X - 1, tail.Y + 1);
-            }
             else if (xDiff == 2)
                newTail = new Coordinate2D(tail.X + 1, tail.Y);
             else if (xDiff == -2)
@@ -278,7 +146,7 @@ namespace AdventOfCode
             else if (yDiff == -2)
                newTail = new Coordinate2D(tail.X, tail.Y - 1);
 
-            return newTail;
+            return (newTail, true);
 
         }
     }

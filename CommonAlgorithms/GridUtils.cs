@@ -8,9 +8,19 @@ namespace Common
 {
     public record Coordinate2D(int X, int Y)
     {
+        
         public int ManhattenDistance(Coordinate2D other) => (int)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y));
         public int Magnitude() => Math.Abs(X) + Math.Abs(Y);
         public Coordinate2D Vector(Coordinate2D other) => new(other.X - X, other.Y - Y);
+
+
+        public (int, int) Difference(Coordinate2D other)
+        {
+            int xDiff = this.X - other.X;
+            int yDiff = this.Y - other.Y;
+
+            return (xDiff, yDiff);
+        }
 
         public List<Coordinate2D> Neighbours(bool diagonals, bool self)
         {
