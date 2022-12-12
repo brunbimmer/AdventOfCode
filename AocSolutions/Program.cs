@@ -50,8 +50,17 @@ namespace PuzzleMain
 
                 int index = int.Parse(input);
                 
-                if (SolutionCache.ContainsKey(index))
-                    SolutionCache[index].Value.GetSolution("daily.txt", true);
+                try
+                {
+                    if (SolutionCache.ContainsKey(index))
+                        SolutionCache[index].Value.GetSolution("daily.txt", true);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
             return;
         }
