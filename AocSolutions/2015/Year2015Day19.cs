@@ -43,26 +43,74 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string input = FileIOHelper.getInstance().ReadDataAsString(file);
+
+            string instructions = input.Split(new string[] { "\n\n" }, StringSplitOptions.None).First();
+            string molecule = input.Split(new string[] { "\n\n" }, StringSplitOptions.None).Last().Trim();
+
+            string[] instructionSet = instructions.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+            //make a backup copy for part 2
+            string original_molecule = new string(molecule);
 
             SW.Start();                       
 
-
+            int distinctMolecules = CalculateDistinctMolecules(instructionSet, molecule);
 
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of Distinct Molecules {0}, Execution Time: {1}", distinctMolecules, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
+            int fewestSteps = SearchForMedicine(instructionSet, original_molecule);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Fewest steps to make medicine {0}, Execution Time: {1}", fewestSteps, StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
-        }       
+        }     
+        
+        private int CalculateDistinctMolecules(string[] instructionSet, string molecule)
+        {
+            List<string> newMolecules = new List<string>();
+
+            foreach(string instruction in instructionSet)
+            {
+                string key = instruction.Split("=>", StringSplitOptions.TrimEntries).First();
+                string val = instruction.Split("=>", StringSplitOptions.TrimEntries).Last();
+
+                foreach(Match m in Regex.Matches(molecule, key, RegexOptions.Compiled))
+                {
+                    string s = molecule.Remove(m.Index, key.Length).Insert(m.Index, val);
+                    newMolecules.Add(s);
+                }                               
+            }
+
+            return newMolecules.Distinct().Count();
+        }
+
+        private int SearchForMedicine(string[] instructionSet, string molecule)
+        {
+            int cnt = 0;
+            while (!molecule.Equals("e"))
+            {
+                foreach(string instruction in instructionSet)
+                {
+                    string key = instruction.Split("=>", StringSplitOptions.TrimEntries).First();
+                    string val = instruction.Split("=>", StringSplitOptions.TrimEntries).Last();
+
+                    if (molecule.Contains(val))
+                    {
+                        Regex regex = new Regex(val);
+                        molecule = regex.Replace(molecule, key, 1);
+                        cnt++;
+                    }
+                }
+            }
+            return cnt;
+        }
     }
 }

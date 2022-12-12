@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -38,29 +39,35 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //Build BasePath and retrieve input. 
- 
+            //No file...input in the puzzle.
 
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
+            int presents = 29000000;
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            SW.Start();                       
-
-
-
+            SW.Start();                
+            
+            int min = int.MaxValue;
+	        int[] houses = new int[200000000];
+	        for(int i = 1; i < presents / 10; ++i)
+		        for(int j = i; j > 0 && j < houses.Length && j < min; j = unchecked(j + i))
+			        if((houses[j] += i * 10) >= presents)
+			            min = Math.Min(min, j);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Smallest House # {0}, Execution Time: {1}", min, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
+           	int min2 = int.MaxValue;
+	        int[] houses2 = new int[200000000];
+	        for(int i = 1; i < presents / 10; ++i)
+		        for(int j = i, c = 0; c < 50 && j < houses2.Length && j < min2; j = unchecked(j + i), ++c)
+			        if((houses2[j] += i * 11) >= presents)
+				        min2 = Math.Min(min2, j);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Smallest House # {0}, Execution Time: {1}", min2, StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
         }       
