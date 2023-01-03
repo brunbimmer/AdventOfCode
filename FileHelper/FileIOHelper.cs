@@ -91,6 +91,28 @@ namespace AdventFileIO
             return grid;
         }
 
+        public Dictionary<(int, int), int> GetDataAsCharMapWithValues(string file)
+        {
+            Dictionary<(int, int), int> grid = new Dictionary<(int, int), int>();
+
+            //read in the
+            string[] lines = ReadDataAsLines(file);
+
+            //Read the data
+            var mapData = lines.Select(x => x.ToArray()).ToArray();
+
+            for (int x = 0; x < mapData.Length; x++)
+                for (int y = 0; y < mapData[x].Length; y++)
+                {
+                    int value = CalculateLetterValue(mapData[x][y]);
+                    grid.Add((x, y), value);
+                }
+                    
+
+            return grid;
+        }
+
+
         public Dictionary<Coordinate2D, char> GetDataAsCoordinates(string file)
         {
             Dictionary<Coordinate2D, char> grid = new Dictionary<Coordinate2D, char>();
@@ -161,5 +183,13 @@ namespace AdventFileIO
             File.WriteAllText(saveFileLocation, data);
         }
 
+        private int CalculateLetterValue(char character)
+        {
+            int ascii = (int)character;
+            if (Char.IsUpper(character)) 
+                return (ascii - 38);
+            else
+                return (ascii - 96);
+        }
     }
 }

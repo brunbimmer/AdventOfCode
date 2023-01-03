@@ -39,6 +39,39 @@ namespace Common
         }
     }
 
+    public record Coordinate2DLong(long X, long Y)
+    {
+        
+        public long ManhattenDistance(Coordinate2DLong other) => (long)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y));
+        public long Magnitude() => Math.Abs(X) + Math.Abs(Y);
+        public Coordinate2DLong Vector(Coordinate2DLong other) => new(other.X - X, other.Y - Y);
+
+
+        public (long, long) Difference(Coordinate2DLong other)
+        {
+            long xDiff = this.X - other.X;
+            long yDiff = this.Y - other.Y;
+
+            return (xDiff, yDiff);
+        }
+
+        public List<Coordinate2DLong> Neighbours(bool diagonals, bool self)
+        {
+            var tmp = new List<Coordinate2DLong>();
+
+            if (diagonals) tmp.Add(new Coordinate2DLong(X - 1, Y - 1));     //top left
+            tmp.Add(new Coordinate2DLong(X, Y - 1));                        //top
+            if (diagonals) tmp.Add(new Coordinate2DLong(X + 1, Y - 1));     //top right
+            tmp.Add(new Coordinate2DLong(X - 1, Y));                        //left
+            if (self) tmp.Add(new Coordinate2DLong(X, Y));                  //center
+            tmp.Add(new Coordinate2DLong(X + 1, Y));                        //right
+            if (diagonals) tmp.Add(new Coordinate2DLong(X - 1, Y + 1));     //bottom left
+            tmp.Add(new Coordinate2DLong(X, Y + 1));                        //bottom 
+            if (diagonals) tmp.Add(new Coordinate2DLong(X + 1, Y + 1));     //bottom right            
+            return tmp;
+        }
+    }
+
     public record Coordinate3D(int X, int Y, int Z)
     {
         public int ManhattenDistance(Coordinate3D other) => (int)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y) + Math.Abs(Z - other.Z));
