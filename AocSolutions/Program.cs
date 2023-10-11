@@ -16,7 +16,6 @@ namespace PuzzleMain
     {
         private static Dictionary<int, KeyValuePair<AdventOfCodeAttribute, IAdventOfCode>> SolutionCache;
 
-        static int tableWidth = 136;
         static void Main(string[] args)
         {
             try
@@ -25,129 +24,39 @@ namespace PuzzleMain
                 
                 LoadSolutionCache();
 
+                if (args.Length != 2)
+                {
+                    Console.WriteLine("Program usage: AdventOfCode <yyyy> <day>");
+                    Console.WriteLine("   Enter the year and correlating day of the month of the Advent of Code Puzzle");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    int year = Convert.ToInt32(args[0]);
+                    int day = Convert.ToInt32(args[1]);
 
-                Program.Run();
+                    //
+                    int solutionIndex = (year - 2015) * 25 + day;
+
+                     if (SolutionCache.ContainsKey(solutionIndex))
+                     {
+                        Console.WriteLine("");
+                        Console.WriteLine("ADVENT OF CODE (December Christmas Puzzles)");
+                        Console.WriteLine("For description of Daily puzzles, please visit ==> https://adventofcode.com/");
+                        Console.WriteLine("----------------------------------------------------------------------------");
+                        Console.WriteLine("");
+                        SolutionCache[solutionIndex].Value.GetSolution("daily.txt", true);
+                     }
+                     else
+                        Console.WriteLine("The select year and day does not correlate to a Advent of Code Puzzle");
+                }
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
-
-        private static void Run()
-        {
-            string input = "";
-
-            DisplayInitScreen();
-
-            while (true)
-            {
-                Console.WriteLine("");
-                Console.Write("What solution do you want to run (type \"X\" to quit program)? ");
-                input = Console.ReadLine();
-
-                if (input.ToLower() == "x" || input.ToLower() == "") break;
-
-                int index = int.Parse(input);
-                
-                try
-                {
-                    if (SolutionCache.ContainsKey(index))
-                        SolutionCache[index].Value.GetSolution("daily.txt", true);
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine(ex.StackTrace);
-                }
-            }
-            return;
-        }
-
-        private static void DisplayInitScreen()
-        {
-
-            var years = SolutionCache.Values.Select(x => x.Key.Year).Distinct().ToList();
-
-            List<string> yearsToPrint = new List<string>();
-
-            foreach (var year in years)
-            {
-                yearsToPrint.Add(year.ToString());
-            }
-
-
-            Console.WriteLine("ADVENT OF CODE (December Christmas Puzzles)");
-            Console.WriteLine("For description of Daily puzzles, please visit ==> https://adventofcode.com/");
-            PrintLine();
-            PrintRow(yearsToPrint.ToArray());
-            PrintLine();
-
-            foreach(int i in Enumerable.Range(1, 25))
-            {
-                PrintSolutionRow(i, yearsToPrint.ToArray().Length);
-            }
-
-            PrintLine();
-        }
-
-        #region Console Helper Routines
-
-        static void PrintLine()
-        {
-            Console.WriteLine(new string('-', tableWidth));
-        }
-
-        static void PrintRow(string[] columns)
-        {
-            int width = (tableWidth - columns.Length) / columns.Length;
-            string row = "|";
-
-            foreach (string column in columns)
-            {
-                row += AlignCentre(column, width) + "|";
-            }
-
-            Console.WriteLine(row);
-        }
-
-        static void PrintSolutionRow(int day, int columnLength)
-        {
-            int width = (tableWidth - columnLength) /columnLength;
-            string row = "|";
-            int year = 2015;
-            
-            foreach (int i in Enumerable.Range(0, columnLength))
-            {
-                int index = (year - 2015) * 25 + day;
-
-                if (SolutionCache.ContainsKey(index))
-                    row +=  (" " + index + ".  Day " + day).PadRight(width) + "|";
-                else
-                    row +=  (" ").PadRight(width) + "|";
-
-                year += 1;
-            }
-
-            Console.WriteLine(row);
-        }
-
-        static string AlignCentre(string text, int width)
-        {
-            text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
-
-            if (string.IsNullOrEmpty(text))
-            {
-                return new string(' ', width);
-            }
-            else
-            {
-                return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
-            }
-        }
-
-        #endregion
 
         private static void LoadSolutionCache()
         {
