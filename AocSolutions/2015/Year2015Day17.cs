@@ -54,12 +54,12 @@ namespace AdventOfCode
                         
             SW.Stop();
 
-            Console.WriteLine("Part 1: Combinations of Containers totalling 150: {0}, Execution Time: {1}", query.Count(), StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Combinations of Containers totaling 150: {0}, Execution Time: {1}", query.Count(), StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
             
-           int minContainers = query.GroupBy(x => x.Count())
+            int minContainers = query.GroupBy(x => x.Count())
                                     .OrderBy(x => x.Key)
                                     .First()
                                     .Count();

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AdventFileIO;
+using System.Numerics;
 using Common;
 
 namespace AdventOfCode
@@ -39,20 +33,15 @@ namespace AdventOfCode
             Console.WriteLine("===========================================");
 
             //Build BasePath and retrieve input. 
- 
 
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
+            SW.Start();
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            SW.Start();                       
-
-
+            BigInteger code = CalculateCode(2947, 3029);
 
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1 - Code at Row 2947 and Column 3029 is: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
@@ -61,8 +50,31 @@ namespace AdventOfCode
             SW.Stop();
 
             //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+        }
 
+        private BigInteger CalculateCode(int row, int col)
+        {
+            BigInteger first_code = 20151125;
+            BigInteger base_value = 252533;
+            BigInteger mod_value = 33554393;
 
-        }       
+            //first calculate the index position of the row and column entry. Based
+            //on simple math
+
+            //Table is a triangle and the element we're looking for is on the hypotenuse
+            //of an isosceles right angle triangle;
+
+            // First calculate length of the two equal sides.
+            BigInteger side = row + col - 1;
+
+            // Calculate how many numbers are in that triangle
+            BigInteger quantityOfNumbers = side * (side + 1) / 2;
+
+            // Now get the index (which ends up being zero-based)
+            BigInteger index = quantityOfNumbers - row;
+
+            return first_code * BigInteger.ModPow(base_value, index, mod_value) % mod_value;
+
+        }
     }
 }
