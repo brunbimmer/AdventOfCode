@@ -42,7 +42,7 @@ namespace AdventOfCode
 
         Dictionary<string, Valve> Valves = new();       // Valves keyed by name.
         int[,] impDists;                                // The important distances (that is dists between non-zero flow + AA)
-        List<string> impValves;                // Non-zero Flow and AA
+        List<string> impValves;                         // Non-zero Flow and AA
         int[] valveMasks;                               // Ints with 1 bit turned on
 
 
@@ -68,15 +68,28 @@ namespace AdventOfCode
 
             SW.Stop();
 
-            Console.WriteLine("Part 1: {0}, Execution Time: {1}", cache.Values.Max(), StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Most Pressure released working alone: {0}, Execution Time: {1}", cache.Values.Max(), StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
-            
+            cache = new();
+            Visit(0, 26, 0, 0, cache);
+
+            int curMax = 0;
+
+            foreach (var kvp1 in cache)
+            {
+                foreach (var kvp2 in cache)
+                {
+                    if ((kvp1.Key & kvp2.Key) != 0) continue; //Only care if valves for disjoint set
+                    curMax = Math.Max(curMax, kvp1.Value + kvp2.Value);
+                }
+            }
+
+
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Most Pressure released working with elephant: {0}, Execution Time: {1}", curMax, StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
         }    
@@ -164,14 +177,14 @@ namespace AdventOfCode
         /// <param name="cache">Key is state (see above) value is max flow achieved in that state</param>
         private void Visit(int node, int time, int state, int flow, Dictionary<int, int> cache)
         {
-            //cache[state] = int.Max(cache.GetValueOrDefault(state, 0), flow); //Are we at a better point with the current valves turned on than last time we were at this point? if so, update value
-            //for(int i = 0; i < impValves.Count; i++) //For all valves
-            //{
-            //    var newTime = time - impDists[node, i] - 1; //time remaining is time minus walking time, minus 1 minute to open valve
-            //    if ((valveMasks[i] & state) != 0 || newTime <= 0) continue; //Don't go to the same valve twice, don't go to a valve if it means we run out of time.
-            //    Visit(i, newTime, state | valveMasks[i], flow + (newTime * Valves[impValves[i]].Flowrate), cache);
-            //    //Go to new valve, update state so it's turned on, add it's flow, repeat everything above.
-            //}
+            cache[state] = Math.Max(cache.GetValueOrDefault(state, 0), flow); //Are we at a better point with the current valves turned on than last time we were at this point? if so, update value
+            for (int i = 0; i < impValves.Count; i++) //For all valves
+            {
+                var newTime = time - impDists[node, i] - 1; //time remaining is time minus walking time, minus 1 minute to open valve
+                if ((valveMasks[i] & state) != 0 || newTime <= 0) continue; //Don't go to the same valve twice, don't go to a valve if it means we run out of time.
+                Visit(i, newTime, state | valveMasks[i], flow + (newTime * Valves[impValves[i]].Flowrate), cache);
+                //Go to new valve, update state so it's turned on, add it's flow, repeat everything above.
+            }
         }
     }
 }
