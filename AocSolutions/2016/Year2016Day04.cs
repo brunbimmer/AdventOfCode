@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AdventFileIO;
 using Common;
 
@@ -43,26 +44,72 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] roomList = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            SW.Start();
 
 
+            int sum = ParseRoomList(roomList);
 
-            
+
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Valid room Sector ID Sum: {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
 
-            SW.Restart();
+       }
 
-           
-            
-            SW.Stop();
+        int ParseRoomList(string[] roomList)
+        {
+            string roomName, sectorId, checksum = "";
+            int sum = 0;
+            foreach (string room in roomList)
+            {
+                (roomName, sectorId, checksum) = GetRoomDetails(room);
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+                if (CheckValidRoom(roomName.Replace("-", ""), checksum))
+                {
+                    sum += int.Parse(sectorId);
+                    var decipheredRoomName = DecypherRoomName(roomName.Replace("-", " "), int.Parse(sectorId));
 
+                    if (decipheredRoomName.Contains("northpole"))
+                        Console.WriteLine($"The room we are looking for is \"{decipheredRoomName}\" it is located in Sector ID {sectorId}.");
+                }
+                    
 
-        }       
+            }
+
+            return sum;
+        }
+
+        // Get the name, the sector id and the checksum of the room.
+        private (string, string, string) GetRoomDetails(string room)
+        {
+            string[] details = new string[3];
+            var pattern = @"^(.+)-([0-9]+)\[([a-z]+)\]$";
+            MatchCollection matches = Regex.Matches(room, pattern);
+
+            return (matches[0].Groups[1].Value, matches[0].Groups[2].Value, matches[0].Groups[3].Value);
+        }
+
+        private bool CheckValidRoom(string roomName, string checksum)
+        {
+            var rulesChecksum = string.Join("", roomName.GroupBy(c => c).OrderByDescending(c => c.Count()).ThenBy(c => c.Key).Take(5).Select(c => c.Key).ToList());
+            return rulesChecksum == checksum;
+        }
+
+        private string DecypherRoomName(string name, int shift)
+        {
+            var alphabet = "abcdefghijklmnopqrstuvwxyz";
+            var builder = new StringBuilder(name);
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (builder[i] == ' ')
+                    continue;
+                builder[i] = alphabet[(alphabet.IndexOf(builder[i]) + shift) % 26];
+            }
+
+            return builder.ToString();
+        }
+
     }
 }
