@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,47 +31,122 @@ namespace AdventOfCode
             SW = new Stopwatch();
         }
 
+
+        private enum Direction
+        {
+            N,
+            E,
+            S,
+            W
+
+        }
+
+        private Direction _currentDirection = Direction.N;
+        private Coordinate2D _currentPosition = new(0, 0);
+        private Coordinate2D _doubleHqCoordinate;
+        private List<Coordinate2D> _locations = new();
+
         public void GetSolution(string path, bool trackTime = false)
         {
             Console.WriteLine("===========================================");
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
+ 
             //Build BasePath and retrieve input. 
  
 
+
+
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            int[] measurements = FileIOHelper.getInstance().ReadDataToIntArray(file);
+            string[] directions = FileIOHelper.getInstance().ReadDataAsString(file).Split(",", StringSplitOptions.TrimEntries);
             
             SW.Start();
-            int increases = Part1(measurements);
-            SW.Stop();
+            ParseDirectionsWithDoubleLocationVisit(directions);
 
-
-
-            Console.WriteLine("  Part 1: Number of increases (Actual Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            int part1Distance = Math.Abs(_currentPosition.X) + Math.Abs(_currentPosition.Y);
+            int part2Distance = Math.Abs(_doubleHqCoordinate.X) + Math.Abs(_doubleHqCoordinate.Y);
             
-            SW.Restart();
-
-            increases = Part2(measurements);
             SW.Stop();
 
-            Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
+            Console.WriteLine("  Part 1: Distance to Bunny HQ: {0}", part1Distance);
+            Console.WriteLine("  Part 2: Action Distance to Bunny HQ: {0}", part2Distance);
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
+
+
+
         }
 
-        private int Part1(int[] measurements)
+        private void ParseDirectionsWithDoubleLocationVisit(string[] directions)
         {
-            return 0;
+            bool isDoubleLocationFound = false;
+
+            foreach (string s in directions)
+            {
+
+                _currentDirection = GetNewDirection(s[0]);
+
+                for (int i = 0; i < int.Parse(s.Substring(1)); i++)
+                {
+                    _currentPosition = GetNewPosition();
+
+                    if (!isDoubleLocationFound && _locations.Contains(_currentPosition))
+                    {
+                        _doubleHqCoordinate = _currentPosition;
+                        isDoubleLocationFound = true;
+                    }
+                    else
+                    {
+                        _locations.Add(_currentPosition);
+                    }
+                }
+            }
         }
 
-        private int Part2(int[] measurements)
+        private Coordinate2D GetNewPosition()
         {
-            return 0;
+            Coordinate2D newPosition = _currentDirection switch
+            {
+                Direction.N => _currentPosition with { Y = _currentPosition.Y + 1 },
+                Direction.E => _currentPosition with { X = _currentPosition.X + 1 },
+                Direction.S => _currentPosition with { Y = _currentPosition.Y - 1 },
+                _ => _currentPosition with { X = _currentPosition.X - 1 },
+            };
+            return newPosition;
+
+        }
+
+
+        private Direction GetNewDirection(char c)
+        {
+            Direction newDirection;
+
+            if (c == 'R')
+            {
+                newDirection = _currentDirection switch
+                {
+                    Direction.N => Direction.E,
+                    Direction.S => Direction.W,
+                    Direction.E => Direction.S,
+                    _ => Direction.N,
+                };
+            }
+            else
+            {
+                newDirection = _currentDirection switch
+                {
+                    Direction.N => Direction.W,
+                    Direction.S => Direction.E,
+                    Direction.E => Direction.N,
+                    _ =>  Direction.S,
+                };
+            }
+
+            
+            return newDirection;
         }
     }
 }
