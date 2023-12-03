@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace AdventOfCode
         public Year2016Day05()
         {
             //Get Attributes
-            AdventOfCodeAttribute ca = (AdventOfCodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(AdventOfCodeAttribute));
+            AdventOfCodeAttribute ca =
+                (AdventOfCodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(AdventOfCodeAttribute));
 
             _Year = ca.Year;
             _Day = ca.Day;
@@ -39,30 +41,88 @@ namespace AdventOfCode
             Console.WriteLine("===========================================");
 
             //Build BasePath and retrieve input. 
- 
-
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            SW.Start();                       
 
 
+            string doorId = "abbhdwsy";
 
-            
+            SW.Start();
+
+            string password = FindPassword(doorId);
+
+
+
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Computed Password: {0}, Execution Time: {1}", password, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
-            
+            string complexPassword = FindComplexPassword(doorId);
+
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Complex Password: {0}, Execution Time: {1}", complexPassword, StopwatchUtil.getInstance().GetTimestamp(SW));
+
+        }
+
+        string FindPassword(string doorId)
+        {
+
+            string password = "";
+            int index = 1;
+
+            do
+            {
+                string md5 = ComputeMD5Hash(doorId + index);
+
+                if (md5.StartsWith("00000"))
+                    password += md5[5]; //sixth position
+
+                index += 1;
+            } while (password.Length < 8);
+
+            return password;
+        }
+
+        string FindComplexPassword(string doorId)
+        {
+
+            var password = Enumerable.Repeat('*', 8).ToArray();
+            int index = 1;
+            int value = 0;
+
+            do
+            {
+                string md5 = ComputeMD5Hash(doorId + index);
+
+                if (md5.StartsWith("00000") && int.TryParse(md5[5].ToString(), out value) && value < password.Length && password[value] == '*')
+                {
+                    password[value] = md5[6]; //sixth position
+                }
+                    
+
+                index += 1;
+            } while (password.Contains('*'));
+
+            return string.Join("", password);
+        }
 
 
-        }       
+        public string ComputeMD5Hash(string input)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return sb.ToString();
+            }
+        }
     }
 }
