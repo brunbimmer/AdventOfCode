@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
+using LINQPad.Controls;
 
 namespace AdventOfCode
 {
@@ -43,26 +44,75 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] triangleList = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             SW.Start();                       
 
-
+            int numPossibleTriangles = ParseTriangleList(triangleList);
 
             
             SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of possible triangles: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(SW));
 
             SW.Restart();
 
-           
+            numPossibleTriangles = ParseVerticalListTriangles(triangleList);
             
             SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Number of possible triangles by column: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(SW));
 
 
-        }       
+        }
+
+        int ParseTriangleList(string[] triangleList)
+        {
+            int possibleTriangles = 0;
+
+            foreach (string triangle in triangleList)
+            {
+                int[] sides = triangle.Trim().Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(int.Parse)
+                                      .OrderBy(x => x)
+                                      .ToArray();
+
+                if (sides[0] + sides[1] > sides[2])
+                    possibleTriangles += 1;
+            }
+
+            return possibleTriangles;
+        }
+
+        int ParseVerticalListTriangles(string[] triangleList)
+        {
+            int possibleTriangles = 0;
+
+            for(int i = 0; i <= (triangleList.Length - 3); i += 3)
+            {
+                string[] side1 = triangleList[i].Trim().Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                string[] side2 = triangleList[i + 1].Trim().Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                string[] side3 = triangleList[i + 2].Trim().Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+                int[] triangle1 = { int.Parse(side1[0]), int.Parse(side2[0]), int.Parse(side3[0]) };
+                int[] triangle2 = { int.Parse(side1[1]), int.Parse(side2[1]), int.Parse(side3[1]) };
+                int[] triangle3 = { int.Parse(side1[2]), int.Parse(side2[2]), int.Parse(side3[2]) };
+
+                var orderedTriangle1 = triangle1.OrderBy(x => x).ToArray();
+                var orderedTriangle2 = triangle2.OrderBy(x => x).ToArray();
+                var orderedTriangle3 = triangle3.OrderBy(x => x).ToArray();
+
+                if (orderedTriangle1[0] + orderedTriangle1[1] > orderedTriangle1[2])
+                    possibleTriangles += 1;
+
+                if (orderedTriangle2[0] + orderedTriangle2[1] > orderedTriangle2[2])
+                    possibleTriangles += 1;
+
+                if (orderedTriangle3[0] + orderedTriangle3[1] > orderedTriangle3[2])
+                    possibleTriangles += 1;
+            }
+
+            return possibleTriangles;
+        }
     }
 }
