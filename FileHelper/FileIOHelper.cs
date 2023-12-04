@@ -139,6 +139,15 @@ namespace AdventFileIO
             return grid;
         }
 
+        public char[][] GetDataAsDoubleCharArray(string file)
+        {
+            string[] lines = ReadDataAsLines(file);
+
+            char[][] grid = lines.Select(x => x.Select(y => y).ToArray()).ToArray();
+
+            return grid;
+        }
+
         public List<(string,string)> ReadDataAsTupleList(string file)
         {
             List<(string, string)> tupleList = new();
