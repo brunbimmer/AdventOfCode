@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    public static class EnumerableExtensions
+    {
+        public static IEnumerable<long> RangeLong(long start, long count)
+        {
+            return Enumerable.Range(0, (int)count).Select(i => start + i);
+        }
+    }
+
     public static class IntUtilities
     {
 
