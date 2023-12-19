@@ -21,11 +21,11 @@ namespace Common
             return _instance;
         }
 
-        public string GetTimestamp(Stopwatch sw)
+        public string GetTimestamp(Stopwatch _SW)
         {
-            long microseconds = sw.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
+            long microseconds = _SW.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
 
-            return (microseconds < 1000) ? $"{microseconds} us" : $"{sw.ElapsedMilliseconds} ms";
+            return (microseconds < 1000) ? $"{microseconds} us" : $"{_SW.ElapsedMilliseconds} ms";
         }
     }
 }

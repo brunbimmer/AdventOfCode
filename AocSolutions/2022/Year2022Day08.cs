@@ -45,7 +45,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day08()
         {
@@ -56,7 +56,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -72,13 +72,13 @@ namespace AdventOfCode
 
             int[][] treeGrid = FileIOHelper.getInstance().GetDataAsDoubleIntArray(file);
 
-            SW.Restart();                       
+            _SW.Restart();                       
 
             (int visibleTrees, int scenicScore) = CalculateVisibleTreesAndScenicScore(treeGrid);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Visible Trees {0}, Top Scenic Score {1}, Execution Time: {2}", visibleTrees, scenicScore, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Visible Trees {0}, Top Scenic Score {1}, Execution Time: {2}", visibleTrees, scenicScore, StopwatchUtil.getInstance().GetTimestamp(_SW));
            
         }       
 

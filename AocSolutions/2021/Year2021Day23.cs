@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
          //The key here is that the hallway and amphipods being represented in a flat structure.
         //                      #############
@@ -52,7 +52,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -69,17 +69,17 @@ namespace AdventOfCode
             string input = FileIOHelper.getInstance().ReadDataAsString(file);
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
 
             int cost = CalculateEnergyCost(input);      //input in 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Energy Cost to organize the amphipods (depth 2): {0}", cost);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             //add the two new lines
 
@@ -95,11 +95,11 @@ namespace AdventOfCode
            
             cost = CalculateEnergyCost(newInput.ToString());            
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Energy Cost to organize the amphipods (depth 4): {0}", cost);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

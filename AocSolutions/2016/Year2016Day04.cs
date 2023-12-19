@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day04()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,15 +46,15 @@ namespace AdventOfCode
 
             string[] roomList = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
 
             int sum = ParseRoomList(roomList);
 
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Valid room Sector ID Sum: {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Valid room Sector ID Sum: {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
        }
 

@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         List<List<int>> calorieCollection = new List<List<int>>();
 
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -44,27 +44,27 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
            
-            SW.Start();
+            _SW.Start();
             
             ParseInput(lines);
 
             int maxElfSum = calorieCollection.Max(x => x.Sum());
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Total calories carried by an elf: {0}", maxElfSum);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
 
             var orderedSumList = calorieCollection.OrderByDescending(x => x.Sum()).ToList().Take(3).ToList();
 
             int topThreeElfSum = orderedSumList.Sum(x => x.Sum());
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Total calories carried by three elves: {0}", topThreeElfSum);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

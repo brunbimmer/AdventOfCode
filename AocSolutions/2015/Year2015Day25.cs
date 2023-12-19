@@ -12,7 +12,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day25()
         {
@@ -23,7 +23,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -34,22 +34,22 @@ namespace AdventOfCode
 
             //Build BasePath and retrieve input. 
 
-            SW.Start();
+            _SW.Start();
 
             BigInteger code = CalculateCode(2947, 3029);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1 - Code at Row 2947 and Column 3029 is: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1 - Code at Row 2947 and Column 3029 is: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
            
             
-            SW.Stop();
+            _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
 
         private BigInteger CalculateCode(int row, int col)

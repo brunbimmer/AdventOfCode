@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day11()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,18 +45,18 @@ namespace AdventOfCode
 
             Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsIntegerMap(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int flashCountAt100 = 0;
             int stepCount = 0;
             (flashCountAt100, stepCount) = OctopusSimulation(octopusGrid, 100);
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of Flashes at Step 100: {0}", flashCountAt100);
             Console.WriteLine("Part 2: First Step Count when all Octopus are lit: {0}", stepCount);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }    

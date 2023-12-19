@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day20()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             
-            SW.Start();                       
+            _SW.Start();                       
             int[] numbers = FileIOHelper.getInstance().ReadDataToIntArray(file);
             int[] moved = new int[numbers.Length];
             
@@ -82,16 +82,16 @@ namespace AdventOfCode
             int sum = FindNumberAt(1000, elements) + FindNumberAt(2000, elements) + FindNumberAt(3000, elements);
 
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Sum of the three numbers forming coordinates: {0}   Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Sum of the three numbers forming coordinates: {0}   Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }    

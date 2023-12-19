@@ -17,7 +17,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day5Problem()
         {
@@ -28,7 +28,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,21 +43,21 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
             int numNiceStrings = Part1(lines);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: The number of nice strings in the sequence input are: {0}", numNiceStrings);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             numNiceStrings = Part2(lines);
 
             Console.WriteLine("  Part 2: The number of nice strings in the sequence input are: {0}", numNiceStrings);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

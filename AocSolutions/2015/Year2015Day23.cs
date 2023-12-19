@@ -20,7 +20,7 @@ namespace AdventOfCode
 
         Dictionary<string, int> registers = new Dictionary<string, int>();
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day23()
         {
@@ -31,7 +31,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -49,23 +49,23 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
             ProcessInstructionsPart1(instructions);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             registers["a"] = 1;
             registers["b"] = 0;
             ProcessInstructionsPart1(instructions);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
 
         private void ProcessInstructionsPart1(string[] instructions)

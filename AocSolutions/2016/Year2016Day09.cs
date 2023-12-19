@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day09()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,22 +46,22 @@ namespace AdventOfCode
 
             string data = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            SW.Start();
+            _SW.Start();
 
             int length = DecompressInput(data);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Decompressed Length {0}, Execution Time: {1}", length, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Decompressed Length {0}, Execution Time: {1}", length, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long newLength = CalculateDecompressedLength(data.Trim());
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: New Decompressed Length {0}, Execution Time: {1}", newLength, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: New Decompressed Length {0}, Execution Time: {1}", newLength, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

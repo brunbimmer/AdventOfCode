@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day4Problem()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -44,21 +44,21 @@ namespace AdventOfCode
             string md5Secret = "bgvyzdsv";
 
             //Build BasePath and retrieve input. 
-            SW.Start();
+            _SW.Start();
 
             int lowestNumber = Part1(md5Secret);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with five leading zero's: {1}", md5Secret, lowestNumber);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             lowestNumber = Part2(md5Secret);
 
             Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with six leading zero's: {1}", md5Secret, lowestNumber);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day14()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,7 +45,7 @@ namespace AdventOfCode
             Dictionary<string, long> polymerTemplate;
             List<(string, string)> rules;
 
-            SW.Start();                       
+            _SW.Start();                       
 
             string originalPolymer = "";
             (polymerTemplate, rules) = ReadData(file, ref originalPolymer);
@@ -53,20 +53,20 @@ namespace AdventOfCode
             long part1 = GrowPolymer(polymerTemplate, rules, 10, originalPolymer);
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Difference between most common and least common element after 10 steps: {0}", part1);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long part2 = GrowPolymer(polymerTemplate, rules, 40, originalPolymer);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Difference between most common and least common element after 40 steps: {0}", part2);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

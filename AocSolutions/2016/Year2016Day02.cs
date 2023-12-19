@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day02()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         private int[,] keypad = { { 1, 2, 3 }, 
@@ -65,22 +65,22 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
             string code = SolvePart1(instructions);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Bathroom Code: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Bathroom Code: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             string realCode = SolvePart2(instructions);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Real Bathroom Code: {0}, Execution Time: {1}", realCode, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Real Bathroom Code: {0}, Execution Time: {1}", realCode, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

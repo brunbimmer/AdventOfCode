@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day7()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -52,16 +52,16 @@ namespace AdventOfCode
             int centerOfMass = GetCenterOfMass(crabPositions);
             double fuelCost = 0;
 
-            SW.Start();            
+            _SW.Start();            
 
             fuelCost = GetFuelCost(median, crabPositions, true); 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Fuel Cost - Part 1 (Median: {0}): {1}", centerOfMass, fuelCost);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             fuelCost = GetFuelCost(average, crabPositions, false);
 
@@ -71,9 +71,9 @@ namespace AdventOfCode
 
             Console.WriteLine("Fuel Cost - Part 2 (Center of Mass: {0}): {1}", centerOfMass, fuelCost);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             Console.WriteLine("");
             Console.WriteLine("I am showing two possible fuel cost answers to the Part 2. One using average and another using center of mass.");
             Console.WriteLine("One of these options will result in the lower fuel cost. I am displaying both for comparision purposes.");

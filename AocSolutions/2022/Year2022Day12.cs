@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day12()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,7 +45,7 @@ namespace AdventOfCode
 
             Dictionary<(int, int), int> grid = FileIOHelper.getInstance().GetDataAsCharMapWithValues(file);
 
-            SW.Start();
+            _SW.Start();
             (int, int) startPoint = grid.Where(x => x.Value == CalculateLetterValue('S')).FirstOrDefault().Key;
             (int, int) endPoint = grid.Where(x => x.Value == CalculateLetterValue('E')).FirstOrDefault().Key;
             grid[startPoint] = 1;   //set the value of the start point to 1
@@ -53,9 +53,9 @@ namespace AdventOfCode
             var pathPart = MapLowestPathScoreAStar(grid, startPoint, endPoint);
             int steps = pathPart.Skip(1).Count();   //don't count the original location
 
-            SW.Stop();
-            Console.WriteLine("Part 1: Shortest # of steps {0}, Execution Time: {1}", steps, StopwatchUtil.getInstance().GetTimestamp(SW));
-            SW.Restart();
+            _SW.Stop();
+            Console.WriteLine("Part 1: Shortest # of steps {0}, Execution Time: {1}", steps, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            _SW.Restart();
             List<int> PathLengths = new();
             var lowPoints = grid.Where(a => a.Value == 1).ToList();     //get all low points
             foreach (var a in lowPoints)
@@ -67,8 +67,8 @@ namespace AdventOfCode
                 }
             }
             int shortestSteps = PathLengths.Min();
-            SW.Stop();
-            Console.WriteLine("Part 2: Least Steps from any starting point A {0}, Execution Time: {1}", shortestSteps, StopwatchUtil.getInstance().GetTimestamp(SW));
+            _SW.Stop();
+            Console.WriteLine("Part 2: Least Steps from any starting point A {0}, Execution Time: {1}", shortestSteps, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }
         private List<(int, int)> MapLowestPathScoreAStar(Dictionary<(int, int), int> grid, (int, int) start, (int, int) goal)

@@ -21,7 +21,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         public Year2015Day12Problem()
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,25 +48,25 @@ namespace AdventOfCode
 
             string content = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            SW.Start();
+            _SW.Start();
 
             long[] numbersOnly = Regex.Matches(content, "(-?[0-9]+)").OfType<Match>().Select(m => long.Parse(m.Value)).ToArray();
                          
 
-            SW.Stop();            
+            _SW.Stop();            
 
             Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence is: {0}", numbersOnly.Sum());
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long sum = Part2Algorithm(content);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence with RED removed is: {0}", sum);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
 
 

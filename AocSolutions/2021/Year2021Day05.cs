@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private class CoordinatePair
         {
@@ -46,7 +46,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -62,24 +62,24 @@ namespace AdventOfCode
 
             ReadFile(file);
 
-            SW.Start();
+            _SW.Start();
             
             ParseInputForOverlappingPoints(true);
-            SW.Stop();
+            _SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Number of overlapping points for horizontal and vertical lines: {0}", OverlappingPoints);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             ParseInputForOverlappingPoints();
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of overlapping points for horizontal/vertical and diagonal lines: {0}", OverlappingPoints);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

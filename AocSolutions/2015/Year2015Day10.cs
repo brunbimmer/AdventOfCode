@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         public Year2015Day10Problem()
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -41,7 +41,7 @@ namespace AdventOfCode
 
             //simple input, file access not required
 
-            SW.Start();
+            _SW.Start();
 
             string sequence = "3113322113";
                 
@@ -51,12 +51,12 @@ namespace AdventOfCode
             }
                            
 
-            SW.Stop();            
+            _SW.Stop();            
 
             Console.WriteLine("  Part 1: When applying the Look And Say Sequence 40 times, the length of the final number is: {0}", sequence.Length);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             sequence = "3113322113";
 
@@ -65,10 +65,10 @@ namespace AdventOfCode
                 sequence = LookAndSay(sequence);
             }
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: When applying the Look And Say Sequence 50 times, the length of the final number is: {0}", sequence.Length);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
 
 

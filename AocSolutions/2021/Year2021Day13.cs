@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day13()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -42,28 +42,28 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             List<(int, int)> graphMap;
             List<string> instructions;
             (graphMap, instructions) = BuildInstructionMap(lines);
             List<(int, int)> graphMapPart1 = TransformGraphMap(graphMap, instructions, 1);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of Points after First Fold: {0}", graphMapPart1.Count);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             List<(int, int)> graphMapFinal = TransformGraphMap(graphMap, instructions, instructions.Count);
             string code = BuildCode(graphMapFinal.OrderBy(x => x.Item2).ToList());
             
-            SW.Stop();
+            _SW.Stop();
 
              Console.WriteLine("Part 2: The code\n\n{0}", code);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         public Year2015Day11Problem()
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -41,28 +41,28 @@ namespace AdventOfCode
 
             //simple input, file access not required
 
-            SW.Start();
+            _SW.Start();
 
             string currentPassword = "cqjxjnds";
 
             string nextPassword = GenerateNewPassword(currentPassword);
                           
 
-            SW.Stop();            
+            _SW.Stop();            
 
             Console.WriteLine("  Part 1: The next password after [{0}]: {1}", currentPassword, nextPassword);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             currentPassword = nextPassword;
 
             nextPassword = GenerateNewPassword(currentPassword);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 2: The next password after [{0}]: {1}", currentPassword, nextPassword);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
 
 

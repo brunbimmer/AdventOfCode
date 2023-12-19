@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day15()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -44,29 +44,29 @@ namespace AdventOfCode
 
             Dictionary<(int, int), int> caveMap = FileIOHelper.getInstance().GetDataAsIntegerMap(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             var pathPart1 = MapLowestPathScoreAStar(caveMap, ( 0, 0), (caveMap.Keys.Max(x => x.Item1), caveMap.Keys.Max(x => x.Item2)));
             int pathScore1 = pathPart1.Skip(1).Sum(x => caveMap[x]);
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Lowest Total Risk from top left to bottom right: {0}", pathScore1);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             GrowMap(caveMap);
             
-            SW.Stop();
+            _SW.Stop();
 
             var pathPart2 = MapLowestPathScoreAStar(caveMap, ( 0, 0), (caveMap.Keys.Max(x => x.Item1), caveMap.Keys.Max(x => x.Item2)));
             int pathScore2 = pathPart2.Skip(1).Sum(x => caveMap[x]);
 
             Console.WriteLine("Part 2: Lowest Total Risk from top left to bottom right in larger map: {0}", pathScore2);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

@@ -49,7 +49,7 @@ namespace AdventOfCode
 
         enum ActionType {Nothing, Missile, Drain, Poison, Shield, Recharge}
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day22()
         {
@@ -60,7 +60,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -70,7 +70,7 @@ namespace AdventOfCode
             Console.WriteLine("===========================================");
 
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int answer = 9999999;
 
@@ -83,11 +83,11 @@ namespace AdventOfCode
             }
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1 - Least amount of Mana Spent to win fight: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1 - Least amount of Mana Spent to win fight: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int answer2 = 9999999;
 
@@ -100,9 +100,9 @@ namespace AdventOfCode
             }
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2 - Least amount of Mana Spent to win fight (Hard Mode): {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2 - Least amount of Mana Spent to win fight (Hard Mode): {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(_SW));
         }   
         
         ActionType Choose()

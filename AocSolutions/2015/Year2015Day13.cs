@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         private Dictionary<Tuple<string, string>, int> locations = new Dictionary<Tuple<string, string>, int>();
@@ -43,7 +43,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -57,26 +57,26 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);         
-            SW.Start();
+            _SW.Start();
           
             List<Guest> guests = ParseSeatingChart(instructions);
 
             List<string> persons = guests.Select(s => s.person).GroupBy(s => s).Select(s => s.Key).ToList();
             int totalChange = GetSittingHappiness(guests, persons);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("  Part 1: Total Change of Happiness for optimal seating: {0}, Execution Time: {1}", totalChange, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("  Part 1: Total Change of Happiness for optimal seating: {0}, Execution Time: {1}", totalChange, StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
                        
             AddMe(guests, persons);
             persons.Add("Me");
             int newTotalChange = GetSittingHappiness(guests, persons);
 
-            SW.Stop();
+            _SW.Stop();
             
-            Console.WriteLine("  Part 2: Total Change of Happiness for optimal seating with me: {0}, Execution Time: {1}", newTotalChange, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("  Part 2: Total Change of Happiness for optimal seating with me: {0}, Execution Time: {1}", newTotalChange, StopwatchUtil.getInstance().GetTimestamp(_SW));
             
 
 

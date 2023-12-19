@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private   string _algorithm;
         private   Dictionary<Coordinate2D, char> _image;
@@ -34,7 +34,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
        public void GetSolution(string path, bool trackTime = false)
@@ -50,26 +50,26 @@ namespace AdventOfCode
 
             string[] dataInput = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             InitializeDataSets(dataInput);                        
             int activeLights = EnhanceImage(2);
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of Active Lights after 2 passes: {0}", activeLights);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             activeLights = EnhanceImage(50);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of Active Lights after 50 passes: {0}", activeLights);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }    

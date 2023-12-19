@@ -17,7 +17,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day6Problem()
         {
@@ -28,7 +28,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,23 +46,23 @@ namespace AdventOfCode
             Dictionary<Coordinate2D, int> grid = new Dictionary<Coordinate2D, int>();
 
 
-            SW.Start();
+            _SW.Start();
 
             int lightsOn = Part1(lines, grid);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: The number of lights that are turned on after Santa's instruction: {0}", lightsOn);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             grid.Clear();
 
             long brightness = Part2(lines, grid);
 
             Console.WriteLine("  Part 2: Total brightness of lights as per Santa's instructions: {0}", brightness);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

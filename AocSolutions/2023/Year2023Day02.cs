@@ -22,7 +22,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         List<List<int>> calorieCollection = new List<List<int>>();
 
@@ -35,7 +35,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -50,24 +50,24 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
            
-            SW.Start();
+            _SW.Start();
 
 
             int sumofIds = FindPossibleGames(lines);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"  Part 1: Some of the IDs of possible games: {sumofIds}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
 
             int powerSetSum = FindPowerSetTotal(lines);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"  Part 2: Power Set Sum: {powerSetSum}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

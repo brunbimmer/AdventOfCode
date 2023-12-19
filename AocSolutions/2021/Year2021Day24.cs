@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         private  List<long> addX = new();
@@ -37,7 +37,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -53,7 +53,7 @@ namespace AdventOfCode
 
             var input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             //took some time to visually review the operations. Operation order is similar for all digit locations
             //with only minor, minor differences with the operands. Extract the operations that are unique per
@@ -76,11 +76,11 @@ namespace AdventOfCode
             string largestNumber = ValidModelNumbers.Last();        //Part 1
             string smallestNumber = ValidModelNumbers.First();      //Part 2
            
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Largest Model Number accepted by Monad:  {0}", largestNumber);
             Console.WriteLine("Smallest Model Number accepted by Monad: {0}", smallestNumber);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

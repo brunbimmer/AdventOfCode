@@ -17,7 +17,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         Dictionary<string, string> instructionSet;
         Dictionary<string, int> cachedValues;
@@ -32,7 +32,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -50,16 +50,16 @@ namespace AdventOfCode
             instructionSet = BuildInstructions(lines);
             cachedValues = new Dictionary<string, int>();
 
-            SW.Start();
+            _SW.Start();
           
             int value = RunSimulation();
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Signal that is sent to Wire A: {0}", value);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             cachedValues.Clear();
 
@@ -69,7 +69,7 @@ namespace AdventOfCode
             int newValue = RunSimulation();
 
             Console.WriteLine("  Part 2: Update signal B to {0}. New value at Wire A: {1}", value, newValue);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private const int _TotalLiters = 150;
 
@@ -32,7 +32,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,15 +48,15 @@ namespace AdventOfCode
 
             int[] containers = FileIOHelper.getInstance().ReadDataToIntArray(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             var query = CalculateSum(containers);
                         
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Combinations of Containers totaling 150: {0}, Execution Time: {1}", query.Count(), StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Combinations of Containers totaling 150: {0}, Execution Time: {1}", query.Count(), StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             
             int minContainers = query.GroupBy(x => x.Count())
@@ -64,9 +64,9 @@ namespace AdventOfCode
                                     .First()
                                     .Count();
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Min # of Containers to fill 150L of Egg Nog: {0}, Execution Time: {1}", minContainers, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Min # of Containers to fill 150L of Egg Nog: {0}, Execution Time: {1}", minContainers, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

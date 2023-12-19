@@ -39,7 +39,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day21()
         {
@@ -50,7 +50,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -59,7 +59,7 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            SW.Restart();
+            _SW.Restart();
             //Build BasePath and retrieve input. 
  
             var boss = new Competitor { HitPoints = 109, Damage = 8, Armour = 2, Name = "Boss" };
@@ -106,8 +106,8 @@ namespace AdventOfCode
             var max = combinations.Max(i => Try("Boss", player, boss, i) ?? Int32.MinValue);
             Console.WriteLine(max);
 
-            SW.Stop();
-            Console.WriteLine("Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            _SW.Stop();
+            Console.WriteLine("Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         
         }   

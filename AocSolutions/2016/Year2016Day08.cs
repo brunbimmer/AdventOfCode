@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         char[,] map = new char[6, 50];
 
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -55,17 +55,17 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             ParseDisplayInstructions(instructions);
 
             int  count = map.Cast<char>().Count(c => c == '#');
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine($"Part 1 - Number of pixels that are lit: {count}, Execution Time: {StopwatchUtil.getInstance().GetTimestamp(SW)}");
+            Console.WriteLine($"Part 1 - Number of pixels that are lit: {count}, Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
 
-            SW.Restart();
+            _SW.Restart();
 
             for (int a = 0; a < map.GetLength(0); a++)
             {
@@ -78,9 +78,9 @@ namespace AdventOfCode
                 
 
 
-            SW.Stop();
+            _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private   List<(bool turnOn, int minX, int maxX, int minY, int maxY, int minZ, int maxZ)> Steps = new();
 
@@ -31,7 +31,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -47,7 +47,7 @@ namespace AdventOfCode
 
             string[] _Instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             foreach (var line in _Instructions)
             {
@@ -60,20 +60,20 @@ namespace AdventOfCode
             int answer1 = Part1();
 
             
-            SW.Stop();
+            _SW.Stop();
 
              Console.WriteLine("Part 1: Number of Cubes on in the +/- 50 initialization perimeter boundary: {0}", answer1);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long answer2 = Part2();
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of Cubes on in entire surface area: {0}", answer2);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }      

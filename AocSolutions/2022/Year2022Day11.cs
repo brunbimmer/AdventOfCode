@@ -59,7 +59,7 @@ namespace AdventOfCode
         }
 
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day11()
         {
@@ -70,7 +70,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         private List<MonkeyBusiness> GetInitialMonkeyState()
@@ -100,24 +100,24 @@ namespace AdventOfCode
  
             // list out the items with options for no armour and rings but not no weapon
             List<MonkeyBusiness> monkeys = GetInitialMonkeyState();          
-            SW.Start();                     
+            _SW.Start();                     
             long InspectionMetric = RunMonkeyBusiness(20, monkeys, true, 3);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Inspection Metric: {0}, Execution Time: {1}", InspectionMetric, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Inspection Metric: {0}, Execution Time: {1}", InspectionMetric, StopwatchUtil.getInstance().GetTimestamp(_SW));
             
             monkeys = GetInitialMonkeyState();
-            SW.Restart();            
+            _SW.Restart();            
 
             long worryDivisor = monkeys.Aggregate(1, (current, monkey) => current * monkey.divisibleBy);
 
             InspectionMetric = RunMonkeyBusiness(10000, monkeys, false, worryDivisor);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Inspection Metric: {0}, Execution Time: {1}", InspectionMetric, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Inspection Metric: {0}, Execution Time: {1}", InspectionMetric, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }     

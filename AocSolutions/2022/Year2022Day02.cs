@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day02()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,7 +45,7 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int totalScore = 0;            
             foreach (string instruction in instructions)
@@ -54,11 +54,11 @@ namespace AdventOfCode
                 totalScore += PlayRound1(play);
             }
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Total Score for all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Total Score for all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
             totalScore = 0;
 
             foreach (string instruction in instructions)
@@ -67,9 +67,9 @@ namespace AdventOfCode
                 totalScore += PlayRound2(play);                
             }           
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Total Score after all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Total Score after all rounds {0}, Execution Time: {1}", totalScore, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

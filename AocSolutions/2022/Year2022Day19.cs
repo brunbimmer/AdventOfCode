@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day19()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         internal class Blueprint
@@ -84,7 +84,7 @@ namespace AdventOfCode
 
             ParseInput(FileIOHelper.getInstance().ReadDataAsLines(file));
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int index = 1;
             int totalP1Score = 0;
@@ -96,11 +96,11 @@ namespace AdventOfCode
             }
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Total Score {0}, Execution Time: {1}", totalP1Score, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Total Score {0}, Execution Time: {1}", totalP1Score, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int totalP2Score = 1;
 
@@ -111,9 +111,9 @@ namespace AdventOfCode
                 totalP2Score *= best;             
             }
                 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Three Blueprint Multiplier {0}, Execution Time: {1}", totalP2Score, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Three Blueprint Multiplier {0}, Execution Time: {1}", totalP2Score, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }     

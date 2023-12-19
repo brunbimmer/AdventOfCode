@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         int sum = 0;         
         int cycle = 0;
@@ -41,7 +41,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -66,7 +66,7 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Restart();                       
+            _SW.Restart();                       
 
             foreach (string instruction in instructions)
             {
@@ -87,9 +87,9 @@ namespace AdventOfCode
             //add the last line to the buffer.
             buffer.AppendLine(new string(currentLine.ToArray()));
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Sum of Signal Strengths {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Sum of Signal Strengths {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             Console.WriteLine("Part 2:");
 

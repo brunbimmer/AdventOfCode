@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day3()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -51,23 +51,23 @@ namespace AdventOfCode
                 binaryInputStream.Add(inputLine);
             }
 
-            SW.Start();
+            _SW.Start();
             int powerOutput = Part1(binaryInputStream);
-            SW.Stop();
+            _SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Power Output: {0}", powerOutput);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int lifeSupport = Part2(binaryInputStream);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Life Support Rating Output: {0}", lifeSupport);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

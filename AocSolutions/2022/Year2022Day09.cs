@@ -22,7 +22,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day09()
         {
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -67,7 +67,7 @@ namespace AdventOfCode
             visitedPart1[rope[0]] = true;
             visitedPart2[tPos] = true;
 
-            SW.Restart();    
+            _SW.Restart();    
             
             foreach (string instruction in instructions)
             {
@@ -111,11 +111,11 @@ namespace AdventOfCode
                 }
             }
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of Positions Tail visited (Two Knots) -> {0}", visitedPart1.Count);
             Console.WriteLine("Part 2: Number of Positions Tail visited (10 knots)  -> {0}", visitedPart2.Count);
-            Console.WriteLine("  Total Execution Time: {0}" , StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("  Total Execution Time: {0}" , StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }   
         

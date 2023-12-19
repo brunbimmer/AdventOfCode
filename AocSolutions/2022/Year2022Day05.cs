@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day05()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,25 +45,25 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             Dictionary<int, Stack<char>> stacks = SetupStacks();
 
             string stackTops = RunOperation(stacks, lines);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             Dictionary<int, Stack<char>> newStacks = SetupStacks();
 
             stackTops = RunOperationPart2(newStacks, lines);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

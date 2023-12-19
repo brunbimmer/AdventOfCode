@@ -15,7 +15,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day24()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -44,21 +44,21 @@ namespace AdventOfCode
             int[] inputs = FileIOHelper.getInstance().ReadDataToIntArray(file);
 
             int sum = inputs.Sum();
-            SW.Start();
+            _SW.Start();
 
             var answer = FindBestQE(inputs, 3);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1 => Minimum Viable QE with 3 groups: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1 => Minimum Viable QE with 3 groups: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             var answer2 = FindBestQE(inputs, 4);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2 => Minimum Viable QE with 4 groups: {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2 => Minimum Viable QE with 4 groups: {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

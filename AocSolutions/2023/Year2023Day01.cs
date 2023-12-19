@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         List<List<int>> calorieCollection = new List<List<int>>();
 
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,24 +48,24 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
            
-            SW.Start();
+            _SW.Start();
 
 
             int sum = CalculateSum(lines);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"  Part 1: Calibration Value of input: {sum}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
 
             int trueSum = CalculateSumWithWords(lines);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"  Part 2: True calibration value: {trueSum}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

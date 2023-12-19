@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day9()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,25 +48,25 @@ namespace AdventOfCode
             List<(int,int)> lowDataPoints = new List<(int,int)>();
             List<int> basins = new List<int>();
 
-            SW.Start();                       
+            _SW.Start();                       
             lowDataPoints = GetLowPoints(caveData);                            
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Sum of Risk Levels of Low Points: {0}", lowDataPoints.Select(lp => caveData[lp] + 1).Sum());
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             basins = GetBasins(caveData, lowDataPoints);
 
             //Take the largest 3 datapoints only to calculate the required result set.
             var maxDataPoints = basins.OrderByDescending(x => x).Take(3).ToArray();
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Largest Three Basins Multiplied: {0}", maxDataPoints[0] * maxDataPoints[1] * maxDataPoints[2]);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }        

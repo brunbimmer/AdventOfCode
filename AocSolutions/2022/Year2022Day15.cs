@@ -22,7 +22,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day15()
         {
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         private record Sensor (long X, long Y, long ManhattanDistance);
@@ -54,23 +54,23 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             (mapOfObjects, sensors) = BuildTunnelMap(input);
 
             long numExcludedBeaconLocations = CalculateExcludedZoneOptimized(mapOfObjects, sensors, 2000000);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Exclusion Beacon Locations : {0}, Execution Time: {1}", numExcludedBeaconLocations, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of Exclusion Beacon Locations : {0}, Execution Time: {1}", numExcludedBeaconLocations, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long tuningFrequency = CalculateFrequency(sensors);            
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Tuning Frequency {0}, Execution Time: {1}", tuningFrequency, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Tuning Frequency {0}, Execution Time: {1}", tuningFrequency, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

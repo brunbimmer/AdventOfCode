@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private   Dictionary<int, (int, long)> scores;     //player and position/score match
         private   int dice;
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -51,19 +51,19 @@ namespace AdventOfCode
             rolls = 0;
             scores = new();
 
-            SW.Start();                       
+            _SW.Start();                       
 
             scores.Add(1, (6, 0));      //Player 1 (Position 7, Score: 0), but make position 0-based and adjust.
             scores.Add(2, (0, 0));      //Player 2 (Position 1, Score: 0), but make position 0-based and adjust.
 
             long lowestScore = Part1();
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Lowest Score: {0}", lowestScore);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             //actual Data
             int player1Loc = 7;
@@ -73,11 +73,11 @@ namespace AdventOfCode
 
             long maxWins = result.Max(x => x.Value);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of Universes in which the winning player won: {0}", maxWins);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

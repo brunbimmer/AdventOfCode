@@ -15,7 +15,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day2Problem()
         {
@@ -26,7 +26,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             //Part 1
 
-            SW.Start();
+            _SW.Start();
 
             int wrappingPaperArea = 0;
             int ribbonLength = 0;
@@ -63,11 +63,11 @@ namespace AdventOfCode
                 ribbonLength += (2 * extra[0] + 2 * extra[1]) + l * w * h;
             }
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Required wrapping paper: {0}", wrappingPaperArea);
             Console.WriteLine("  Part 2: Total Ribben Length: {0}", ribbonLength);
-            Console.WriteLine("   Execution Time: {0} ms", SW.ElapsedMilliseconds);
+            Console.WriteLine("   Execution Time: {0} ms", _SW.ElapsedMilliseconds);
 
         }
     }

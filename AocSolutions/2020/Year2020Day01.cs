@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2020Day01()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,22 +43,22 @@ namespace AdventOfCode
 
             int[] measurements = FileIOHelper.getInstance().ReadDataToIntArray(file);
             
-            SW.Start();
+            _SW.Start();
             int increases = Part1(measurements);
-            SW.Stop();
+            _SW.Stop();
 
 
 
             Console.WriteLine("  Part 1: Number of increases (Actual Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
 
             increases = Part2(measurements);
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

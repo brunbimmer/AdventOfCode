@@ -26,7 +26,7 @@ namespace AdventOfCode
 
        
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
 
 
@@ -39,7 +39,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         private int[] scratchCardList;
@@ -58,18 +58,18 @@ namespace AdventOfCode
 
             scratchCardList = Enumerable.Repeat(1, cards.Length).ToArray();
            
-            SW.Start();
+            _SW.Start();
 
 
             int total = ProcessCardList(cards);
 
 
-            SW.Stop();
+            _SW.Stop();
 
 
             Console.WriteLine($"  Part 1: Scratch Card Value:          {total}");
             Console.WriteLine($"  Part 2: Number of scratch cards won: {scratchCardList.Sum()}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(SW)}");
+            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
         }
 
         int ProcessCardList(string[] cards)

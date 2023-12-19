@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day12()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,26 +45,26 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             var graph = BuildGraphMap(lines);
             int paths = CountPaths(graph, "start", "end", new HashSet<string> { "start" });
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of Paths through cave system Part 1: {0}", paths);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int pathsPart2 = CountSmallCavesVisitTwice(graph, "start", "end", new Dictionary<string, int> { ["start"] = 1 });
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of Paths through cave system Part 2: {0}", pathsPart2);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

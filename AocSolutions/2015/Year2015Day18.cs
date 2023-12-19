@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day18()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,15 +46,15 @@ namespace AdventOfCode
 
             Dictionary<Coordinate2D, char> lightGrid = FileIOHelper.getInstance().GetDataAsCoordinates(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int activeLights = AnimateLights(lightGrid, 100, false);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Num of Active Lights after 100 steps -> {0}, Execution Time: {1}", activeLights, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Num of Active Lights after 100 steps -> {0}, Execution Time: {1}", activeLights, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             //corner lights stuck in on position
             int maxX = lightGrid.Max(a => a.Key.X);
@@ -67,9 +67,9 @@ namespace AdventOfCode
 
             activeLights = AnimateLights(lightGrid, 100, true);
                      
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Num of Active Lights after 100 steps --> {0}, Execution Time: {1}", activeLights, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Num of Active Lights after 100 steps --> {0}, Execution Time: {1}", activeLights, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

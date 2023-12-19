@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day16()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         internal class Valve
@@ -59,18 +59,18 @@ namespace AdventOfCode
            
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             Initialize(input);
 
             Dictionary<int, int> cache = new();
             Visit(0, 30, 0, 0, cache);
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Most Pressure released working alone: {0}, Execution Time: {1}", cache.Values.Max(), StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Most Pressure released working alone: {0}, Execution Time: {1}", cache.Values.Max(), StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             cache = new();
             Visit(0, 26, 0, 0, cache);
@@ -87,9 +87,9 @@ namespace AdventOfCode
             }
 
 
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Most Pressure released working with elephant: {0}, Execution Time: {1}", curMax, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Most Pressure released working with elephant: {0}, Execution Time: {1}", curMax, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }    

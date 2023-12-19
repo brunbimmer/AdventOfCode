@@ -17,7 +17,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day01()
         {
@@ -28,7 +28,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
 
@@ -62,21 +62,17 @@ namespace AdventOfCode
 
             string[] directions = FileIOHelper.getInstance().ReadDataAsString(file).Split(",", StringSplitOptions.TrimEntries);
             
-            SW.Start();
+            _SW.Start();
             ParseDirectionsWithDoubleLocationVisit(directions);
 
             int part1Distance = Math.Abs(_currentPosition.X) + Math.Abs(_currentPosition.Y);
             int part2Distance = Math.Abs(_doubleHqCoordinate.X) + Math.Abs(_doubleHqCoordinate.Y);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Distance to Bunny HQ: {0}", part1Distance);
             Console.WriteLine("  Part 2: Action Distance to Bunny HQ: {0}", part2Distance);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
-
-
-
-
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }
 

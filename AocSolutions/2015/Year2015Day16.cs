@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         internal class Sue
         {
@@ -174,7 +174,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -189,7 +189,7 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             Sue perfectSue = new Sue(3,7,2,3,0,0,5,3,2,1);
 
@@ -284,12 +284,12 @@ namespace AdventOfCode
                 }
             }
                         
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Matched up Sue {0}, Execution Time: {1}", perfectSuePart1, StopwatchUtil.getInstance().GetTimestamp(SW));
-            Console.WriteLine("Part 2: Matched up Sue {0}, Execution Time: {1}", perfectSuePart2, StopwatchUtil.getInstance().GetTimestamp(SW));         
+            Console.WriteLine("Part 1: Matched up Sue {0}, Execution Time: {1}", perfectSuePart1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 2: Matched up Sue {0}, Execution Time: {1}", perfectSuePart2, StopwatchUtil.getInstance().GetTimestamp(_SW));         
             
-            SW.Stop();
+            _SW.Stop();
 
 
         }       

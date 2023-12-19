@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day07()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,23 +46,23 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
             int _supportTlS = FindTlsEntries(lines);
 
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of IPs supporting TLS {0}, Execution Time: {1}", _supportTlS, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of IPs supporting TLS {0}, Execution Time: {1}", _supportTlS, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int _supportSSL= FindSupportingSSL(lines);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of IPs supporting SSL {0}, Execution Time: {1}", _supportSSL, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Number of IPs supporting SSL {0}, Execution Time: {1}", _supportSSL, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }
 

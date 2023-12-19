@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day10()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,24 +48,24 @@ namespace AdventOfCode
             List<string> corruptedList;
             int score;
 
-            SW.Start();                       
+            _SW.Start();                       
              (corruptedList, score) = GetSolution1(input.ToList());                       
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Total Syntax Score: {0}", score);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             List<string> incompleteList = input.Except(corruptedList).ToList();
 
             long midPointScore = GetSolution2(incompleteList);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Total MidPoint Score: {0}", midPointScore);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }        

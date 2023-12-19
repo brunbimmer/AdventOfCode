@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private class BingoCard
         {
@@ -45,7 +45,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -61,25 +61,25 @@ namespace AdventOfCode
 
             ReadFile(file);
 
-            SW.Start();
+            _SW.Start();
             PlayBingoGame();
-            SW.Stop();
+            _SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Sum of Unmarked Cards in Winner Board ({0}) * Last Number Called ({1}): {2}", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             ResetBingoValidation();
 
             PlayBingoGame(true);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Sum of Unmarked Cards in Last Winning Board ({0}) * Last Number Called ({1}): {2}", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

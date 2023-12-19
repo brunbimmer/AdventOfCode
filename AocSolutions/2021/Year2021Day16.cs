@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         class Packet
         {
@@ -51,7 +51,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -66,15 +66,15 @@ namespace AdventOfCode
 
             string transmission = FileIOHelper.getInstance().ReadDataAsString(file).Trim();
 
-            SW.Start();                       
+            _SW.Start();                       
 
             var OuterPacket = ParseStream(transmission);  
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Sum of all the Version Numbers: {0}", OuterPacket.VersionSum);
             Console.WriteLine("Part 1: Final Value: {0}", OuterPacket.Value);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }      

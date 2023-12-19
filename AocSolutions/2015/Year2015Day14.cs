@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private class ReinderStat
         {
@@ -46,7 +46,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -62,7 +62,7 @@ namespace AdventOfCode
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             List<ReinderStat> stats = ParseReinderStats(instructions);
 
@@ -70,17 +70,17 @@ namespace AdventOfCode
 
             int reinderMaxDistance = stats.Max(x => x.distancePart1);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Distance winning deer travelled {0}, Execution Time: {1}", reinderMaxDistance, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Distance winning deer travelled {0}, Execution Time: {1}", reinderMaxDistance, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int reinderMaxPoints = RunSimulation2(stats);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Points winning deer is {0}, Execution Time: {1}", reinderMaxPoints, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Points winning deer is {0}, Execution Time: {1}", reinderMaxPoints, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
 

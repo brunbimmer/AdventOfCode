@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day06()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,31 +45,31 @@ namespace AdventOfCode
 
             String input = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            SW.Restart();
+            _SW.Restart();
 
             int startOfPacket = FindStart(input, 4);            
 
-            SW.Stop();            
-            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Original", startOfPacket, StopwatchUtil.getInstance().GetTimestamp(SW));
+            _SW.Stop();            
+            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Original", startOfPacket, StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Restart();
+            _SW.Restart();
             
             int startOfPacket2 = ScanAsSpan(input, 4);                                    
-            SW.Stop();
-            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Scan", startOfPacket2, StopwatchUtil.getInstance().GetTimestamp(SW));            
+            _SW.Stop();
+            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Scan", startOfPacket2, StopwatchUtil.getInstance().GetTimestamp(_SW));            
 
-            SW.Restart();
+            _SW.Restart();
 
             int startOfMessage = FindStart(input, 14);
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Original", startOfMessage, StopwatchUtil.getInstance().GetTimestamp(SW));
-            SW.Restart();
+            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Original", startOfMessage, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            _SW.Restart();
 
             int startOfMessage2 = ScanAsSpan(input, 14);                        
-            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Scan", startOfMessage2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Scan", startOfMessage2, StopwatchUtil.getInstance().GetTimestamp(_SW));
             
-            SW.Stop();
+            _SW.Stop();
         }       
 
         private int FindStart(string input, int length)

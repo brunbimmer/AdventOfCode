@@ -37,6 +37,16 @@ namespace Common
             if (diagonals) tmp.Add(new Coordinate2D(X + 1, Y + 1));     //bottom right            
             return tmp;
         }
+
+        public static Coordinate2D operator +(Coordinate2D a) => a;
+        public static Coordinate2D operator +(Coordinate2D a, Coordinate2D b) => new(a.X + b.X, a.Y + b.Y);
+        public static Coordinate2D operator -(Coordinate2D a) => new(-a.X, -a.Y);
+        public static Coordinate2D operator -(Coordinate2D a, Coordinate2D b) => a + (-b);
+        public static Coordinate2D operator *(int scale, Coordinate2D a) => new(scale * a.X, scale * a.Y);
+
+        public static implicit operator Coordinate2D((int x, int y) a) => new(a.x, a.y);
+
+        public static implicit operator (int x, int Y)(Coordinate2D a) => (a.X, a.Y);
     }
 
     public record Coordinate2DLong(long X, long Y)
@@ -45,7 +55,6 @@ namespace Common
         public long ManhattenDistance(Coordinate2DLong other) => (long)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y));
         public long Magnitude() => Math.Abs(X) + Math.Abs(Y);
         public Coordinate2DLong Vector(Coordinate2DLong other) => new(other.X - X, other.Y - Y);
-
 
         public (long, long) Difference(Coordinate2DLong other)
         {
@@ -70,6 +79,16 @@ namespace Common
             if (diagonals) tmp.Add(new Coordinate2DLong(X + 1, Y + 1));     //bottom right            
             return tmp;
         }
+
+        public static Coordinate2DLong operator +(Coordinate2DLong a) => a;
+        public static Coordinate2DLong operator +(Coordinate2DLong a, Coordinate2DLong b) => new(a.X + b.X, a.Y + b.Y);
+        public static Coordinate2DLong operator -(Coordinate2DLong a) => new(-a.X, -a.Y);
+        public static Coordinate2DLong operator -(Coordinate2DLong a, Coordinate2DLong b) => a + (-b);
+        public static Coordinate2DLong operator *(int scale, Coordinate2DLong a) => new(scale * a.X, scale * a.Y);
+
+        public static implicit operator Coordinate2DLong((long x, long y) a) => new(a.x, a.y);
+
+        public static implicit operator (long x, long Y)(Coordinate2DLong a) => (a.X, a.Y);
     }
 
     public record Coordinate3D(int X, int Y, int Z)

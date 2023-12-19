@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day3Problem()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,21 +43,21 @@ namespace AdventOfCode
 
             string elfDirections = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            SW.Start();
+            _SW.Start();
 
             int housesVisited = Part1(elfDirections);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Number of houses visited by Santa Prime: {0}", housesVisited);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             housesVisited = Part2(elfDirections);
 
             Console.WriteLine("  Part 2: Number of houses visited by twin Santa's: {0}", housesVisited);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

@@ -130,6 +130,26 @@ namespace AdventFileIO
             return grid;
         }
 
+        public (Dictionary<Coordinate2D, int>, int, int) GetDataAsIntMap(string file)
+        {
+            Dictionary<Coordinate2D, int> grid = new Dictionary<Coordinate2D, int>();
+
+            //read in the
+            string[] lines = ReadDataAsLines(file);
+
+            //Read the data
+            var mapData = lines.Select(x => x.ToArray()).ToArray();
+
+            int maxX = mapData.Length;
+            int maxY = mapData[0].Length;
+
+            for (int x = 0; x < mapData.Length; x++)
+                for (int y = 0; y < mapData[x].Length; y++)
+                    grid.Add(new Coordinate2D(x, y), mapData[x][y]);
+
+            return (grid, maxX, maxY);
+        }
+
         public int[][] GetDataAsDoubleIntArray(string file)
         {
             string[] lines = ReadDataAsLines(file);

@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day03()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -46,22 +46,22 @@ namespace AdventOfCode
 
             string[] triangleList = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int numPossibleTriangles = ParseTriangleList(triangleList);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of possible triangles: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of possible triangles: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             numPossibleTriangles = ParseVerticalListTriangles(triangleList);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of possible triangles by column: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Number of possible triangles by column: {0}, Execution Time: {1}", numPossibleTriangles, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }

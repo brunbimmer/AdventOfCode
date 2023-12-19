@@ -22,7 +22,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         int total = 0;
         private List<string> board = new List<string>();
@@ -38,7 +38,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -53,7 +53,7 @@ namespace AdventOfCode
 
             board = FileIOHelper.getInstance().ReadDataAsLines(file).ToList();
            
-            SW.Start();
+            _SW.Start();
 
             Regex num_pattern = new Regex(@"\d+");
 
@@ -68,14 +68,14 @@ namespace AdventOfCode
                 }
             }
 
-            SW.Stop();
+            _SW.Stop();
 
 
             Console.WriteLine($"  Part 1: Sum of Value Part Numbers: {total}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-            SW.Restart();
+            _SW.Restart();
 
             int ratioTotal = 0;
             foreach (var pairs in gearNumbers)
@@ -85,10 +85,10 @@ namespace AdventOfCode
                     ratioTotal += pairs.Value[0] * pairs.Value[1];
                 }
             }
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"  Part 2: Sum of Gear Ratios Numbers: {ratioTotal}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
         
 

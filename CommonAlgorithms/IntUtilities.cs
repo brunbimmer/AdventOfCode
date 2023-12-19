@@ -12,6 +12,31 @@ namespace Common
         {
             return Enumerable.Range(0, (int)count).Select(i => start + i);
         }
+
+        public static IEnumerable<IEnumerable<T>> SplitWhen<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var sublist = new List<T>();
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    if (sublist.Any())
+                    {
+                        yield return sublist;
+                        sublist = new List<T>();
+                    }
+                }
+                else
+                {
+                    sublist.Add(item);
+                }
+            }
+
+            if (sublist.Any())
+            {
+                yield return sublist;
+            }
+        }
     }
 
     public static class IntUtilities

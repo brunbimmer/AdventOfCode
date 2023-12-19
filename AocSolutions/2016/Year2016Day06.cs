@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2016Day06()
         {
@@ -31,7 +31,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -47,7 +47,7 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();
+            _SW.Start();
 
             string[][] elements = lines.Select(line => line.Select(c => c.ToString()).ToArray()).ToArray();
 
@@ -69,11 +69,11 @@ namespace AdventOfCode
                 code2.Append(line.GroupBy(c => c).OrderBy(c => c.Count()).Select(c => c.Key).First());
             }
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine($"Part 1: Code based on most common letter per column: {code1}");
             Console.WriteLine($"Part 2: Code based on least common letter per column: {code2}");
-            Console.WriteLine($"    Execution Time: {StopwatchUtil.getInstance().GetTimestamp(SW)}");
+            Console.WriteLine($"    Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
 
 
         }       

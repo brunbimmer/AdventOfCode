@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day13()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -42,21 +42,21 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             string input = FileIOHelper.getInstance().ReadDataAsString(file);
 
-            SW.Start();
+            _SW.Start();
             var packets = ParseInputIntoJsonNodes(input);
 
             int numOrderedPairs = packets.Chunk(2)
               .Select((pair, index) => CompareNodes(pair[0], pair[1]) < 0 ? index + 1 : 0)
               .Sum();
-            SW.Stop();
-            Console.WriteLine("Part 1: Decoder Key {0}, Execution Time: {1}", numOrderedPairs, StopwatchUtil.getInstance().GetTimestamp(SW));
-            SW.Restart();
+            _SW.Stop();
+            Console.WriteLine("Part 1: Decoder Key {0}, Execution Time: {1}", numOrderedPairs, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            _SW.Restart();
             var dividerPackets = ParseInputIntoJsonNodes("[[2]]\n[[6]]").ToList();
             var newPacketList = packets.Concat(dividerPackets).ToList();
             newPacketList.Sort(CompareNodes);
             int decoderKey = (newPacketList.IndexOf(dividerPackets[0]) + 1) * (newPacketList.IndexOf(dividerPackets[1]) + 1);
-            SW.Stop();
-            Console.WriteLine("Part 2: Decoder Key {0}, Execution Time: {1}", decoderKey, StopwatchUtil.getInstance().GetTimestamp(SW));
+            _SW.Stop();
+            Console.WriteLine("Part 2: Decoder Key {0}, Execution Time: {1}", decoderKey, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }
 

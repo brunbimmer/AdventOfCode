@@ -19,7 +19,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day20()
         {
@@ -30,7 +30,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -43,7 +43,7 @@ namespace AdventOfCode
 
             int presents = 29000000;
 
-            SW.Start();                
+            _SW.Start();                
             
             int min = int.MaxValue;
 	        int[] houses = new int[200000000];
@@ -52,11 +52,11 @@ namespace AdventOfCode
 			        if((houses[j] += i * 10) >= presents)
 			            min = Math.Min(min, j);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Smallest House # {0}, Execution Time: {1}", min, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Smallest House # {0}, Execution Time: {1}", min, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
            	int min2 = int.MaxValue;
 	        int[] houses2 = new int[200000000];
@@ -65,9 +65,9 @@ namespace AdventOfCode
 			        if((houses2[j] += i * 11) >= presents)
 				        min2 = Math.Min(min2, j);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Smallest House # {0}, Execution Time: {1}", min2, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Smallest House # {0}, Execution Time: {1}", min2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

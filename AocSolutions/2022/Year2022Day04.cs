@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day04()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,16 +45,16 @@ namespace AdventOfCode
 
             List<string> input = FileIOHelper.getInstance().ReadDataAsLines(file).ToList();
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int inclusivePairs, overlapPairs;
 
             (inclusivePairs, overlapPairs) = FindPairs(input);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Inclusive Assignment Pairs {0}, Execution Time: {1}", inclusivePairs, StopwatchUtil.getInstance().GetTimestamp(SW));
-            Console.WriteLine("Part 2: Overlap Assignment Pairs {0}, Execution Time: {1}", overlapPairs, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Inclusive Assignment Pairs {0}, Execution Time: {1}", inclusivePairs, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 2: Overlap Assignment Pairs {0}, Execution Time: {1}", overlapPairs, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

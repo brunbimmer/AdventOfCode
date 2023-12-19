@@ -20,7 +20,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day14()
         {
@@ -31,7 +31,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -47,7 +47,7 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
 
             List<Coordinate2D[]> rockPath = input.Select(ParsePath).ToList();
@@ -59,19 +59,19 @@ namespace AdventOfCode
             
             var sandUnits = RunSandSimulation(start, bottom, walls.Contains);
            
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Sand Units {0}, Execution Time: {1}", sandUnits.Count, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of Sand Units {0}, Execution Time: {1}", sandUnits.Count, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             var floor = bottom + 2;
 
             var sandUnits2 = RunSandSimulation(start, int.MaxValue, p => p.Y == floor || walls.Contains(p));
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of Sand Units {0}, Execution Time: {1}", sandUnits2.Count, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Number of Sand Units {0}, Execution Time: {1}", sandUnits2.Count, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }
         

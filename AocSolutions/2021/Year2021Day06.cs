@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day6()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -47,23 +47,23 @@ namespace AdventOfCode
 
             long[] fishInput = Array.ConvertAll(input.Split(','), s => long.Parse(s));
 
-            SW.Start();            
+            _SW.Start();            
             long fish = CountFish(fishInput, 80);
-            SW.Stop();
+            _SW.Stop();
 
 
 
             Console.WriteLine("Part 1: Number of Fish after 50 days: {0}", fish);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             long fish2 = CountFish(fishInput, 256);           
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Number of Fish after 256 days: {0}", fish2);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }        

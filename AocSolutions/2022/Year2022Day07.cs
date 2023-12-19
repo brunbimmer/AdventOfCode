@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2022Day07()
         {
@@ -27,7 +27,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         class Folder
@@ -49,7 +49,7 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             List<Folder> folders = ParseFileSystem(input);
 
@@ -60,19 +60,19 @@ namespace AdventOfCode
                 total += d.Size;
             }
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: {0}, Execution Time: {1}", total, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: {0}, Execution Time: {1}", total, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int available = 70000000 - folders.First(o => o.Path == "").Size;
 
             int smallest = folders.Where(o => o.Size >= (30000000 - available)).Min(o => o.Size);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: {0}, Execution Time: {1}", smallest, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: {0}, Execution Time: {1}", smallest, StopwatchUtil.getInstance().GetTimestamp(_SW));
         }       
 
         private List<Folder> ParseFileSystem(string[] input)

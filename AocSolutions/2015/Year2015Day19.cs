@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day19()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -53,22 +53,22 @@ namespace AdventOfCode
             //make a backup copy for part 2
             string original_molecule = new string(molecule);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             int distinctMolecules = CalculateDistinctMolecules(instructionSet, molecule);
 
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Distinct Molecules {0}, Execution Time: {1}", distinctMolecules, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 1: Number of Distinct Molecules {0}, Execution Time: {1}", distinctMolecules, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int fewestSteps = SearchForMedicine(instructionSet, original_molecule);
             
-            SW.Stop();
+            _SW.Stop();
 
-            Console.WriteLine("Part 2: Fewest steps to make medicine {0}, Execution Time: {1}", fewestSteps, StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("Part 2: Fewest steps to make medicine {0}, Execution Time: {1}", fewestSteps, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }     

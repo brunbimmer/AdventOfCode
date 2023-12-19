@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         
         private Dictionary<Tuple<string, string>, int> locations = new Dictionary<Tuple<string, string>, int>();
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -49,7 +49,7 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);         
-            SW.Start();
+            _SW.Start();
           
             foreach (string line in input)
                 AddToMap(line);
@@ -59,13 +59,13 @@ namespace AdventOfCode
             (shortestRoute, longestRoute) = ProcessDistancePermutations();
 
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: Shortest route: {0}", shortestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             Console.WriteLine("  Part 2: Longest route: {0}", longestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             
 

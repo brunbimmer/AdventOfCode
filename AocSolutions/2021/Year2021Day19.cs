@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         private   Dictionary<int, HashSet<Coordinate3D>> _scannerData;
         private   HashSet<Coordinate3D> _beaconMap;
@@ -33,7 +33,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -49,27 +49,27 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();                       
+            _SW.Start();                       
 
             InitializeDataSets(lines);
             List<Coordinate3D> beacons = new List<Coordinate3D>();
 
             int numberOfBeacons = Part1();
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Number of beacons: {0}", numberOfBeacons);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
             int distance = Part2();           
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Maximum distance between any two scanners: {0}", distance);
             
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }       

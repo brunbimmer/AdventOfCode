@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day18()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -48,27 +48,27 @@ namespace AdventOfCode
             int magnitude = 0;
             string finalString = "";
 
-            SW.Start();                       
+            _SW.Start();                       
 
             (magnitude, finalString) = Part1(snailFish);
 
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1 - Magnitude of addition problem: ");
             Console.WriteLine("    Solution Answer: {0}", finalString);
             Console.WriteLine("    Final Magnitude: {0}", magnitude);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
-            SW.Restart();
+            _SW.Restart();
 
            int magnitudeMax = Part2(snailFish);
             
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 2: Max Magnitude from Permutations: {0}", magnitudeMax);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }    

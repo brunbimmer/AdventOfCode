@@ -18,7 +18,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2021Day8()
         {
@@ -29,7 +29,7 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         public void GetSolution(string path, bool trackTime = false)
@@ -45,18 +45,18 @@ namespace AdventOfCode
 
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            SW.Start();        
+            _SW.Start();        
             
             int totalDigits, sumSequences = 0;
 
             (totalDigits, sumSequences) = DecodeSequences(input);
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("Part 1: Sequence of Easy Decipherable Digits: {0}", totalDigits);
             Console.WriteLine("Part 2: Sum of Output Values: {0}", sumSequences);
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
         }        

@@ -16,7 +16,7 @@ namespace AdventOfCode
         private int _Day;
         private string _OverrideFile;
 
-        public Stopwatch SW { get; set; }
+        public Stopwatch _SW { get; set; }
 
         public Year2015Day1Problem()
         {
@@ -27,12 +27,12 @@ namespace AdventOfCode
             _Day = ca.Day;
             _OverrideFile = ca.OverrideTestFile;
 
-            SW = new Stopwatch();
+            _SW = new Stopwatch();
         }
 
         
 
-        public virtual void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false)
         {
             Console.WriteLine("===========================================");
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
@@ -46,18 +46,18 @@ namespace AdventOfCode
 
             //Part 1
 
-            SW.Start();
+            _SW.Start();
 
             int countUp = CommonAlgorithms.StringUtils.CountCharacters(line, '(');
             int countDown = CommonAlgorithms.StringUtils.CountCharacters(line, ')');
 
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 1: What floor is Santa on: {0}", countUp - countDown);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             //Part 2
-            SW.Restart();
-            SW.Start();
+            _SW.Restart();
+            _SW.Start();
 
             int floor = 0;
             int pos = 1;
@@ -72,10 +72,10 @@ namespace AdventOfCode
 
                 pos++;
             }
-            SW.Stop();
+            _SW.Stop();
 
             Console.WriteLine("  Part 2: Position of character when Santa enters basement: {0}", pos);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(SW));
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             Console.WriteLine("\n===========================================\n");
         }
     }
