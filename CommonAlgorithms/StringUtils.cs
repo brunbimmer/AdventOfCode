@@ -21,4 +21,11 @@ namespace CommonAlgorithms
             }
         }
     }
+
+    static class StringExtensions
+    {
+        static public long[] ToLongs(this string input, string splitter)
+            => [.. input.Split(splitter, StringSplitOptions.RemoveEmptyEntries).Select(long.Parse)];
+
+    }
 }

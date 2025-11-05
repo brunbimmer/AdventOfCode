@@ -150,6 +150,26 @@ namespace AdventFileIO
             return (grid, maxX, maxY);
         }
 
+        public (Dictionary<Coordinate2D, char>, int, int) GetDataAsCharMap(string file)
+        {
+            Dictionary<Coordinate2D, char> grid = new Dictionary<Coordinate2D, char>();
+
+            //read in the
+            string[] lines = ReadDataAsLines(file);
+
+            //Read the data
+            var mapData = lines.Select(x => x.ToArray()).ToArray();
+
+            int maxX = mapData.Length;
+            int maxY = mapData[0].Length;
+
+            for (int x = 0; x < mapData.Length; x++)
+                for (int y = 0; y < mapData[x].Length; y++)
+                    grid.Add(new Coordinate2D(x, y), mapData[x][y]);
+
+            return (grid, maxX, maxY);
+        }
+
         public int[][] GetDataAsDoubleIntArray(string file)
         {
             string[] lines = ReadDataAsLines(file);
@@ -164,6 +184,52 @@ namespace AdventFileIO
             string[] lines = ReadDataAsLines(file);
 
             char[][] grid = lines.Select(x => x.Select(y => y).ToArray()).ToArray();
+
+            return grid;
+        }
+
+        public char[,] GetDataAsDoubleCharJaggedArray(string file)
+        {
+            string[] lines = ReadDataAsLines(file);
+
+            // Assuming all lines are of the same length
+            int rowCount = lines.Length;
+            int colCount = lines[0].Length;
+
+            // Create a 2D char array
+            char[,] grid = new char[rowCount, colCount];
+
+            // Populate the 2D array
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    grid[i, j] = lines[i][j];
+                }
+            }
+
+            return grid;
+        }
+
+        public char[,] GetDataAsRectangularArray(string file)
+        {
+            string[] lines = ReadDataAsLines(file);
+
+            // Determine the number of rows and columns
+            int rows = lines.Length;
+            int cols = lines[0].Length; // Assuming all lines have the same length
+
+            // Create a rectangular array
+            char[,] grid = new char[rows, cols];
+
+            // Populate the rectangular array
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    grid[i, j] = lines[i][j];
+                }
+            }
 
             return grid;
         }

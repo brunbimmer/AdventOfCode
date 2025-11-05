@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Common
 {
+    public enum Axis
+    {
+        X,
+        Y,
+        Z,
+        W
+    }
+
     public record Coordinate2D(int X, int Y)
     {
         
@@ -22,7 +31,7 @@ namespace Common
             return (xDiff, yDiff);
         }
 
-        public List<Coordinate2D> Neighbours(bool diagonals, bool self)
+        public List<Coordinate2D> Neighbours(bool diagonals = false, bool self = false)
         {
             var tmp = new List<Coordinate2D>();
 
@@ -47,6 +56,18 @@ namespace Common
         public static implicit operator Coordinate2D((int x, int y) a) => new(a.x, a.y);
 
         public static implicit operator (int x, int Y)(Coordinate2D a) => (a.X, a.Y);
+
+        public Coordinate2D Move(Utilities.Direction dir, int dist = 1)
+        {
+            return dir switch
+            {
+                Utilities.Direction.N => new Coordinate2D(this.X - dist, this.Y),
+                Utilities.Direction.S => new Coordinate2D(this.X + dist, this.Y),
+                Utilities.Direction.E => new Coordinate2D(this.X, this.Y + dist),
+                Utilities.Direction.W => new Coordinate2D(this.X, this.Y - dist),
+            };
+        }
+
     }
 
     public record Coordinate2DLong(long X, long Y)
@@ -64,7 +85,7 @@ namespace Common
             return (xDiff, yDiff);
         }
 
-        public List<Coordinate2DLong> Neighbours(bool diagonals, bool self)
+        public List<Coordinate2DLong> Neighbours(bool diagonals = false, bool self = false)
         {
             var tmp = new List<Coordinate2DLong>();
 
@@ -93,10 +114,18 @@ namespace Common
 
     public record Coordinate3D(int X, int Y, int Z)
     {
-        public int ManhattenDistance(Coordinate3D other) => (int)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y) + Math.Abs(Z - other.Z));
+        public int ManhattanDistance(Coordinate3D other) => (int)(Math.Abs(X - other.X) + Math.Abs(Y - other.Y) + Math.Abs(Z - other.Z));
         public int Magnitude() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
         public Coordinate3D Vector(Coordinate3D other) => new(other.X - X, other.Y - Y, other.Z - Z);
         public Coordinate3D Translate(Coordinate3D translation) => new(X + translation.X, Y + translation.Y, Z + translation.Z);
+
+        public static implicit operator Coordinate3D((int x, int y, int z) a) => new(a.x, a.y, a.z);
+
+        public static implicit operator (int x, int y, int z)(Coordinate3D a) => (a.X, a.Y, a.Z);
+        public static Coordinate3D operator +(Coordinate3D a) => a;
+        public static Coordinate3D operator +(Coordinate3D a, Coordinate3D b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        public static Coordinate3D operator -(Coordinate3D a) => new(-a.X, -a.Y, -a.Z);
+        public static Coordinate3D operator -(Coordinate3D a, Coordinate3D b) => a + (-b);
     }
 
 }

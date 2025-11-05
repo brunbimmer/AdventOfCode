@@ -151,6 +151,15 @@ namespace Common
             return Regex.Matches(str, "-?\\d+").Select(m => int.Parse(m.Value));
         }
 
+        /// <summary>
+        /// Extracts all "Words" (including xnoppyt) from a string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> ExtractWords(this string str)
+        {
+            return Regex.Matches(str, "[a-zA-z]+").Select(a => a.Value);
+        }
     }
 
     public class Range

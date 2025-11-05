@@ -131,7 +131,7 @@ namespace AdventOfCode
                         continue;
                     }
 
-                    int distance = scannerFrom.ManhattenDistance(scannerTo);
+                    int distance = scannerFrom.ManhattanDistance(scannerTo);
                     if (distance > maxDistance)
                     {
                         maxDistance = distance;
