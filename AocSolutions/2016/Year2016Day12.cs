@@ -20,6 +20,15 @@ namespace AdventOfCode
 
         public Stopwatch _SW { get; set; }
 
+        private Dictionary<string, int> registers = new Dictionary<string, int>()
+        {
+            {"a", 0 },
+            {"b", 0 },
+            {"c", 0 },
+            {"d", 0 }
+        };
+
+
         public Year2016Day12()
         {
             //Get Attributes
@@ -43,26 +52,79 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            List<string> instructions = FileIOHelper.getInstance().ReadDataAsLines(file).ToList<string>();
 
             _SW.Start();                       
 
-
+            ParseInstructions(instructions);
 
             
             _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            
+            Console.WriteLine("Part 1 (Value on Register A): {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-           
+            //Reinitialize with Part 2 instructions.
+            registers["a"] = 0;
+            registers["b"] = 0;
+            registers["c"] = 1;
+            registers["d"] = 0;
+
+            ParseInstructions(instructions);           
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+             Console.WriteLine("Part 1 (Value on Register A after initializing Register C to 1): {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-        }       
+        }    
+
+        private void ParseInstructions(List<string> instructions)
+        {
+            int instructionPointer = 0;
+
+
+            while (instructionPointer < instructions.Count)
+            {
+                string[] parts = instructions[instructionPointer].Split(' ');
+
+                switch (parts[0])
+                {
+                    case "cpy":
+                        int value = int.TryParse(parts[1], out int val) ? val : registers[parts[1]];
+                        registers[parts[2]] = value;
+                        instructionPointer++;
+                        break;
+
+                    case "inc":
+                        registers[parts[1]]++;
+                        instructionPointer++;
+                        break;
+
+                    case "dec":
+                        registers[parts[1]]--;
+                        instructionPointer++;
+                        break;
+
+                    case "jnz":
+                        int checkValue = int.TryParse(parts[1], out int chkVal) ? chkVal : registers[parts[1]];
+                        if (checkValue != 0)
+                        {
+                            int jumpValue = int.Parse(parts[2]);
+                            instructionPointer += jumpValue;
+                        }
+                        else
+                        {
+                            instructionPointer++;
+                        }
+                        break;
+
+                    default:
+                        instructionPointer++;
+                        break;
+                }
+            }
+        }   
     }
 }

@@ -40,29 +40,60 @@ namespace AdventOfCode
 
             //Build BasePath and retrieve input. 
  
-
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string inputString = "00111101111101000";
+            int size = 272;
+            int sizePart2 = 35651584;
 
             _SW.Start();                       
 
+            string checkSum = GetCheckSum(inputString, size);
 
-
-            
             _SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 1 - Checksum Result: {0}, Execution Time: {1}", checkSum, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-           
+            string checkSumPart2 = GetCheckSum(inputString, sizePart2);
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 2 - Checksum Result: {0}, Execution Time: {1}", checkSumPart2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-        }       
+        }    
+
+        string GetCheckSum(string input, int size)
+        {
+            StringBuilder sb = new StringBuilder(input);
+
+            while (sb.Length < size)
+            {
+                StringBuilder bRev = new StringBuilder(sb.Length + 1);
+                bRev.Append('0');
+                for (int i = sb.Length - 1; i >= 0; i--)
+                {
+                    bRev.Append(sb[i] == '0' ? '1' : '0');
+                }
+                sb.Append(bRev.ToString());
+            }
+
+            // Trim to size
+            sb.Length = size;
+
+            // Compute checksum
+            StringBuilder checksum = new StringBuilder();
+            while (sb.Length % 2 == 0)
+            {
+                checksum.Clear();
+                for (int i = 0; i < sb.Length; i += 2)
+                {
+                    checksum.Append(sb[i] == sb[i + 1] ? '1' : '0');
+                }
+                sb = new StringBuilder(checksum.ToString());
+            }
+
+            return sb.ToString();
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace AdventOfCode
 
             do
             {
-                string md5 = ComputeMD5Hash(doorId + index);
+                string md5 = Utilities.ComputeMD5Hash(doorId + index);
 
                 if (md5.StartsWith("00000"))
                     password += md5[5]; //sixth position
@@ -93,7 +93,7 @@ namespace AdventOfCode
 
             do
             {
-                string md5 = ComputeMD5Hash(doorId + index);
+                string md5 = Utilities.ComputeMD5Hash(doorId + index);
 
                 if (md5.StartsWith("00000") && int.TryParse(md5[5].ToString(), out value) && value < password.Length && password[value] == '*')
                 {
@@ -105,24 +105,6 @@ namespace AdventOfCode
             } while (password.Contains('*'));
 
             return string.Join("", password);
-        }
-
-
-        public string ComputeMD5Hash(string input)
-        {
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("x2"));
-                }
-
-                return sb.ToString();
-            }
         }
     }
 }

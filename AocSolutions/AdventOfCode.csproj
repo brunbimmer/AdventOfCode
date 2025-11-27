@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="rem xcopy .\inputs\ $(OutDir)\inputs\ /E /I /Y" />
+    <!-- Skip xcopy on non-Windows platforms -->
   </Target>
 
 </Project>
