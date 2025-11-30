@@ -41,28 +41,51 @@ namespace AdventOfCode
             //Build BasePath and retrieve input. 
  
 
-            string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            int numberOfElves = 3001330; // Hardcoded input for Day 19
 
             _SW.Start();                       
 
-
+            double elfWithAllPresents = SolvePart1(numberOfElves);
 
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 1 - Elf all the presents: {0}, Execution Time: {1}", elfWithAllPresents, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-           
+            double elfWithPresentsPart2 = SolvePart2(numberOfElves);
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
-
+            Console.WriteLine("Part 2 - Elf all the presents: {0}, Execution Time: {1}", elfWithPresentsPart2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
         }       
+
+        double SolvePart1(int n)
+        {
+            int msb = (int)Math.Log2(n);
+            return ((n ^ (1 << msb)) << 1) + 1;
+        }
+
+        double SolvePart2(int n)
+        {
+            int l = (int)Math.Floor(Math.Log(n, 3));
+            int k = n - (int)Math.Pow(3, l);
+            
+            if (k == 0)
+            {
+                return n; // is a power of 3
+            }
+            
+            if (l == 1 || k <= Math.Pow(3, l))
+            {
+                return k;
+            }
+            else
+            {
+                return Math.Pow(3, l) + 2 * (k - Math.Pow(3, l));
+            }
+        }
     }
 }

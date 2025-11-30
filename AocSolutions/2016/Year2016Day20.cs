@@ -43,26 +43,101 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             _SW.Start();                       
 
 
+            int result1 = FindLowestAllowedIP(input);
 
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 1 - Lowest Allowed IP: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-           
+            int totalAllowed = FindAllAllowedIPs(input);
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 2 - Total Allowed IPs: {0}, Execution Time: {1}", totalAllowed, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-        }       
+        }      
+
+        int FindLowestAllowedIP(string[] input)
+        {
+            List<(long, long)> blockedRanges = new List<(long, long)>();
+
+            foreach (string line in input)
+            {
+                string[] parts = line.Split('-');
+                long start = long.Parse(parts[0]);
+                long end = long.Parse(parts[1]);
+                blockedRanges.Add((start, end));
+            }
+
+            blockedRanges = blockedRanges.OrderBy(r => r.Item1).ToList();
+
+            long currentIP = 0;
+
+            foreach (var range in blockedRanges)
+            {
+                if (currentIP < range.Item1)
+                {
+                    // Found a gap
+                    return (int)currentIP;
+                }
+                else if (currentIP <= range.Item2)
+                {
+                    // Move currentIP to the end of the blocked range
+                    currentIP = range.Item2 + 1;
+                }
+            }
+
+            return (int)currentIP;
+        } 
+
+        int FindAllAllowedIPs(string[] input)
+        {
+            List<(long, long)> blockedRanges = new List<(long, long)>();
+
+            foreach (string line in input)
+            {
+                string[] parts = line.Split('-');
+                long start = long.Parse(parts[0]);
+                long end = long.Parse(parts[1]);
+                blockedRanges.Add((start, end));
+            }
+
+            blockedRanges = blockedRanges.OrderBy(r => r.Item1).ToList();
+
+            long currentIP = 0;
+            long allowedCount = 0;
+
+            foreach (var range in blockedRanges)
+            {
+                if (currentIP < range.Item1)
+                {
+                    // Count allowed IPs in the gap
+                    allowedCount += range.Item1 - currentIP;
+                    currentIP = range.Item2 + 1;
+                }
+                else if (currentIP <= range.Item2)
+                {
+                    // Move currentIP to the end of the blocked range
+                    currentIP = range.Item2 + 1;
+                }
+            }
+
+            // Count any remaining allowed IPs up to 4294967295
+            if (currentIP <= 4294967295)
+            {
+                allowedCount += 4294967295 - currentIP + 1;
+            }
+
+            return (int)allowedCount;
+        }
     }
 }

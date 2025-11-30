@@ -56,8 +56,7 @@ namespace AdventOfCode
 
             _SW.Start();                       
 
-            ParseInstructions(instructions);
-
+            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions); 
             
             _SW.Stop();
             
@@ -71,60 +70,13 @@ namespace AdventOfCode
             registers["c"] = 1;
             registers["d"] = 0;
 
-            ParseInstructions(instructions);           
+            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions);           
             
             _SW.Stop();
 
              Console.WriteLine("Part 1 (Value on Register A after initializing Register C to 1): {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-        }    
-
-        private void ParseInstructions(List<string> instructions)
-        {
-            int instructionPointer = 0;
-
-
-            while (instructionPointer < instructions.Count)
-            {
-                string[] parts = instructions[instructionPointer].Split(' ');
-
-                switch (parts[0])
-                {
-                    case "cpy":
-                        int value = int.TryParse(parts[1], out int val) ? val : registers[parts[1]];
-                        registers[parts[2]] = value;
-                        instructionPointer++;
-                        break;
-
-                    case "inc":
-                        registers[parts[1]]++;
-                        instructionPointer++;
-                        break;
-
-                    case "dec":
-                        registers[parts[1]]--;
-                        instructionPointer++;
-                        break;
-
-                    case "jnz":
-                        int checkValue = int.TryParse(parts[1], out int chkVal) ? chkVal : registers[parts[1]];
-                        if (checkValue != 0)
-                        {
-                            int jumpValue = int.Parse(parts[2]);
-                            instructionPointer += jumpValue;
-                        }
-                        else
-                        {
-                            instructionPointer++;
-                        }
-                        break;
-
-                    default:
-                        instructionPointer++;
-                        break;
-                }
-            }
-        }   
+        }          
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,6 +9,98 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+
+    public static class BunnyAssemblyParser
+    {
+        public static Dictionary<string, int> ParseInstructions(Dictionary<string, int> registers, List<string> instructions)
+        {
+            int instructionPointer = 0;
+
+            while (instructionPointer < instructions.Count)
+            {
+                string[] parts = instructions[instructionPointer].Split(' ');
+
+                switch (parts[0])
+                {
+                    case "cpy":
+
+                        // Skip if destination is not a register
+                        if (int.TryParse(parts[2], out _))
+                        {
+                            instructionPointer++;
+                            break;
+                        }
+                        int value = int.TryParse(parts[1], out int val) ? val : registers[parts[1]];
+                        registers[parts[2]] = value;
+                        instructionPointer++;
+                        break;
+                    case "inc":
+                        registers[parts[1]]++;
+                        instructionPointer++;
+                        break;
+
+                    case "dec":
+                        registers[parts[1]]--;
+                        instructionPointer++;
+                        break;
+
+                    case "jnz":
+                        int checkValue = int.TryParse(parts[1], out int chkVal) ? chkVal : registers[parts[1]];
+                        if (checkValue != 0)
+                        {
+                            int jumpValue = int.TryParse(parts[2], out int jmpVal) ? jmpVal : registers[parts[2]];
+                            instructionPointer += jumpValue;
+                        }
+                        else
+                        {
+                            instructionPointer++;
+                        }
+                        break;
+                    case "tgl":
+                        int tglOffset = int.TryParse(parts[1], out int tglVal) ? tglVal : registers[parts[1]];
+                        int targetIndex = instructionPointer + tglOffset;
+                        if (targetIndex >= 0 && targetIndex < instructions.Count)
+                        {
+                            string targetInstruction = instructions[targetIndex];
+                            string[] targetParts = targetInstruction.Split(' ');
+
+                            if (targetParts.Length == 2)
+                            {
+                                // One-argument instruction
+                                if (targetParts[0] == "inc")
+                                    targetParts[0] = "dec";
+                                else
+                                    targetParts[0] = "inc";
+                            }
+                            else if (targetParts.Length == 3)
+                            {
+                                // Two-argument instruction
+                                if (targetParts[0] == "jnz")
+                                    targetParts[0] = "cpy";
+                                else
+                                    targetParts[0] = "jnz";
+                            }
+
+                            instructions[targetIndex] = string.Join(" ", targetParts);
+                        }
+                        instructionPointer++;
+                        break;
+                
+                    case "out":                        
+                        int output = int.TryParse(parts[1], out int outVal) ? outVal : registers[parts[1]];
+                        Console.Write(output + " ");
+                        instructionPointer++;
+                        break;            
+                    default:
+                        instructionPointer++;
+                        break;
+                }
+            }
+           
+           return registers;
+        }
+    }
+
     public static class Utilities
     {
         public static string ComputeMD5Hash(string input)
@@ -245,4 +338,5 @@ namespace Common
 
         public long Length => Ranges.Aggregate(1L, (a, b) => a *= b.Value.Length);
     }
+
 }

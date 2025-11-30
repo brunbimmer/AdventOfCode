@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
+using ConsoleTables;
+using Microsoft.Extensions.Primitives;
 
 namespace AdventOfCode
 {
@@ -19,6 +21,14 @@ namespace AdventOfCode
         private string _OverrideFile;
 
         public Stopwatch _SW { get; set; }
+
+        private Dictionary<string, int> registers = new Dictionary<string, int>()
+        {
+            {"a", 7 },
+            {"b", 0 },
+            {"c", 0 },
+            {"d", 0 }
+        };
 
         public Year2016Day23()
         {
@@ -43,26 +53,34 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
+            string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             _SW.Start();                       
 
-
+            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions.ToList());
 
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 1 - Value of Register A: {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
+
+            //Reinitialize with Part 2 instructions.
+            registers["a"] = 12;
+            registers["b"] = 0;
+            registers["c"] = 0;
+            registers["d"] = 0;
 
             _SW.Restart();
 
-           
+           registers = BunnyAssemblyParser.ParseInstructions(registers, instructions.ToList());
             
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part  - Value of Register A: {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
-        }       
+        }   
+
+      
     }
 }
