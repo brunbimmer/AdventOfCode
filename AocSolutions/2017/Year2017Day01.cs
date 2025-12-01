@@ -41,36 +41,60 @@ namespace AdventOfCode
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            int[] measurements = FileIOHelper.getInstance().ReadDataToIntArray(file);
+            string input = FileIOHelper.getInstance().ReadDataAsString(file);
             
             _SW.Start();
-            int increases = Part1(measurements);
+            
+            int sum = SolvePart1(input);
+
             _SW.Stop();
 
-
-
-            Console.WriteLine("  Part 1: Number of increases (Actual Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("  Part 1 - Result: {0}. Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));            
             
             _SW.Restart();
 
-            increases = Part2(measurements);
+            sum = SolvePart2(input);
+
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-
+            Console.WriteLine("  Part 2 - result: {0}. Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));            
 
         }
 
-        private int Part1(int[] measurements)
+        int SolvePart1(string input)
         {
-            return 0;
+            string digits = input.Trim();
+            int sum = 0;
+            
+            for (int i = 0; i < digits.Length; i++)
+            {
+                int nextIndex = (i + 1) % digits.Length; // Circular
+                if (digits[i] == digits[nextIndex])
+                {
+                    sum += int.Parse(digits[i].ToString());
+                }
+            }
+            
+            return sum;
         }
 
-        private int Part2(int[] measurements)
+        int SolvePart2(string input)
         {
-            return 0;
+            string digits = input.Trim();
+            int sum = 0;
+            int halfwayPoint = digits.Length / 2;
+            
+            for (int i = 0; i < digits.Length; i++)
+            {
+                int compareIndex = (i + halfwayPoint) % digits.Length;
+                if (digits[i] == digits[compareIndex])
+                {
+                    sum += int.Parse(digits[i].ToString());
+                }
+            }
+            
+            return sum;
         }
+
     }
 }
