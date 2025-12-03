@@ -20,6 +20,9 @@ namespace AdventOfCode
 
         public Stopwatch _SW { get; set; }
 
+        private const long DECRYPTION_KEY = 811589153L;
+        private const int PART2_ROUNDS = 10;
+
         public Year2022Day20()
         {
             //Get Attributes
@@ -38,93 +41,66 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //Build BasePath and retrieve input. 
- 
-
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-            
-            _SW.Start();                       
-            int[] numbers = FileIOHelper.getInstance().ReadDataToIntArray(file);
-            int[] moved = new int[numbers.Length];
-            
-            List<(int, int)> elements = numbers.Zip(moved).ToList();
+            string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            while (elements.Where(x => x.Item2 == 0 && x.Item1 != 0).Count() > 0)
-            {                
-                int index = elements.Select((n, index) => new { n, index })
-                                      .Where(pair => pair.n.Item2 == 0 && pair.n.Item1 != 0)
-                                      .Select(pair => (int) pair.index)
-                                      .FirstOrDefault();
+            _SW.Start();
 
-
-                int value = elements[index].Item1;
-                int _tempNewPositionDiff = mod(value, elements.Count);
-                int newIndex = 0;
-
-                if (index + _tempNewPositionDiff > elements.Count)
-                {
-                    newIndex = _tempNewPositionDiff - (elements.Count - index) + 1;
-                }
-                else
-                {
-                    newIndex = index + _tempNewPositionDiff;
-
-                    if (value <= 0) newIndex -= 1;      //we transported a negative # into a position direction. Take away 1 for final positioning
-                }
-
-                elements.RemoveAt(index);
-                elements.Insert(newIndex, (value, 1));
-
-            }
-
-            //elements are now shuffled.
-            
-            int sum = FindNumberAt(1000, elements) + FindNumberAt(2000, elements) + FindNumberAt(3000, elements);
-
+            var numbers = lines.Select(long.Parse).ToList();
+            long part1 = GetGroveCoordinates(numbers, 1);
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Sum of the three numbers forming coordinates: {0}   Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine($"  Part 1: Grove Coordinates Sum: {part1}");
+            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-            
+            var decryptedNumbers = numbers.Select(n => n * DECRYPTION_KEY).ToList();
+            long part2 = GetGroveCoordinates(decryptedNumbers, PART2_ROUNDS);
+
             _SW.Stop();
 
+            Console.WriteLine($"  Part 2: Decrypted Grove Coordinates Sum: {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-
-
-        }    
-        
-        int FindNumberAt(int position, List<(int, int)> elements)
-        {
-            int index = elements.Select((n, index) => new { n, index })
-                                      .Where(pair => pair.n.Item1 == 0)
-                                      .Select(pair => (int) pair.index)
-                                      .FirstOrDefault();
-
-            //cut down on movements based on modular arithmetic
-            int NumberOfHops = position % elements.Count;
-            int finalPosition = 0;
-            if (index + NumberOfHops >= elements.Count)
-            {
-                NumberOfHops -= (elements.Count - index);
-                finalPosition = NumberOfHops;
-            }
-            else
-            {
-                finalPosition = index + NumberOfHops;
-            }
-
-
-            return elements[finalPosition].Item1;                
         }
 
-        int mod(int x, int y)
+        long GetGroveCoordinates(List<long> numbers, int rounds)
         {
-           int t = x - ((x / y) * y);
-           if (t < 0) t += y;
-           return t;
+            int n = numbers.Count;
+            // Create a list of (value, original index) to track movements
+            var elements = numbers.Select((val, idx) => (val, idx)).ToList();
+
+            // Perform mixing rounds
+            for (int round = 0; round < rounds; round++)
+            {
+                // Mix in original order
+                for (int originalIdx = 0; originalIdx < n; originalIdx++)
+                {
+                    // Find current position of element with this original index
+                    int currentPos = elements.FindIndex(e => e.idx == originalIdx);
+                    var element = elements[currentPos];
+                    elements.RemoveAt(currentPos);
+
+                    // Calculate new position with wrapping
+                    // Modulo by (n-1) because we've removed one element
+                    long moveAmount = element.val % (n - 1);
+                    int newPos = (int)((currentPos + moveAmount) % (n - 1));
+                    if (newPos < 0) newPos += (n - 1);
+
+                    elements.Insert(newPos, element);
+                }
+            }
+
+            // Find position of 0
+            int zeroPos = elements.FindIndex(e => e.val == 0);
+
+            // Get the three grove coordinates
+            long coord1 = elements[(zeroPos + 1000) % n].val;
+            long coord2 = elements[(zeroPos + 2000) % n].val;
+            long coord3 = elements[(zeroPos + 3000) % n].val;
+
+            return coord1 + coord2 + coord3;
         }
     }
 }

@@ -75,8 +75,6 @@ namespace AdventOfCode
         {
             (int guardX, int guardY) = FindCharacterPosition(dataMap, '^');
 
-            char guardDirection = '^';
-
             // Directions: Up, Right, Down, Left
             int[] dx = { -1, 0, 1,  0 };
             int[] dy = {  0, 1, 0, -1 };

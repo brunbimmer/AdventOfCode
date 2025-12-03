@@ -110,7 +110,7 @@ namespace AdventOfCode
                 int best = Simulate(bp, 1, 0, 0, 0, 0, 0, 0, 0, AllowedRobots.All, 32);
                 totalP2Score *= best;             
             }
-                
+            
             _SW.Stop();
 
             Console.WriteLine("Part 2: Three Blueprint Multiplier {0}, Execution Time: {1}", totalP2Score, StopwatchUtil.getInstance().GetTimestamp(_SW));

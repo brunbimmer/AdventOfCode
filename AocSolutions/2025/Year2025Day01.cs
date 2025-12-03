@@ -68,8 +68,6 @@ namespace AdventOfCode
             foreach (string rotationLine in rotations)
             {
                 string rotation = rotationLine.Trim();
-                if (rotation.Length < 2)
-                    continue;
                 
                 char direction = rotation[0]; // 'L' or 'R'
                 int distance = int.Parse(rotation.Substring(1));
