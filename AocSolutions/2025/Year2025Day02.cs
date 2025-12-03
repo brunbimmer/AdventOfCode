@@ -54,15 +54,9 @@ namespace AdventOfCode
             _SW.Stop();
 
             Console.WriteLine($"  Part 1: Sum of Invalid IDs: {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-            
-            _SW.Restart();
-
-            _SW.Stop();
-
             Console.WriteLine($"  Part 2: Sum of Invalid IDs (Repeated Pattern): {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-
+            
         }
 
         (long part1, long part2) FindInvalidIDs(string input)
