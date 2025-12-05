@@ -59,6 +59,8 @@ namespace Common
 
         public Coordinate2D Move(Utilities.Direction dir, int dist = 1)
         {
+
+            #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             return dir switch
             {
                 Utilities.Direction.N => new Coordinate2D(this.X - dist, this.Y),
@@ -66,6 +68,7 @@ namespace Common
                 Utilities.Direction.E => new Coordinate2D(this.X, this.Y + dist),
                 Utilities.Direction.W => new Coordinate2D(this.X, this.Y - dist),
             };
+            #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
         }
 
     }
