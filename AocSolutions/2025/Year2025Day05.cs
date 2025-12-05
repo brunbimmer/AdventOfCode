@@ -49,9 +49,12 @@ namespace AdventOfCode
 
             var (ranges, availableIds) = ParseInput(input);
 
+            // Pre-merge ranges for both parts
+            var mergedRanges = MergeRanges(ranges);
+
             _SW.Start();
 
-            long freshCount = CountFreshIngredients(ranges, availableIds);
+            long freshCount = CountFreshIngredients(mergedRanges, availableIds);
 
             _SW.Stop();
 
@@ -61,7 +64,7 @@ namespace AdventOfCode
             _SW.Restart();
 
             // Part 2: Count unique IDs that fall within any range (handling overlaps)
-            long uniqueFreshIngredients = DetermineTotalNumberOfFreshIngredients(ranges);
+            long uniqueFreshIngredients = CalculateTotalFreshIngredients(mergedRanges);
 
             _SW.Stop();
 
@@ -95,29 +98,12 @@ namespace AdventOfCode
             return (ranges, availableIds);
         }
 
-        private long CountFreshIngredients(List<(long, long)> ranges, List<long> availableIds)
+        private List<(long, long)> MergeRanges(List<(long, long)> ranges)
         {
-            long count = 0;
-            foreach (var id in availableIds)
-            {
-                // Check if ID falls within any range
-                foreach (var (start, end) in ranges)
-                {
-                    if (id >= start && id <= end)
-                    {
-                        count++;
-                        break; // Found in a range, no need to check others
-                    }
-                }
-            }
-            return count;
-        }
+            if (ranges.Count == 0) return ranges;
 
-        private long DetermineTotalNumberOfFreshIngredients(List<(long, long)> ranges)
-        {
-            // Merge overlapping ranges to count unique IDs
             var sortedRanges = ranges.OrderBy(r => r.Item1).ToList();
-            long totalUnique = 0;
+            var merged = new List<(long, long)>();
 
             long currentStart = sortedRanges[0].Item1;
             long currentEnd = sortedRanges[0].Item2;
@@ -133,16 +119,48 @@ namespace AdventOfCode
                 }
                 else
                 {
-                    // Non-overlapping range, add current to total
-                    totalUnique += (currentEnd - currentStart + 1);
+                    // Non-overlapping range, add current to merged list
+                    merged.Add((currentStart, currentEnd));
                     currentStart = nextStart;
                     currentEnd = nextEnd;
                 }
             }
 
             // Add the last range
-            totalUnique += (currentEnd - currentStart + 1);
+            merged.Add((currentStart, currentEnd));
 
+            return merged;
+        }
+
+        private long CountFreshIngredients(List<(long, long)> mergedRanges, List<long> availableIds)
+        {
+            long count = 0;
+            foreach (var id in availableIds)
+            {
+                // Binary search-like check: since ranges are merged and sorted, check each
+                foreach (var (start, end) in mergedRanges)
+                {
+                    if (id >= start && id <= end)
+                    {
+                        count++;
+                        break; // Found in a range, no need to check others
+                    }
+                    else if (id < start)
+                    {
+                        break; // No point checking further, ranges are sorted
+                    }
+                }
+            }
+            return count;
+        }
+
+        private long CalculateTotalFreshIngredients(List<(long, long)> mergedRanges)
+        {
+            long totalUnique = 0;
+            foreach (var (start, end) in mergedRanges)
+            {
+                totalUnique += (end - start + 1);
+            }
             return totalUnique;
         }
     }
