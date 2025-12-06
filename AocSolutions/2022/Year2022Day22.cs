@@ -11,6 +11,15 @@ using Common;
 
 namespace AdventOfCode
 {
+    // Facing directions for navigation
+    public enum Facing
+    {
+        Right = 0,
+        Down = 1,
+        Left = 2,
+        Up = 3
+    }
+
     [AdventOfCode(Year = 2022, Day = 22)]
     public class Year2022Day22 : IAdventOfCode
     {
@@ -109,7 +118,7 @@ namespace AdventOfCode
             int col = startPos.X;
             int row = startPos.Y;
 
-            int facing = 0; // 0=right, 1=down, 2=left, 3=up
+            Facing facing = Facing.Right; // Start facing right
 
             // Determine cube size from board
             int cubeSize = isCube ? 50 : 0;
@@ -118,23 +127,23 @@ namespace AdventOfCode
             {
                 if (instruction == "R")
                 {
-                    facing = (facing + 1) % 4;
+                    facing = (Facing)(((int)facing + 1) % 4);
                 }
                 else if (instruction == "L")
                 {
-                    facing = (facing + 3) % 4; // Counterclockwise
+                    facing = (Facing)(((int)facing + 3) % 4); // Counterclockwise
                 }
                 else
                 {
                     int steps = int.Parse(instruction);
-                    int dr = directions[facing][0];
-                    int dc = directions[facing][1];
+                    int dr = directions[(int)facing][0];
+                    int dc = directions[(int)facing][1];
 
                     for (int i = 0; i < steps; i++)
                     {
                         int nextRow = row + dr;
                         int nextCol = col + dc;
-                        int nextFacing = facing;
+                        Facing nextFacing = facing;
 
                         if (isCube)
                         {
@@ -152,8 +161,9 @@ namespace AdventOfCode
                             }
                         }
 
-                        // Check if next tile is a wall
-                        if (!board.ContainsKey(new Coordinate2D(nextCol, nextRow)) || board[new Coordinate2D(nextCol, nextRow)] == '#')
+                        // Check if next tile is a wall or doesn't exist
+                        var checkCoord = new Coordinate2D(nextCol, nextRow);
+                        if (!board.ContainsKey(checkCoord) || board[checkCoord] == '#')
                             break;
 
                         row = nextRow;
@@ -164,7 +174,7 @@ namespace AdventOfCode
             }
 
             // Password: 1000 * row + 4 * col + facing (1-indexed)
-            return 1000 * (row + 1) + 4 * (col + 1) + facing;
+            return 1000 * (row + 1) + 4 * (col + 1) + (int)facing;
         }
 
         private (int, int) WrapFlatMap(int col, int row, int dr, int dc, Dictionary<Coordinate2D, char> board)
@@ -205,20 +215,19 @@ namespace AdventOfCode
             return (row, col);
         }
 
-        private (int, int, int) GetNextPositionCube(int col, int row, int dr, int dc, int facing, int cubeSize, Dictionary<Coordinate2D, char> board)
+        private (int, int, Facing) GetNextPositionCube(int col, int row, int dr, int dc, Facing facing, int cubeSize, Dictionary<Coordinate2D, char> board)
         {
             int nextCol = col + dc;
             int nextRow = row + dr;
-            int nextFacing = facing;
+            Facing nextFacing = facing;
 
             var nextPos = new Coordinate2D(nextCol, nextRow);
 
             // If we're still on the board, return as-is
-            if (board.ContainsKey(nextPos))
+            if (board.ContainsKey(nextPos) && board[nextPos] != '#')
                 return (nextRow, nextCol, nextFacing);
 
             // We're wrapping to another face - handle the transition
-            int currentFace = GetFace(col, row, cubeSize);
             (nextRow, nextCol, nextFacing) = WrapCubeFace(col, row, facing, cubeSize);
 
             return (nextRow, nextCol, nextFacing);
@@ -244,84 +253,90 @@ namespace AdventOfCode
             return -1;
         }
 
-        private (int, int, int) WrapCubeFace(int col, int row, int facing, int size)
+        private (int, int, Facing) WrapCubeFace(int col, int row, Facing facing, int size)
         {
             int currentFace = GetFace(col, row, size);
-            int localCol = col % size;
-            int localRow = row % size;
+            
+            // Calculate local coordinates (0-49) within the face
+            int localCol = 0, localRow = 0;
+            switch (currentFace)
+            {
+                case 1: localCol = col - 50;   localRow = row - 0; break;
+                case 2: localCol = col - 100;  localRow = row - 0; break;
+                case 3: localCol = col - 50;   localRow = row - 50; break;
+                case 4: localCol = col - 0;    localRow = row - 100; break;
+                case 5: localCol = col - 50;   localRow = row - 100; break;
+                case 6: localCol = col - 0;    localRow = row - 150; break;
+            }
 
-            // Exact wrapping logic based on face connectivity
-            if (facing == 0) // Moving RIGHT
+            // Switch on face, then on facing direction
+            switch (currentFace)
             {
-                switch (currentFace)
-                {
-                    case 1: // Face 1 right => Face 2 left
-                        return (row, 100, 0);
-                    case 2: // Face 2 right => Face 5 right (opposite, flipped)
-                        return (149 - localRow, 99, 2);
-                    case 3: // Face 3 right => Face 2 bottom (right col becomes bottom row)
-                        return (49, 100 + localRow, 3);
-                    case 4: // Face 4 right => Face 5 left
-                        return (row, 50, 0);
-                    case 5: // Face 5 right => Face 2 right (opposite, flipped)
-                        return (49 - localRow, 149, 2);
-                    case 6: // Face 6 right => Face 5 bottom (right col becomes bottom row)
-                        return (149, 50 + localRow, 3);
-                }
-            }
-            else if (facing == 1) // Moving DOWN
-            {
-                switch (currentFace)
-                {
-                    case 1: // Face 1 bottom => Face 3 top
-                        return (50, col, 1);
-                    case 2: // Face 2 bottom => Face 3 right (bottom row becomes right col)
-                        return (50 + localCol, 99, 2);
-                    case 3: // Face 3 bottom => Face 5 top
-                        return (100, col, 1);
-                    case 4: // Face 4 bottom => Face 6 top
-                        return (150, col, 1);
-                    case 5: // Face 5 bottom => Face 6 right (bottom row becomes right col)
-                        return (150 + localCol, 49, 2);
-                    case 6: // Face 6 bottom => Face 2 top
-                        return (0, 100 + localCol, 1);
-                }
-            }
-            else if (facing == 2) // Moving LEFT
-            {
-                switch (currentFace)
-                {
-                    case 1: // Face 1 left => Face 4 left (opposite, flipped)
-                        return (149 - localRow, 0, 0);
-                    case 2: // Face 2 left => Face 1 right
-                        return (row, 99, 2);
-                    case 3: // Face 3 left => Face 4 top (left col becomes top row)
-                        return (100, localRow, 1);
-                    case 4: // Face 4 left => Face 1 left (opposite, flipped)
-                        return (49 - localRow, 50, 0);
-                    case 5: // Face 5 left => Face 4 right
-                        return (row, 49, 2);
-                    case 6: // Face 6 left => Face 1 top (left col becomes top row)
-                        return (0, 50 + localRow, 1);
-                }
-            }
-            else if (facing == 3) // Moving UP
-            {
-                switch (currentFace)
-                {
-                    case 1: // Face 1 top => Face 6 left (top row becomes left col)
-                        return (150 + localCol, 0, 0);
-                    case 2: // Face 2 top => Face 6 bottom (top row becomes bottom row, reversed)
-                        return (199, 49 - localCol, 3);
-                    case 3: // Face 3 top => Face 1 bottom
-                        return (49, col, 3);
-                    case 4: // Face 4 top => Face 3 left (top row becomes left col)
-                        return (50, 50 + localCol, 0);
-                    case 5: // Face 5 top => Face 3 bottom
-                        return (99, col, 3);
-                    case 6: // Face 6 top => Face 4 bottom (top row becomes bottom row)
-                        return (149, col, 3);
-                }
+                case 1:
+                    if (facing == Facing.Right) // Face 1 right => Face 2 left
+                        return (row, 100, Facing.Right);
+                    else if (facing == Facing.Down) // Face 1 bottom => Face 3 top
+                        return (50, col, Facing.Down);
+                    else if (facing == Facing.Left) // Face 1 left => Face 4 left (opposite, flipped)
+                        return (149 - localRow, 0, Facing.Right);
+                    else if (facing == Facing.Up) // Face 1 top => Face 6 left (top row becomes left col)
+                        return (150 + localCol, 0, Facing.Right);
+                    break;
+
+                case 2:
+                    if (facing == Facing.Right) // Face 2 right => Face 5 right (opposite, flipped)
+                        return (149 - localRow, 99, Facing.Left);
+                    else if (facing == Facing.Down) // Face 2 bottom => Face 3 right (bottom row becomes right col)
+                        return (50 + localCol, 99, Facing.Left);
+                    else if (facing == Facing.Left) // Face 2 left => Face 1 right
+                        return (row, 99, Facing.Left);
+                    else if (facing == Facing.Up) // Face 2 top => Face 6 bottom (top row becomes bottom row)
+                        return (199, localCol, Facing.Up);
+                    break;
+
+                case 3:
+                    if (facing == Facing.Right) // Face 3 right => Face 2 bottom (right col becomes bottom row)
+                        return (49, 100 + localRow, Facing.Up);
+                    else if (facing == Facing.Down) // Face 3 bottom => Face 5 top
+                        return (100, col, Facing.Down);
+                    else if (facing == Facing.Left) // Face 3 left => Face 4 top (left col becomes top row)
+                        return (100, localRow, Facing.Down);
+                    else if (facing == Facing.Up) // Face 3 top => Face 1 bottom
+                        return (49, col, Facing.Up);
+                    break;
+
+                case 4:
+                    if (facing == Facing.Right) // Face 4 right => Face 5 left
+                        return (row, 50, Facing.Right);
+                    else if (facing == Facing.Down) // Face 4 bottom => Face 6 top
+                        return (150, col, Facing.Down);
+                    else if (facing == Facing.Left) // Face 4 left => Face 1 left (opposite, flipped)
+                        return (49 - localRow, 50, Facing.Right);
+                    else if (facing == Facing.Up) // Face 4 top => Face 3 left (top row becomes left col)
+                        return (50 + localCol, 50, Facing.Right);
+                    break;
+
+                case 5:
+                    if (facing == Facing.Right) // Face 5 right => Face 2 right (opposite, flipped)
+                        return (49 - localRow, 149, Facing.Left);
+                    else if (facing == Facing.Down) // Face 5 bottom => Face 6 right (bottom row becomes right col)
+                        return (150 + localCol, 49, Facing.Left);
+                    else if (facing == Facing.Left) // Face 5 left => Face 4 right
+                        return (row, 49, Facing.Left);
+                    else if (facing == Facing.Up) // Face 5 top => Face 3 bottom
+                        return (99, col, Facing.Up);
+                    break;
+
+                case 6:
+                    if (facing == Facing.Right) // Face 6 right => Face 5 bottom (right col becomes bottom row)
+                        return (149, 50 + localRow, Facing.Up);
+                    else if (facing == Facing.Down) // Face 6 bottom => Face 2 top
+                        return (0, 100 + localCol, Facing.Down);
+                    else if (facing == Facing.Left) // Face 6 left => Face 1 top (left col becomes top row)
+                        return (0, 50 + localRow, Facing.Down);
+                    else if (facing == Facing.Up) // Face 6 top => Face 4 bottom (top row becomes bottom row)
+                        return (149, col, Facing.Up);
+                    break;
             }
 
             // Fallback
