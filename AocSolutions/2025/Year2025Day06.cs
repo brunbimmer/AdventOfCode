@@ -73,27 +73,15 @@ namespace AdventOfCode
         private List<Problem> ParseProblems(string[] input)
         {
             int maxWidth = input.Max(l => l.Length);
-            int dataRows = input.Length - 1; // Exclude operation row
+            int dataRows = input.Length - 1;
+            var problems = new List<Problem>();
+            var columnGroups = new List<List<int>>();
+            var currentGroup = new List<int>();
             
-            // Identify column groups (separated by empty columns)
-            List<List<int>> columnGroups = new List<List<int>>();
-            List<int> currentGroup = new List<int>();
-            
+            // Identify column groups separated by spaces
             for (int col = 0; col < maxWidth; col++)
             {
-                bool hasNonSpace = false;
-                
-                // Check if this column has any non-space characters (excluding last row)
-                for (int row = 0; row < dataRows; row++)
-                {
-                    if (col < input[row].Length && input[row][col] != ' ')
-                    {
-                        hasNonSpace = true;
-                        break;
-                    }
-                }
-
-                if (hasNonSpace)
+                if (Enumerable.Range(0, dataRows).Any(row => col < input[row].Length && input[row][col] != ' '))
                 {
                     currentGroup.Add(col);
                 }
@@ -103,56 +91,31 @@ namespace AdventOfCode
                     currentGroup = new List<int>();
                 }
             }
-            
             if (currentGroup.Count > 0)
                 columnGroups.Add(currentGroup);
 
-            // Parse problems from column groups
-            var problems = new List<Problem>();
-
+            // Parse each group into a problem
             foreach (var group in columnGroups)
             {
+                int minCol = group.Min();
+                int maxCol = group.Max();
+                
                 var numbers = new List<long>();
-                char operation = ' ';
-
-                // Read each line horizontally (except last which is operation)
                 for (int lineIdx = 0; lineIdx < dataRows; lineIdx++)
                 {
-                    int minCol = group.Min();
-                    int maxCol = group.Max();
+                    string groupText = new string(Enumerable.Range(minCol, maxCol - minCol + 1)
+                        .Select(col => col < input[lineIdx].Length ? input[lineIdx][col] : ' ')
+                        .ToArray());
                     
-                    // Extract substring for this group
-                    string groupText = "";
-                    for (int col = minCol; col <= maxCol; col++)
-                    {
-                        if (col < input[lineIdx].Length)
-                            groupText += input[lineIdx][col];
-                    }
-                    
-                    // Parse numbers from this line (split by spaces)
-                    var parts = groupText.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var part in parts)
-                    {
-                        if (long.TryParse(part, out var num))
-                            numbers.Add(num);
-                    }
+                    numbers.AddRange(groupText.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries)
+                        .Where(part => long.TryParse(part, out _))
+                        .Select(long.Parse));
                 }
 
-                // Last line has the operation (read from first column in group)
-                int minOpCol = group.Min();
-                if (minOpCol < input[input.Length - 1].Length)
-                {
-                    operation = input[input.Length - 1][minOpCol];
-                }
-
+                char operation = minCol < input[input.Length - 1].Length ? input[input.Length - 1][minCol] : ' ';
+                
                 if (numbers.Count > 0)
-                {
-                    problems.Add(new Problem 
-                    { 
-                        Numbers = numbers, 
-                        Operation = operation 
-                    });
-                }
+                    problems.Add(new Problem { Numbers = numbers, Operation = operation });
             }
 
             return problems;
