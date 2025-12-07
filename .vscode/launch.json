@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/AocSolutions/bin/Debug/net8.0/AdventOfCode.dll",
-            "args": ["2025", "6"],
+            "args": ["2025", "7"],
             "cwd": "${workspaceFolder}/AocSolutions",
             "stopAtEntry": false,
             "console": "internalConsole"
