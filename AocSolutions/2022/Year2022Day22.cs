@@ -120,9 +120,6 @@ namespace AdventOfCode
 
             Facing facing = Facing.Right; // Start facing right
 
-            // Determine cube size from board
-            int cubeSize = isCube ? 50 : 0;
-
             foreach (string instruction in instructions)
             {
                 if (instruction == "R")
@@ -136,34 +133,38 @@ namespace AdventOfCode
                 else
                 {
                     int steps = int.Parse(instruction);
-                    int dr = directions[(int)facing][0];
-                    int dc = directions[(int)facing][1];
 
                     for (int i = 0; i < steps; i++)
                     {
-                        int nextRow = row + dr;
-                        int nextCol = col + dc;
-                        Facing nextFacing = facing;
+                        int dr = directions[(int)facing][0];    // reset the delta as the "facing" direction could have changed.
+                        int dc = directions[(int)facing][1];    // reset the delta as the "facing" direction could have changed.
+
+                        int nextRow = row + dr;                 // calculate next row in possible new direction
+                        int nextCol = col + dc;                 // calculate next column in possible new direction
+                        Facing nextFacing = facing;             // assume facing doesn't change unless wrapping on cube
+                        bool canMove = false;                   // assume we cannot move until verified
 
                         if (isCube)
                         {
-                            (nextRow, nextCol, nextFacing) = GetNextPositionCube(col, row, dr, dc, facing, cubeSize, board);
+                            (nextRow, nextCol, nextFacing, canMove) = GetNextPositionCube(col, row, dr, dc, facing, board);
                         }
                         else
                         {
                             // For flat map, handle wrapping
                             var nextCoord = new Coordinate2D(nextCol, nextRow);
                             
-                            // If position doesn't exist or is a wall, check for wrapping
+                            // If position doesn't exist, check for wrapping
                             if (!board.ContainsKey(nextCoord))
                             {
                                 (nextRow, nextCol) = WrapFlatMap(col, row, dr, dc, board);
                             }
+
+                            // Check if next tile is a wall or doesn't exist
+                            var checkCoord = new Coordinate2D(nextCol, nextRow);
+                            canMove = board.ContainsKey(checkCoord) && board[checkCoord] != '#';
                         }
 
-                        // Check if next tile is a wall or doesn't exist
-                        var checkCoord = new Coordinate2D(nextCol, nextRow);
-                        if (!board.ContainsKey(checkCoord) || board[checkCoord] == '#')
+                        if (!canMove)
                             break;
 
                         row = nextRow;
@@ -215,7 +216,7 @@ namespace AdventOfCode
             return (row, col);
         }
 
-        private (int, int, Facing) GetNextPositionCube(int col, int row, int dr, int dc, Facing facing, int cubeSize, Dictionary<Coordinate2D, char> board)
+        private (int, int, Facing, bool) GetNextPositionCube(int col, int row, int dr, int dc, Facing facing, Dictionary<Coordinate2D, char> board)
         {
             int nextCol = col + dc;
             int nextRow = row + dr;
@@ -223,17 +224,26 @@ namespace AdventOfCode
 
             var nextPos = new Coordinate2D(nextCol, nextRow);
 
-            // If we're still on the board, return as-is
-            if (board.ContainsKey(nextPos) && board[nextPos] != '#')
-                return (nextRow, nextCol, nextFacing);
+            // If position exists on the board, check if it's passable or a wall
+            if (board.ContainsKey(nextPos))
+            {
+                if (board[nextPos] != '#')
+                    return (nextRow, nextCol, nextFacing, true);
+                else
+                    return (nextRow, nextCol, nextFacing, false); // Wall blocking, don't move
+            }
 
-            // We're wrapping to another face - handle the transition
-            (nextRow, nextCol, nextFacing) = WrapCubeFace(col, row, facing, cubeSize);
-
-            return (nextRow, nextCol, nextFacing);
-        }
-
-        private int GetFace(int col, int row, int size)
+            // Position doesn't exist on board, we're leaving the face - wrap to next face
+            (nextRow, nextCol, nextFacing) = WrapCubeFace(col, row, facing);
+            
+            // Check if wrapped destination is valid and not a wall
+            var wrappedPos = new Coordinate2D(nextCol, nextRow);
+            bool canMove = board.ContainsKey(wrappedPos) && board[wrappedPos] != '#';
+                        
+            return (nextRow, nextCol, nextFacing, canMove);                       
+        }        
+        
+        private int GetFace(int col, int row)
         {
             // Detect which face based on coordinate ranges
             // Face 1: cols 50-99, rows 0-49
@@ -243,19 +253,19 @@ namespace AdventOfCode
             // Face 5: cols 50-99, rows 100-149
             // Face 6: cols 0-49, rows 150-199
 
-            if (col >= 50 && col < 100 && row >= 0 && row < 50) return 1;
-            if (col >= 100 && col < 150 && row >= 0 && row < 50) return 2;
-            if (col >= 50 && col < 100 && row >= 50 && row < 100) return 3;
-            if (col >= 0 && col < 50 && row >= 100 && row < 150) return 4;
-            if (col >= 50 && col < 100 && row >= 100 && row < 150) return 5;
-            if (col >= 0 && col < 50 && row >= 150 && row < 200) return 6;
+            if (col >= 50  && col < 100 && row >= 0   && row < 50  ) return 1;
+            if (col >= 100 && col < 150 && row >= 0   && row < 50  ) return 2;
+            if (col >= 50  && col < 100 && row >= 50  && row < 100 ) return 3;
+            if (col >= 0   && col < 50  && row >= 100 && row < 150 ) return 4;
+            if (col >= 50  && col < 100 && row >= 100 && row < 150 ) return 5;
+            if (col >= 0   && col < 50  && row >= 150 && row < 200 ) return 6;
             
             return -1;
         }
 
-        private (int, int, Facing) WrapCubeFace(int col, int row, Facing facing, int size)
+        private (int, int, Facing) WrapCubeFace(int col, int row, Facing facing)
         {
-            int currentFace = GetFace(col, row, size);
+            int currentFace = GetFace(col, row);
             
             // Calculate local coordinates (0-49) within the face
             int localCol = 0, localRow = 0;
