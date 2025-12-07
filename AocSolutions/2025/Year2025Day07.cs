@@ -73,12 +73,13 @@ namespace AdventOfCode
             }
 
             // Track values at each column as they fall
-            var current = new Dictionary<int, long>();
-            current[startCol] = 1;
-
+            var current = new Dictionary<int, long> { { startCol, 1 } };
             int splitCount = 0;
 
             // Process each row
+            // Note: splitCount counts the number of BEAM SPLITS, not the number of '^' characters.
+            // Multiple beams can hit the same splitter, and each beam that hits creates a split.
+            // So if 2 beams hit the same '^', that's 2 splits (counted separately).
             for (int row = 1; row < grid.Length; row++)
             {
                 var next = new Dictionary<int, long>();
@@ -88,28 +89,18 @@ namespace AdventOfCode
                     if (grid[row][col] == '^')
                     {
                         // Splitter: split into left and right
+                        // Increment splitCount for each beam hitting this splitter
                         splitCount++;
-
+                        
                         if (col > 0)
-                        {
-                            if (!next.ContainsKey(col - 1))
-                                next[col - 1] = 0;
-                            next[col - 1] += value;
-                        }
-
+                            next[col - 1] = next.GetValueOrDefault(col - 1) + value;
                         if (col < grid[row].Length - 1)
-                        {
-                            if (!next.ContainsKey(col + 1))
-                                next[col + 1] = 0;
-                            next[col + 1] += value;
-                        }
+                            next[col + 1] = next.GetValueOrDefault(col + 1) + value;
                     }
                     else
                     {
                         // Pass through
-                        if (!next.ContainsKey(col))
-                            next[col] = 0;
-                        next[col] += value;
+                        next[col] = next.GetValueOrDefault(col) + value;
                     }
                 }
 
