@@ -51,10 +51,15 @@ namespace AdventOfCode
             int height = input.Length - 2;   // Exclude walls
             var start = new Coordinate2D(0, -1);
             var end = new Coordinate2D(width - 1, height);
+            
+            int cycleTime = LCM(width, height);
+            
+            // Pre-compute blizzard positions for all times in the cycle
+            var blizzardStates = PrecomputeBlizzardStates(blizzards, cycleTime, width, height);
 
             _SW.Start();
             
-            int part1 = FindPath(blizzards, start, end, width, height, 0);
+            int part1 = FindPath(blizzardStates, start, end, width, height, 0, cycleTime);
 
             _SW.Stop();
 
@@ -64,9 +69,9 @@ namespace AdventOfCode
             _SW.Restart();
 
             // Part 2: Go to end, back to start, then to end again
-            int timeAfterFirstLeg = FindPath(blizzards, start, end, width, height, 0);
-            int timeAfterSecondLeg = FindPath(blizzards, end, start, width, height, timeAfterFirstLeg);
-            int part2 = FindPath(blizzards, start, end, width, height, timeAfterSecondLeg);
+            int timeAfterFirstLeg = FindPath(blizzardStates, start, end, width, height, 0, cycleTime);
+            int timeAfterSecondLeg = FindPath(blizzardStates, end, start, width, height, timeAfterFirstLeg, cycleTime);
+            int part2 = FindPath(blizzardStates, start, end, width, height, timeAfterSecondLeg, cycleTime);
 
             _SW.Stop();
 
@@ -103,31 +108,38 @@ namespace AdventOfCode
             return blizzards;
         }
 
-        private HashSet<Coordinate2D> GetBlizzardPositions(List<(Coordinate2D pos, Coordinate2D dir)> blizzards, int time, int width, int height)
+        private List<HashSet<Coordinate2D>> PrecomputeBlizzardStates(List<(Coordinate2D pos, Coordinate2D dir)> blizzards, int cycleTime, int width, int height)
         {
-            var positions = new HashSet<Coordinate2D>();
+            var states = new List<HashSet<Coordinate2D>>(cycleTime);
             
-            foreach (var (pos, dir) in blizzards)
+            for (int time = 0; time < cycleTime; time++)
             {
-                int newX = (pos.X + dir.X * time) % width;
-                if (newX < 0) newX += width;
+                var positions = new HashSet<Coordinate2D>();
                 
-                int newY = (pos.Y + dir.Y * time) % height;
-                if (newY < 0) newY += height;
+                foreach (var (pos, dir) in blizzards)
+                {
+                    int newX = (pos.X + dir.X * time) % width;
+                    if (newX < 0) newX += width;
+                    
+                    int newY = (pos.Y + dir.Y * time) % height;
+                    if (newY < 0) newY += height;
+                    
+                    positions.Add(new Coordinate2D(newX, newY));
+                }
                 
-                positions.Add(new Coordinate2D(newX, newY));
+                states.Add(positions);
             }
             
-            return positions;
+            return states;
         }
 
-        private int FindPath(List<(Coordinate2D pos, Coordinate2D dir)> blizzards, Coordinate2D start, Coordinate2D end, int width, int height, int startTime)
+        private int FindPath(List<HashSet<Coordinate2D>> blizzardStates, Coordinate2D start, Coordinate2D end, int width, int height, int startTime, int cycleTime)
         {
             var queue = new Queue<(Coordinate2D pos, int time)>();
             var visited = new HashSet<(Coordinate2D, int)>();
             
             queue.Enqueue((start, startTime));
-            visited.Add((start, startTime));
+            visited.Add((start, startTime % cycleTime));
             
             var directions = new[] { 
                 new Coordinate2D(0, 0),  // Wait
@@ -137,8 +149,6 @@ namespace AdventOfCode
                 new Coordinate2D(0, -1)  // Up
             };
             
-            int cycleTime = LCM(width, height);
-            
             while (queue.Count > 0)
             {
                 var (pos, time) = queue.Dequeue();
@@ -147,7 +157,8 @@ namespace AdventOfCode
                     return time;
                 
                 int nextTime = time + 1;
-                var blizzardPositions = GetBlizzardPositions(blizzards, nextTime, width, height);
+                int cycleIndex = nextTime % cycleTime;
+                var blizzardPositions = blizzardStates[cycleIndex];
                 
                 foreach (var dir in directions)
                 {
@@ -167,7 +178,7 @@ namespace AdventOfCode
                     // Check if there's a blizzard at this position
                     if (isValid && !blizzardPositions.Contains(nextPos))
                     {
-                        var state = (nextPos, nextTime % cycleTime);
+                        var state = (nextPos, cycleIndex);
                         if (!visited.Contains(state))
                         {
                             visited.Add(state);
