@@ -52,9 +52,12 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
+            // Prepare boxes and edges once
+            var (boxes, edges) = PrepareData(input);
+
             _SW.Start();
 
-            long part1 = Solve(input);
+            long part1 = SolvePart1(boxes, edges);
 
             _SW.Stop();
 
@@ -63,7 +66,7 @@ namespace AdventOfCode
 
             _SW.Restart();
 
-            long part2 = Solve(input, true);
+            long part2 = SolvePart2(boxes, edges);
 
             _SW.Stop();
 
@@ -71,11 +74,11 @@ namespace AdventOfCode
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
 
-        private long Solve(string[] lines, bool solvePart2 = false)
+        private (List<Coordinate3D> boxes, List<(double distance, int a, int b)> edges) PrepareData(string[] lines)
         {
             var boxes = ParseBoxes(lines);
             
-            // Generate all pairs with Euclidean distance and sort by distance
+            // Generate all pairs with Euclidean distance
             var edges = new List<(double distance, int a, int b)>();
             for (int i = 0; i < boxes.Count; i++)
             {
@@ -84,8 +87,51 @@ namespace AdventOfCode
                     edges.Add((EuclideanDistance(boxes[i], boxes[j]), i, j));
                 }
             }
+            
+            // Sort by distance
             edges.Sort((a, b) => a.distance.CompareTo(b.distance));
             
+            return (boxes, edges);
+        }
+
+        private long SolvePart1(List<Coordinate3D> boxes, List<(double distance, int a, int b)> edges)
+        {
+            return Solve(boxes, edges, solvePart2: false);
+        }
+
+        private long SolvePart2(List<Coordinate3D> boxes, List<(double distance, int a, int b)> edges)
+        {
+            return Solve(boxes, edges, solvePart2: true);
+        }
+
+        private List<Coordinate3D> ParseBoxes(string[] lines)
+        {
+            var boxes = new List<Coordinate3D>();
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+                var parts = line.Split(',');
+                if (parts.Length != 3)
+                    continue;
+                long x = long.Parse(parts[0].Trim());
+                long y = long.Parse(parts[1].Trim());
+                long z = long.Parse(parts[2].Trim());
+                boxes.Add(new Coordinate3D((int)x, (int)y, (int)z));
+            }
+            return boxes;
+        }
+
+        private double EuclideanDistance(Coordinate3D a, Coordinate3D b)
+        {
+            long dx = a.X - b.X;
+            long dy = a.Y - b.Y;
+            long dz = a.Z - b.Z;
+            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
+        }
+
+        private long Solve(List<Coordinate3D> boxes, List<(double distance, int a, int b)> edges, bool solvePart2)
+        {
             var circuits = new HashSet<Circuit>();
             long lastConnectionX1 = 0;
             long lastConnectionX2 = 0;
@@ -158,32 +204,6 @@ namespace AdventOfCode
                 var sizes = circuits.Select(c => c.Count).OrderByDescending(s => s).Take(3);
                 return sizes.Aggregate(1L, (acc, size) => acc * size);
             }
-        }
-
-        private List<Coordinate3D> ParseBoxes(string[] lines)
-        {
-            var boxes = new List<Coordinate3D>();
-            foreach (var line in lines)
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
-                var parts = line.Split(',');
-                if (parts.Length != 3)
-                    continue;
-                long x = long.Parse(parts[0].Trim());
-                long y = long.Parse(parts[1].Trim());
-                long z = long.Parse(parts[2].Trim());
-                boxes.Add(new Coordinate3D((int)x, (int)y, (int)z));
-            }
-            return boxes;
-        }
-
-        private double EuclideanDistance(Coordinate3D a, Coordinate3D b)
-        {
-            long dx = a.X - b.X;
-            long dy = a.Y - b.Y;
-            long dz = a.Z - b.Z;
-            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
     }
 }
