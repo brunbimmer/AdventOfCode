@@ -73,115 +73,88 @@ namespace AdventOfCode
 
         private long Solve(string[] lines, bool solvePart2 = false)
         {
-            // Parse junction boxes to Coordinate3D
             var boxes = ParseBoxes(lines);
             
-            // Generate all pairs with EuclideanDistance
+            // Generate all pairs with Euclidean distance and sort by distance
             var edges = new List<(double distance, int a, int b)>();
             for (int i = 0; i < boxes.Count; i++)
             {
                 for (int j = i + 1; j < boxes.Count; j++)
                 {
-                    double dist = EuclideanDistance(boxes[i], boxes[j]);
-                    edges.Add((dist, i, j));
+                    edges.Add((EuclideanDistance(boxes[i], boxes[j]), i, j));
                 }
             }
-            
-            // Sort by distance (shortest to longest)
             edges.Sort((a, b) => a.distance.CompareTo(b.distance));
-                       
-            // Dictionary to track circuits: Value is circuit info
+            
             var circuits = new HashSet<Circuit>();
-
             long lastConnectionX1 = 0;
             long lastConnectionX2 = 0;
-
-
-            //Circuit Counter
-            int MaxConnections = 10;
-
-            int counter = 0;
-
-            bool _bDone = false;
+            int connectionCount = 0;
+            const int MAX_CONNECTIONS_PART1 = 1000;
 
             foreach (var (distance, a, b) in edges)
             {
-                if (!solvePart2) counter++; //count 1000 connections only for part 1
+                // Stop after 1000 connections for Part 1
+                if (!solvePart2) connectionCount++;
 
-                if (_bDone) break;
+                var matchingCircuits = circuits.Where(c => c.Boxes.Contains(a) || c.Boxes.Contains(b)).ToList();
 
-                var circuit = circuits.Where(c => c.Boxes.Contains(a) || c.Boxes.Contains(b)).ToList();
-
-                if (circuit.Count() != 0)
+                if (matchingCircuits.Count == 0)
                 {
-                    if (circuit.Count() > 1)
+                    // Both boxes are new - create new circuit
+                    circuits.Add(new Circuit(2, new HashSet<int> { a, b }));
+                }
+                else if (matchingCircuits.Count == 1)
+                {
+                    // One box is in a circuit
+                    var circuit = matchingCircuits[0];
+                    if (!circuit.Boxes.Contains(a) || !circuit.Boxes.Contains(b))
                     {
-                        // Merge circuits if both boxes are in different circuits
-                        var circuitsList = circuit.ToList();
-                        var firstCircuit = circuitsList[0];
-                        for (int i = 1; i < circuitsList.Count; i++)
+                        circuit.Boxes.Add(a);
+                        circuit.Boxes.Add(b);
+                        circuit.Count++;
+                        
+                        if (circuit.Boxes.Count == boxes.Count)
                         {
-                            var toMerge = circuitsList[i];
-                            firstCircuit.Count += toMerge.Count;
-                            foreach (var box in toMerge.Boxes)
-                            {
-                                firstCircuit.Boxes.Add(box);
-                            }
-                            circuits.Remove(toMerge);
-
-                    
-                            // If all boxes are now in one circuit, we're done
-                            if (circuits.Count == 1)
-                            {
-                                // Track this as the last connection
-                                lastConnectionX1 = boxes[a].X;
-                                lastConnectionX2 = boxes[b].X;
-
-                                if (circuits.First().Boxes.Count() == boxes.Count) 
-                                {
-                                    _bDone = true;
-                                }
-                            }
-                        }                        
-                    }
-                    else 
-                    {
-                        if (circuit.First().Boxes.Contains(a) && circuit.First().Boxes.Contains(b))
-                        {
-                            // Both boxes already in the same circuit, skip to avoid cycle
-                            continue;
-                        }
-
-                        circuit.First().Boxes.Add(a);    //Gets added if not present
-                        circuit.First().Boxes.Add(b);    //Gets added if not present
-                        circuit.First().Count += 1;      //Increase circuit size
-
-                        if (circuits.First().Boxes.Count() == boxes.Count) 
-                        {
-                            // Track this as the last connection
                             lastConnectionX1 = boxes[a].X;
                             lastConnectionX2 = boxes[b].X;
-                            _bDone = true;
+                            if (solvePart2) break;
                         }
                     }
                 }
-                else 
+                else
                 {
-                    Circuit newCircuit = new Circuit(2, new HashSet<int> { a, b });
-                    circuits.Add(newCircuit);
+                    // Both boxes are in different circuits - merge them
+                    var firstCircuit = matchingCircuits[0];
+                    for (int i = 1; i < matchingCircuits.Count; i++)
+                    {
+                        var toMerge = matchingCircuits[i];
+                        firstCircuit.Count += toMerge.Count;
+                        foreach (var box in toMerge.Boxes)
+                        {
+                            firstCircuit.Boxes.Add(box);
+                        }
+                        circuits.Remove(toMerge);
+                    }
+
+                    if (firstCircuit.Boxes.Count == boxes.Count)
+                    {
+                        lastConnectionX1 = boxes[a].X;
+                        lastConnectionX2 = boxes[b].X;
+                        if (solvePart2) break;
+                    }
                 }
 
-                if (counter >= MaxConnections) break;
+                if (connectionCount >= MAX_CONNECTIONS_PART1)
+                    break;
             }
-            
+
             if (solvePart2)
             {
-                // For part 2, return the size of the largest circuit
                 return lastConnectionX1 * lastConnectionX2;
             }
             else
             {
-                // Get the 3 largest circuit sizes and multiply
                 var sizes = circuits.Select(c => c.Count).OrderByDescending(s => s).Take(3);
                 return sizes.Aggregate(1L, (acc, size) => acc * size);
             }
