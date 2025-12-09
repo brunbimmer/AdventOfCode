@@ -42,15 +42,15 @@ namespace AdventOfCode
 
             _SW.Start();
 
-            var redTiles = ParseTiles(input);
+            var tiles = ParseTiles(input);
 
             _SW.Stop();
-            Console.WriteLine($"  Parsed {redTiles.Count} red tiles");
+            Console.WriteLine($"  Parsed {tiles.Count} tiles");
             Console.WriteLine("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
 
-            long part1 = SolvePart1(redTiles);
+            long part1 = SolvePart1(tiles);
 
             _SW.Stop();
             Console.WriteLine($"  Part 1 - Largest Area between two coordinates: {part1}");
@@ -58,10 +58,10 @@ namespace AdventOfCode
 
             _SW.Restart();
 
-            long part2 = SolvePart2(redTiles);
+            long part2 = SolvePart2(tiles);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 2 - Largest Filled Area: {part2}");
+            Console.WriteLine($"  Part 2 - Largest Filled Red/Green Inclusive Area: {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
 
@@ -86,19 +86,19 @@ namespace AdventOfCode
             return tiles;
         }
 
-        private long SolvePart1(List<(int col, int row)> redTiles)
+        private long SolvePart1(List<(int col, int row)> tiles)
         {
             long maxArea = 0;
 
             // Try all pairs of red tiles as opposite corners
-            for (int i = 0; i < redTiles.Count; i++)
+            for (int i = 0; i < tiles.Count; i++)
             {
-                for (int j = i + 1; j < redTiles.Count; j++)
+                for (int j = i + 1; j < tiles.Count; j++)
                 {
-                    int col1 = redTiles[i].col;
-                    int row1 = redTiles[i].row;
-                    int col2 = redTiles[j].col;
-                    int row2 = redTiles[j].row;
+                    int col1 = tiles[i].col;
+                    int row1 = tiles[i].row;
+                    int col2 = tiles[j].col;
+                    int row2 = tiles[j].row;
 
                     // Calculate rectangle area (width * height)
                     // Include the tiles themselves, so width = |col2 - col1| + 1
