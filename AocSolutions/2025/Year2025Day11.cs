@@ -61,7 +61,7 @@ namespace AdventOfCode
             long part2 = SolvePart2(graph);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 2 - Total paths with constraint: {part2}");
+            Console.WriteLine($"  Part 2 - Paths from 'svr' to 'out' visiting both 'dac' and 'fft': {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
         }
 
