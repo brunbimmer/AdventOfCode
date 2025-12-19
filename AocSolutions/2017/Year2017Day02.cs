@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -22,7 +18,6 @@ namespace AdventOfCode
 
         public Year2017Day02()
         {
-            //Get Attributes
             AdventOfCodeAttribute ca = (AdventOfCodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(AdventOfCodeAttribute));
 
             _Year = ca.Year;
@@ -38,31 +33,76 @@ namespace AdventOfCode
             Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
             Console.WriteLine("===========================================");
 
-            //Build BasePath and retrieve input. 
- 
-
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
+            string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
+            _SW.Start();
+            long part1 = SolvePart1(lines);
             _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            Console.WriteLine("Part 1 (checksum = sum of row max-min): {0}, Execution Time: {1}", part1, StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();
-
-           
-            
+            long part2 = SolvePart2(lines);
             _SW.Stop();
+            Console.WriteLine("Part 2 (sum of divisible-pair quotients per row): {0}, Execution Time: {1}", part2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+        }
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+        // Part 1: checksum = sum over rows of (max - min)
+        private long SolvePart1(string[] lines)
+        {
+            long checksum = 0;
+            foreach (var row in ParseSpreadsheet(lines))
+            {
+                checksum += row.Max() - row.Min();
+            }
+            return checksum;
+        }
 
+        // Part 2: per row find the only divisible pair (a % b == 0), add a/b
+        private long SolvePart2(string[] lines)
+        {
+            long sum = 0;
+            foreach (var row in ParseSpreadsheet(lines))
+            {
+                sum += FindEvenDivisionResult(row);
+            }
+            return sum;
+        }
 
-        }       
+        private IEnumerable<int[]> ParseSpreadsheet(string[] lines)
+        {
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                // AoC input is tab-separated, but accept spaces too.
+                var parts = line.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 0)
+                    continue;
+
+                yield return parts.Select(int.Parse).ToArray();
+            }
+        }
+
+        private int FindEvenDivisionResult(int[] row)
+        {
+            // The puzzle guarantees exactly one such pair per row.
+            for (int i = 0; i < row.Length; i++)
+            {
+                for (int j = 0; j < row.Length; j++)
+                {
+                    if (i == j)
+                        continue;
+
+                    int a = row[i];
+                    int b = row[j];
+                    if (a % b == 0)
+                        return a / b;
+                }
+            }
+
+            throw new InvalidOperationException("No evenly divisible pair found in row: " + string.Join(" ", row));
+        }
     }
 }
