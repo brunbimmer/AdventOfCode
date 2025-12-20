@@ -52,16 +52,21 @@ namespace AdventOfCode
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             string[] input = FileIOHelper.getInstance().ReadDataAsLines(file);
 
+            _SW.Start();
+
             // Prepare boxes and edges once
             var (boxes, edges) = PrepareData(input);
 
-            _SW.Start();
+            _SW.Stop();
+            Console.WriteLine($"");
+            Console.WriteLine("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
+            _SW.Restart();
 
             long part1 = SolvePart1(boxes, edges);
 
             _SW.Stop();
-
-            Console.WriteLine($"  Part 1: {part1}");
+            Console.WriteLine($"  Part 1 - : {part1}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
             _SW.Restart();

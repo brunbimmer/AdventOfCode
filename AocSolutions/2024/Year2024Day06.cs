@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
-using LINQPad.Extensibility.DataContext;
 using static Common.Utilities;
 
 namespace AdventOfCode
@@ -61,11 +56,11 @@ namespace AdventOfCode
             
             _SW.Restart();
 
-            int part2 = 0;
+            int part2 = CountObstructionPositionsThatLoop(dataMap);
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2:  {part2}");
+            Console.WriteLine($"  Part 2 => Number of different positions for obstructions:  {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
@@ -121,6 +116,105 @@ namespace AdventOfCode
             return visitedPositions.Count();
         }
 
+        int CountObstructionPositionsThatLoop(char[,] dataMap)
+        {
+            (int startX, int startY) = FindCharacterPosition(dataMap, '^');
+
+            // Candidates: any position visited in the original walk (excluding start).
+            // Placing an obstruction elsewhere can't affect the path.
+            var visited = WalkVisitedPositions(dataMap, startX, startY);
+
+            int count = 0;
+            foreach (var (x, y) in visited)
+            {
+                if (x == startX && y == startY)
+                    continue;
+
+                if (dataMap[x, y] == '#')
+                    continue;
+
+                // Try placing obstruction here
+                dataMap[x, y] = '#';
+                bool loops = DoesGuardLoop(dataMap, startX, startY);
+                dataMap[x, y] = '.'; // restore (input only has '.', '#', '^')
+
+                if (loops)
+                    count++;
+            }
+
+            // Restore start marker just in case
+            dataMap[startX, startY] = '^';
+            return count;
+        }
+
+        HashSet<(int x, int y)> WalkVisitedPositions(char[,] dataMap, int startX, int startY)
+        {
+            int[] dx = { -1, 0, 1, 0 };
+            int[] dy = { 0, 1, 0, -1 };
+
+            var visited = new HashSet<(int, int)>();
+
+            int x = startX;
+            int y = startY;
+            int dir = 0;
+            visited.Add((x, y));
+
+            while (true)
+            {
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+
+                if (!IsInBounds(nx, ny, dataMap))
+                    break;
+
+                if (dataMap[nx, ny] == '#')
+                {
+                    dir = (dir + 1) % 4;
+                    continue;
+                }
+
+                x = nx;
+                y = ny;
+                visited.Add((x, y));
+            }
+
+            return visited;
+        }
+
+        bool DoesGuardLoop(char[,] dataMap, int startX, int startY)
+        {
+            int[] dx = { -1, 0, 1, 0 };
+            int[] dy = { 0, 1, 0, -1 };
+
+            int x = startX;
+            int y = startY;
+            int dir = 0;
+
+            var seenStates = new HashSet<(int x, int y, int dir)>();
+
+            while (true)
+            {
+                var state = (x, y, dir);
+                if (!seenStates.Add(state))
+                    return true; // repeated state => loop
+
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+
+                if (!IsInBounds(nx, ny, dataMap))
+                    return false; // exited
+
+                if (dataMap[nx, ny] == '#')
+                {
+                    dir = (dir + 1) % 4;
+                    continue;
+                }
+
+                x = nx;
+                y = ny;
+            }
+        }
+
         public (int row, int col) FindCharacterPosition(char[,] charArray, char target)
         {
             // Get the dimensions of the array
@@ -139,7 +233,8 @@ namespace AdventOfCode
 
         bool IsInBounds(int x, int y, char[,] map)
         {
-            return x >= 0 && x < map.GetLength(1) && y >= 0 && y < map.GetLength(0);
+            // 2D array is [rows, cols] => x is row, y is col
+            return x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1);
         }
     }
 }

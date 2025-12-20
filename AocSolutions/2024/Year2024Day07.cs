@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
-using LINQPad.Extensibility.DataContext;
 
 namespace AdventOfCode
 {
@@ -47,27 +42,102 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
-
-
+            var equations = ParseEquations(lines);
             _SW.Start();
 
-            long part1 = 0;
+            long part1 = Solve(equations, includeConcat: false);
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: {part1}");
+            Console.WriteLine($"  Part 1 (sum of test values solvable with +,*): {part1}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
             
             _SW.Restart();
 
-            long part2 = 0;
+            long part2 = Solve(equations, includeConcat: true);
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: {part2}");
+            Console.WriteLine($"  Part 2 (sum solvable with +,*,concat): {part2}");
             Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
 
 
+        }
+
+        private sealed record Equation(long Target, long[] Numbers);
+
+        private static List<Equation> ParseEquations(string[] lines)
+        {
+            var result = new List<Equation>();
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                var parts = line.Split(':', 2);
+                long target = long.Parse(parts[0].Trim());
+                long[] numbers = parts[1].Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(long.Parse)
+                    .ToArray();
+
+                result.Add(new Equation(target, numbers));
+            }
+            return result;
+        }
+
+        private static long Solve(List<Equation> equations, bool includeConcat)
+        {
+            long sum = 0;
+            foreach (var eq in equations)
+            {
+                if (IsSolvable(eq.Target, eq.Numbers, includeConcat))
+                    sum += eq.Target;
+            }
+            return sum;
+        }
+
+        private static bool IsSolvable(long target, long[] numbers, bool includeConcat)
+        {
+            // Keep the set of all possible running totals after processing i numbers.
+            // Operators evaluate strictly left-to-right.
+            var current = new HashSet<long> { numbers[0] };
+
+            for (int i = 1; i < numbers.Length; i++)
+            {
+                long n = numbers[i];
+                var next = new HashSet<long>();
+
+                foreach (var v in current)
+                {
+                    long a = v + n;
+                    if (a <= target) next.Add(a);
+
+                    long m = v * n;
+                    if (m <= target) next.Add(m);
+
+                    if (includeConcat)
+                    {
+                        long c = Concat(v, n);
+                        if (c <= target) next.Add(c);
+                    }
+                }
+
+                if (next.Count == 0)
+                    return false;
+
+                current = next;
+            }
+
+            return current.Contains(target);
+        }
+
+        private static long Concat(long left, long right)
+        {
+            // Decimal concatenation.
+            long pow = 10;
+            while (pow <= right)
+                pow *= 10;
+            return left * pow + right;
         }
     }
 }
