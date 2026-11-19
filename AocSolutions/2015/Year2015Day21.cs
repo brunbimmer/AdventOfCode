@@ -53,11 +53,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             _SW.Restart();
             //Build BasePath and retrieve input. 
@@ -100,14 +98,14 @@ namespace AdventOfCode
 
             // minimum spend for player to win
             var min = combinations.Min(i => Try("Player", player, boss, i) ?? Int32.MaxValue);
-            Console.WriteLine(min);
+            output.WritePart(1, min, trackTime ? _SW.Elapsed : null, "Minimum cost to win");
 
             // maximum spend for boss to win
             var max = combinations.Max(i => Try("Boss", player, boss, i) ?? Int32.MinValue);
-            Console.WriteLine(max);
+            output.WritePart(2, max, trackTime ? _SW.Elapsed : null, "Maximum cost to lose");
 
             _SW.Stop();
-            Console.WriteLine("Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
         
         }   

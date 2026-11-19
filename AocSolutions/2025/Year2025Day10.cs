@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
@@ -45,24 +43,24 @@ namespace AdventOfCode
             var machines = ParseMachines(input);
 
             _SW.Stop();
-            Console.WriteLine($"  Parsed {machines.Count} machines");
-            Console.WriteLine("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WriteDiagnostic($"  Parsed {machines.Count} machines");
+            output.WriteDiagnostic(string.Format("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW)));
 
             _SW.Restart();
 
             long part1 = SolvePart1(machines);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 1 - Total minimum button presses: {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "Total minimum button presses");
+
 
             _SW.Restart();
 
             long part2 = SolvePart2(machines);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 2 - Total minimum button presses for joltage configuration: {part2}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, part2, trackTime ? _SW.Elapsed : null, "Total minimum button presses for joltage configuration");
+
         }
 
         private class Machine

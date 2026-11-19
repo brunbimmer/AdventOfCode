@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -49,16 +47,16 @@ namespace AdventOfCode
             _SW.Start();
 
 
-            int sum = ParseRoomList(roomList);
+            int sum = ParseRoomList(roomList, output);
 
 
             _SW.Stop();
 
-            Console.WriteLine("Valid room Sector ID Sum: {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, sum, trackTime ? _SW.Elapsed : null, "Valid room Sector ID Sum");
 
        }
 
-        int ParseRoomList(string[] roomList)
+        int ParseRoomList(string[] roomList, IPuzzleOutput output)
         {
             string roomName, sectorId, checksum = "";
             int sum = 0;
@@ -72,7 +70,10 @@ namespace AdventOfCode
                     var decipheredRoomName = DecypherRoomName(roomName.Replace("-", " "), int.Parse(sectorId));
 
                     if (decipheredRoomName.Contains("northpole"))
-                        Console.WriteLine($"The room we are looking for is \"{decipheredRoomName}\" it is located in Sector ID {sectorId}.");
+                    {
+                        output.WritePart(2, sectorId, description: "Sector ID of the northpole room");
+                        output.WriteDiagnostic($"The room we are looking for is \"{decipheredRoomName}\" it is located in Sector ID {sectorId}.");
+                    }
                 }
                     
 

@@ -41,11 +41,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -56,11 +54,11 @@ namespace AdventOfCode
 
             _SW.Start();                       
 
-            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions); 
+            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions, output.WriteDiagnostic);
             
             _SW.Stop();
             
-            Console.WriteLine("Part 1 (Value on Register A): {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, registers["a"], trackTime ? _SW.Elapsed : null, "(Value on Register A)");
 
             _SW.Restart();
 
@@ -70,11 +68,11 @@ namespace AdventOfCode
             registers["c"] = 1;
             registers["d"] = 0;
 
-            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions);           
+            registers = BunnyAssemblyParser.ParseInstructions(registers, instructions, output.WriteDiagnostic);
             
             _SW.Stop();
 
-             Console.WriteLine("Part 1 (Value on Register A after initializing Register C to 1): {0}, Execution Time: {1}", registers["a"], StopwatchUtil.getInstance().GetTimestamp(_SW));
+             output.WritePart(2, registers["a"], trackTime ? _SW.Elapsed : null, "(Value on Register A after initializing Register C to 1)");
 
 
         }          

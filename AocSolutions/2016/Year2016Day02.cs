@@ -52,11 +52,9 @@ namespace AdventOfCode
         private string realCode = string.Empty;
 
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -72,7 +70,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Bathroom Code: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, code, trackTime ? _SW.Elapsed : null, "Bathroom Code");
 
             _SW.Restart();
 
@@ -80,7 +78,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Real Bathroom Code: {0}, Execution Time: {1}", realCode, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, realCode, trackTime ? _SW.Elapsed : null, "Real Bathroom Code");
 
 
         }

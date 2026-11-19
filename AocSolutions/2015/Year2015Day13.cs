@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
-using Common;
-using CommonAlgorithms;
-using Microsoft.VisualBasic;
 
 namespace AdventOfCode
 {
@@ -21,10 +14,6 @@ namespace AdventOfCode
         private string _OverrideFile;
 
         public Stopwatch _SW { get; set; }
-
-        
-        private Dictionary<Tuple<string, string>, int> locations = new Dictionary<Tuple<string, string>, int>();
-        private List<string> allTowns = new List<string>();
 
         struct Guest
         {
@@ -46,18 +35,16 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
              
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
             string[] instructions = FileIOHelper.getInstance().ReadDataAsLines(file);         
-            _SW.Start();
+            _SW.Restart();
           
             List<Guest> guests = ParseSeatingChart(instructions);
 
@@ -66,7 +53,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Total Change of Happiness for optimal seating: {0}, Execution Time: {1}", totalChange, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, totalChange, trackTime ? _SW.Elapsed : null, "Total Change of Happiness for optimal seating");
             
             _SW.Restart();
                        
@@ -76,7 +63,7 @@ namespace AdventOfCode
 
             _SW.Stop();
             
-            Console.WriteLine("  Part 2: Total Change of Happiness for optimal seating with me: {0}, Execution Time: {1}", newTotalChange, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, newTotalChange, trackTime ? _SW.Elapsed : null, "Total Change of Happiness for optimal seating with me");
             
 
 
@@ -124,33 +111,65 @@ namespace AdventOfCode
         
         private int GetSittingHappiness(List<Guest> guests, List<string> persons)
         {
-            var sittingsPerms = BuildPermutations(persons);
-            var sittingsValues = new Dictionary<string, int>();
+            var changes = new Dictionary<(string Person, string Neighbor), int>();
+            foreach (Guest guest in guests)
+                changes.TryAdd((guest.person, guest.nextTo), guest.gain - guest.lose);
 
-            foreach (List<string> perm in sittingsPerms)
+            int[,] happiness = new int[persons.Count, persons.Count];
+            for (int first = 0; first < persons.Count; first++)
             {
-                int happiness = 0;
-                Guest sitting;
-                perm.Add(perm[0]);
-                for (int i = 0; i < perm.Count - 1; i++)
+                for (int second = first + 1; second < persons.Count; second++)
                 {
-                    if (guests.Any(s => s.person == perm[i] && s.nextTo == perm[i + 1]))
+                    changes.TryGetValue((persons[first], persons[second]), out int forward);
+                    changes.TryGetValue((persons[second], persons[first]), out int reverse);
+                    happiness[first, second] = forward + reverse;
+                    happiness[second, first] = forward + reverse;
+                }
+            }
+
+            return GetMaximumHappiness(happiness);
+        }
+
+        private int GetMaximumHappiness(int[,] happiness)
+        {
+            int remainingGuests = happiness.GetLength(0) - 1;
+            if (remainingGuests <= 0)
+                return 0;
+
+            // Guest zero anchors the circle. Each mask identifies the other guests already seated.
+            int stateCount = 1 << remainingGuests;
+            var best = new int[stateCount, remainingGuests];
+            for (int mask = 0; mask < stateCount; mask++)
+                for (int last = 0; last < remainingGuests; last++)
+                    best[mask, last] = int.MinValue;
+
+            for (int guest = 0; guest < remainingGuests; guest++)
+                best[1 << guest, guest] = happiness[0, guest + 1];
+
+            for (int mask = 1; mask < stateCount; mask++)
+            {
+                for (int last = 0; last < remainingGuests; last++)
+                {
+                    if (best[mask, last] == int.MinValue)
+                        continue;
+
+                    for (int next = 0; next < remainingGuests; next++)
                     {
-                        sitting = guests.First(s => s.person == perm[i] && s.nextTo == perm[i + 1]);
-                        happiness += sitting.gain - sitting.lose;
-                    }
-                    if (guests.Any(s => s.person == perm[i + 1] && s.nextTo == perm[i]))
-                    {
-                        sitting = guests.First(s => s.person == perm[i + 1] && s.nextTo == perm[i]);
-                        happiness += sitting.gain - sitting.lose;
+                        int nextBit = 1 << next;
+                        if ((mask & nextBit) != 0)
+                            continue;
+
+                        int nextMask = mask | nextBit;
+                        int score = best[mask, last] + happiness[last + 1, next + 1];
+                        best[nextMask, next] = Math.Max(best[nextMask, next], score);
                     }
                 }
-                if (happiness > 0)
-                    sittingsValues.Add(String.Join("->", perm), happiness);
             }
-            var happiestSitting = sittingsValues.OrderByDescending(v => v.Value).First();
-         
-            return happiestSitting.Value;
+
+            int maximum = int.MinValue;
+            for (int last = 0; last < remainingGuests; last++)
+                maximum = Math.Max(maximum, best[stateCount - 1, last] + happiness[last + 1, 0]);
+            return maximum;
         }
 
         public List<List<string>> BuildPermutations(List<string> items)

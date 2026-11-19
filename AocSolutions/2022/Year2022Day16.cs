@@ -46,11 +46,9 @@ namespace AdventOfCode
         int[] valveMasks;                               // Ints with 1 bit turned on
 
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -68,7 +66,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Most Pressure released working alone: {0}, Execution Time: {1}", cache.Values.Max(), StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, cache.Values.Max(), trackTime ? _SW.Elapsed : null, "Most Pressure released working alone");
 
             _SW.Restart();
 
@@ -89,7 +87,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Most Pressure released working with elephant: {0}, Execution Time: {1}", curMax, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, curMax, trackTime ? _SW.Elapsed : null, "Most Pressure released working with elephant");
 
 
         }    

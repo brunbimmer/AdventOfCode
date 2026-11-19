@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
@@ -46,8 +44,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Total Splits: {splitCount}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, splitCount, trackTime ? _SW.Elapsed : null, "Total Splits");
+
 
             _SW.Restart();
 
@@ -55,8 +53,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Total Timelines: {timelineCount}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, timelineCount, trackTime ? _SW.Elapsed : null, "Total Timelines");
+
         }
 
         private int CountSplits(string[] grid)

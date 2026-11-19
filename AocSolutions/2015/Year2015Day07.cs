@@ -35,11 +35,12 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
+
+
+
             
  
 
@@ -56,8 +57,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Signal that is sent to Wire A: {0}", value);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, value, trackTime ? _SW.Elapsed : null, "Signal that is sent to Wire A");
+
 
             _SW.Restart();
 
@@ -68,8 +69,8 @@ namespace AdventOfCode
 
             int newValue = RunSimulation();
 
-            Console.WriteLine("  Part 2: Update signal B to {0}. New value at Wire A: {1}", value, newValue);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, newValue, trackTime ? _SW.Elapsed : null, string.Format("Update signal B to {0}. New value at Wire A", value, newValue));
+
 
 
         }

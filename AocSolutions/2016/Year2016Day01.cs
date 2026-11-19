@@ -46,11 +46,9 @@ namespace AdventOfCode
         private Coordinate2D _doubleHqCoordinate;
         private List<Coordinate2D> _locations = new();
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
  
             //Build BasePath and retrieve input. 
@@ -70,9 +68,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Distance to Bunny HQ: {0}", part1Distance);
-            Console.WriteLine("  Part 2: Action Distance to Bunny HQ: {0}", part2Distance);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1Distance, trackTime ? _SW.Elapsed : null, "Distance to Bunny HQ");
+            output.WritePart(2, part2Distance, trackTime ? _SW.Elapsed : null, "Action Distance to Bunny HQ");
+
 
         }
 

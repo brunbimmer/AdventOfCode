@@ -59,11 +59,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -74,15 +72,16 @@ namespace AdventOfCode
 
             _SW.Restart();                       
 
-            (int visibleTrees, int scenicScore) = CalculateVisibleTreesAndScenicScore(treeGrid);
+            (int visibleTrees, int scenicScore) = CalculateVisibleTreesAndScenicScore(treeGrid, output);
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Visible Trees {0}, Top Scenic Score {1}, Execution Time: {2}", visibleTrees, scenicScore, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, visibleTrees, trackTime ? _SW.Elapsed : null, "Visible Trees");
+            output.WritePart(2, scenicScore, description: "Top Scenic Score");
            
         }       
 
-        private (int, int) CalculateVisibleTreesAndScenicScore(int[][] treeGrid)
+        private (int, int) CalculateVisibleTreesAndScenicScore(int[][] treeGrid, IPuzzleOutput output)
         {
             int visibleTrees = 0;
             int scenicScore = 0;
@@ -108,10 +107,10 @@ namespace AdventOfCode
 
                     int height = treeGrid[x][y];
 
-                    int [] horizontalLeft = DoReversal(treeGrid[x].SubArray(0, y));
+                    int [] horizontalLeft = DoReversal(treeGrid[x].SubArray(0, y), output);
                     int [] horizontalRight = treeGrid[x].SubArray(y + 1, (maxY - 1) - y);
 
-                    int [] verticalTop = DoReversal(treeGrid.SubArray(0, x).Column(y));                                                  
+                    int [] verticalTop = DoReversal(treeGrid.SubArray(0, x).Column(y), output);
                     int [] verticalBottom = treeGrid.SubArray(x + 1, (maxX - 1) - x).Column(y);
 
                     
@@ -138,7 +137,7 @@ namespace AdventOfCode
             return (visibleTrees, scenicScore);
         }
 
-        public int[] DoReversal(int[] theArray)
+        public int[] DoReversal(int[] theArray, IPuzzleOutput output = null)
         {
             int tempHolder = 0;
 
@@ -153,7 +152,7 @@ namespace AdventOfCode
             }
             else
             {
-                Console.WriteLine("Nothing to reverse");
+                output?.WriteDiagnostic("Nothing to reverse");
             }
             return theArray;
         }

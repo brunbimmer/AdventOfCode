@@ -38,11 +38,9 @@ namespace AdventOfCode
 
         private readonly record struct Node(string Id, string Left, string Right);
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -55,9 +53,9 @@ namespace AdventOfCode
             (long left_sum, long right_sum)  = FindSolution(input);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Sum of Right element sequences: {right_sum}");
-            Console.WriteLine($"  Part 2: Sum of Left element sequences: {left_sum}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, right_sum, trackTime ? _SW.Elapsed : null, "Sum of Right element sequences");
+            output.WritePart(2, left_sum, trackTime ? _SW.Elapsed : null, "Sum of Left element sequences");
+
         }
 
         private (long, long) FindSolution(string[] input)

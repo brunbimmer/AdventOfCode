@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -52,7 +50,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1 - Number of safe tiles 40 rows: {0}, Execution Time: {1}", safeTiles, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, safeTiles, trackTime ? _SW.Elapsed : null, "Number of safe tiles 40 rows");
 
             _SW.Restart();
 
@@ -60,7 +58,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2 Number of safe tiles in 400,000 rows: {0}, Execution Time: {1}", safeTiles40k, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, safeTiles40k, trackTime ? _SW.Elapsed : null, "Number of safe tiles in 400,000 rows");
 
         }       
 

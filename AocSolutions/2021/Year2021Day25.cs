@@ -40,11 +40,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -59,8 +57,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("SeaCucumbers stop moving at Step #:  {0}", steps);     
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, steps, trackTime ? _SW.Elapsed : null, "Step when sea cucumbers stop moving");
+
 
 
         }       

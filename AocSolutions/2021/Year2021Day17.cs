@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -53,8 +51,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Highest Y position is {0}", yMax);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, yMax, trackTime ? _SW.Elapsed : null, "Highest Y position is");
+
 
             _SW.Restart();
 
@@ -62,9 +60,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of distinct initial velocity values that cause probe to hit target area: {0}", nHits);
+            output.WritePart(2, nHits, trackTime ? _SW.Elapsed : null, "Number of distinct initial velocity values that cause probe to hit target area");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }       

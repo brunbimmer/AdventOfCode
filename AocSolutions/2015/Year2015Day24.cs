@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -46,24 +44,24 @@ namespace AdventOfCode
             int sum = inputs.Sum();
             _SW.Start();
 
-            var answer = FindBestQE(inputs, 3);
+            var answer = FindBestQE(inputs, 3, output);
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1 => Minimum Viable QE with 3 groups: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, answer, trackTime ? _SW.Elapsed : null, "Minimum Viable QE with 3 groups");
 
             _SW.Restart();
 
-            var answer2 = FindBestQE(inputs, 4);
+            var answer2 = FindBestQE(inputs, 4, output);
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2 => Minimum Viable QE with 4 groups: {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, answer2, trackTime ? _SW.Elapsed : null, "Minimum Viable QE with 4 groups");
 
 
         }
         
-        long FindBestQE(int[] inputs, int groups)
+        long FindBestQE(int[] inputs, int groups, IPuzzleOutput output)
         {
             var totalWeight = inputs.Sum();
             var weightPerSet = totalWeight / groups;
@@ -73,7 +71,7 @@ namespace AdventOfCode
                 .OrderBy(g => g.Count)
                 .ThenBy(g => g.QE)
                 .First();
-            bestSet.Dump();
+            output.WriteDiagnostic(bestSet.ToString());
             return bestSet.QE;
         }
 

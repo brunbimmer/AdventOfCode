@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -63,22 +61,25 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"Part 1 - Number of pixels that are lit: {count}, Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, count, trackTime ? _SW.Elapsed : null, "Number of pixels that are lit");
 
             _SW.Restart();
 
+            var display = new StringBuilder();
             for (int a = 0; a < map.GetLength(0); a++)
             {
                 for (int b = 0; b < map.GetLength(1); b++)
                 {
-                    Console.Write(map[a, b]);
+                    display.Append(map[a, b]);
                 }
-                Console.WriteLine();
+                display.AppendLine();
             }
                 
 
 
             _SW.Stop();
+
+            output.WritePart(2, display.ToString(), trackTime ? _SW.Elapsed : null, "Display code");
 
             //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
 

@@ -30,18 +30,16 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            List<(string, string)> directions = FileIOHelper.getInstance().ReadDataAsTupleList(file);
+            List<(string, string)> directions = FileIOHelper.getInstance().ReadDataAsTupleList(file, output.WriteDiagnostic);
 
             int distanceX, distanceY;
 
@@ -51,16 +49,16 @@ namespace AdventOfCode
 
 
 
-            Console.WriteLine("  Part 1: Final Horizontal Position ({0}) * Final Depth ({1}): {2}", distanceX, distanceY, distanceX * distanceY);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, distanceX * distanceY, trackTime ? _SW.Elapsed : null, string.Format("Final Horizontal Position ({0}) * Final Depth ({1})", distanceX, distanceY, distanceX * distanceY));
+
 
             _SW.Restart();
 
             (distanceX, distanceY) = Part2(directions);
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Final Horizontal Position ({0}) * Final Depth ({1}): {2}", distanceX, distanceY, distanceX * distanceY);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, distanceX * distanceY, trackTime ? _SW.Elapsed : null, string.Format("Final Horizontal Position ({0}) * Final Depth ({1})", distanceX, distanceY, distanceX * distanceY));
+
 
 
         }

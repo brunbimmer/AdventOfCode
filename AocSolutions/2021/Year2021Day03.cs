@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -52,13 +50,13 @@ namespace AdventOfCode
             }
 
             _SW.Start();
-            int powerOutput = Part1(binaryInputStream);
+            int powerOutput = Part1(binaryInputStream, output);
             _SW.Stop();
 
 
 
-            Console.WriteLine("Part 1: Power Output: {0}", powerOutput);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, powerOutput, trackTime ? _SW.Elapsed : null, "Power Output");
+
 
             _SW.Restart();
 
@@ -66,13 +64,13 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Life Support Rating Output: {0}", lifeSupport);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, lifeSupport, trackTime ? _SW.Elapsed : null, "Life Support Rating Output");
+
 
 
         }
 
-        private int Part1(List<int[]> binaryInputStream)
+        private int Part1(List<int[]> binaryInputStream, IPuzzleOutput output)
         {
             //all lines are the same length, so get the lineLength of first line
             int lineLength = binaryInputStream.First().Length;
@@ -95,7 +93,7 @@ namespace AdventOfCode
 
                 if (bit1Counter == bit0Counter)
                 {
-                    Console.WriteLine("We encountered an equal number of 0's and 1's in position {0}, what is the solution", i);
+                    output.WriteDiagnostic(string.Format("We encountered an equal number of 0's and 1's in position {0}, what is the solution", i));
                 }
 
                 if (bit1Counter > bit0Counter)

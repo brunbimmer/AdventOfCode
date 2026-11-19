@@ -63,11 +63,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
 
             _SW.Start();                       
@@ -85,7 +83,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1 - Least amount of Mana Spent to win fight: {0}, Execution Time: {1}", answer, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, answer, trackTime ? _SW.Elapsed : null, "Least amount of Mana Spent to win fight");
 
             _SW.Restart();
 
@@ -102,7 +100,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2 - Least amount of Mana Spent to win fight (Hard Mode): {0}, Execution Time: {1}", answer2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, answer2, trackTime ? _SW.Elapsed : null, "Least amount of Mana Spent to win fight (Hard Mode)");
         }   
         
         ActionType Choose()

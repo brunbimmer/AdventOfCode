@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
             _scannerData = new();
@@ -58,8 +56,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of beacons: {0}", numberOfBeacons);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, numberOfBeacons, trackTime ? _SW.Elapsed : null, "Number of beacons");
+
 
             _SW.Restart();
 
@@ -67,9 +65,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Maximum distance between any two scanners: {0}", distance);
+            output.WritePart(2, distance, trackTime ? _SW.Elapsed : null, "Maximum distance between any two scanners");
             
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }       

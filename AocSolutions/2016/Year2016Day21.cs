@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -51,7 +49,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1 - Scrambled Password: {0}, Execution Time: {1}", scrambledPassword, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, scrambledPassword, trackTime ? _SW.Elapsed : null, "Scrambled Password");
 
             _SW.Restart();
 
@@ -59,7 +57,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2 - Unscrambled Password: {0}, Execution Time: {1}", unscrambledPassword, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, unscrambledPassword, trackTime ? _SW.Elapsed : null, "Unscrambled Password");
 
         }       
 

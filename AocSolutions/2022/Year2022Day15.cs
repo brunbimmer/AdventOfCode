@@ -41,11 +41,9 @@ namespace AdventOfCode
         HashSet<(long X, long Y)> mapOfObjects;
         List<Sensor> sensors;
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -62,7 +60,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Exclusion Beacon Locations : {0}, Execution Time: {1}", numExcludedBeaconLocations, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, numExcludedBeaconLocations, trackTime ? _SW.Elapsed : null, "Number of Exclusion Beacon Locations");
 
             _SW.Restart();
 
@@ -70,7 +68,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Tuning Frequency {0}, Execution Time: {1}", tuningFrequency, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, tuningFrequency, trackTime ? _SW.Elapsed : null, "Tuning Frequency");
 
 
         }       

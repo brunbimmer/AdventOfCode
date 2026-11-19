@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -48,15 +46,15 @@ namespace AdventOfCode
 
             _SW.Start();                       
 
-            FindBotNumber(lines);
+            FindBotNumber(lines, output);
 
             
             _SW.Stop();
 
-            Console.WriteLine("Total Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
         }
 
-        private void FindBotNumber(string[] lines)
+        private void FindBotNumber(string[] lines, IPuzzleOutput output)
         {
             var bots = new Dictionary<int, Action<int>>();
             int[] outputs = new int[21];
@@ -80,7 +78,7 @@ namespace AdventOfCode
                         if (vals.Count == 2)
                         {
                             if (vals.Min() == 17 && vals.Max() == 61) 
-                                System.Console.WriteLine($"Part 1: Bot Number that compares value-61 microchip w/ value-17 microchip: {botnum}");
+                                output.WritePart(1, botnum, description: "Bot Number that compares value-61 microchip w/ value-17 microchip");
                             if (match.Groups["low"].Value == "bot")
                             {
                                 bots[int.Parse(match.Groups["lowval"].Value)](vals.Min());
@@ -102,7 +100,7 @@ namespace AdventOfCode
                 }
             }
 
-            System.Console.WriteLine($"Part 2: Result of multiplying outputs 0 x 1 x 2: {outputs[0] * outputs[1] * outputs[2]}");
+            output.WritePart(2, outputs[0] * outputs[1] * outputs[2], description: "Result of multiplying outputs 0 x 1 x 2");
         }
     }
 }

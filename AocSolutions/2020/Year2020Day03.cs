@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -32,37 +26,56 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            string[] map = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             _SW.Restart();
-
-           
-            
+            int trees = Part1(map);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, trees, trackTime ? _SW.Elapsed : null, "Number of trees encountered");
 
 
-        }       
+            _SW.Restart();
+            long product = Part2(map);
+            _SW.Stop();
+
+            output.WritePart(2, product, trackTime ? _SW.Elapsed : null, "Product of trees encountered on all five slopes");
+
+        }
+
+        private int Part1(string[] map)
+        {
+            return CountTrees(map, 3, 1);
+        }
+
+        private long Part2(string[] map)
+        {
+            long product = CountTrees(map, 1, 1);
+            product *= CountTrees(map, 3, 1);
+            product *= CountTrees(map, 5, 1);
+            product *= CountTrees(map, 7, 1);
+            product *= CountTrees(map, 1, 2);
+            return product;
+        }
+
+        private int CountTrees(string[] map, int right, int down)
+        {
+            int trees = 0;
+            int column = 0;
+
+            for (int row = down; row < map.Length; row += down)
+            {
+                column = (column + right) % map[row].Length;
+                if (map[row][column] == '#')
+                    trees++;
+            }
+
+            return trees;
+        }
     }
 }

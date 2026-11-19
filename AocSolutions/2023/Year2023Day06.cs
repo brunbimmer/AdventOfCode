@@ -39,11 +39,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -59,8 +57,8 @@ namespace AdventOfCode
             long winCombo = CalculateWaysToWin(races);
             
             _SW.Stop();
-            Console.WriteLine($"  Part 1: WinCombinations: {winCombo}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, winCombo, trackTime ? _SW.Elapsed : null, "WinCombinations");
+
 
             _SW.Reset();
             _SW.Start();
@@ -69,8 +67,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: WinCombinations2: {winCombo}");
-            Console.WriteLine($"   Execution2 Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WriteDiagnostic($"  Part 1: WinCombinations2: {winCombo}");
+
 
             _SW.Reset();
             _SW.Start();
@@ -82,8 +80,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Lowest Location: {winCombo}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, winCombo, trackTime ? _SW.Elapsed : null, "Lowest Location");
+
 
             _SW.Reset();
             _SW.Start();
@@ -92,8 +90,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: WinCombinations2: {winCombo}");
-            Console.WriteLine($"   Execution2 Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WriteDiagnostic($"  Part 2: WinCombinations2: {winCombo}");
+
 
         }
 

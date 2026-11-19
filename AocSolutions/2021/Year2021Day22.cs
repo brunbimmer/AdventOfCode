@@ -34,11 +34,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -62,8 +60,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-             Console.WriteLine("Part 1: Number of Cubes on in the +/- 50 initialization perimeter boundary: {0}", answer1);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+             output.WritePart(1, answer1, trackTime ? _SW.Elapsed : null, "Number of Cubes on in the +/- 50 initialization perimeter boundary");
+
 
             _SW.Restart();
 
@@ -71,9 +69,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of Cubes on in entire surface area: {0}", answer2);
+            output.WritePart(2, answer2, trackTime ? _SW.Elapsed : null, "Number of Cubes on in entire surface area");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }      

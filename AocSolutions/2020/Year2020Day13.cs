@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Numerics;
 using AdventFileIO;
 using Common;
 
@@ -32,37 +28,99 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
+            long earliestDeparture = long.Parse(lines[0]);
+            var buses = lines[1].Split(',')
+                .Select((id, offset) => (Id: id, Offset: offset))
+                .Where(bus => bus.Id != "x")
+                .Select(bus => (Id: long.Parse(bus.Id), Offset: bus.Offset))
+                .ToArray();
 
             _SW.Restart();
-
-           
-            
+            long result = Part1(earliestDeparture, buses);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Earliest bus ID multiplied by waiting time");
 
 
-        }       
+            _SW.Restart();
+            BigInteger timestamp = Part2(buses);
+            _SW.Stop();
+
+            output.WritePart(2, timestamp, trackTime ? _SW.Elapsed : null, "Earliest timestamp matching all bus offsets");
+
+        }
+
+        private long Part1(long earliestDeparture, (long Id, int Offset)[] buses)
+        {
+            if (buses.Length == 0)
+                throw new InvalidOperationException("No active buses were found in the schedule.");
+
+            long bestBusId = 0;
+            long shortestWait = long.MaxValue;
+            foreach (var bus in buses)
+            {
+                long busId = bus.Id;
+                long wait = (busId - earliestDeparture % busId) % busId;
+                if (wait < shortestWait)
+                {
+                    bestBusId = busId;
+                    shortestWait = wait;
+                }
+            }
+
+            return checked(bestBusId * shortestWait);
+        }
+
+        private BigInteger Part2((long Id, int Offset)[] buses)
+        {
+            BigInteger timestamp = 0;
+            BigInteger period = 1;
+
+            foreach (var bus in buses)
+            {
+                if (bus.Id <= 0)
+                    throw new InvalidOperationException("Bus IDs must be positive.");
+
+                long gcd = Numerics.Gcd((long)(period % bus.Id), bus.Id);
+                BigInteger difference = -bus.Offset - timestamp;
+                if (difference % gcd != 0)
+                    throw new InvalidOperationException("The bus offsets have no matching timestamp.");
+
+                // Solve period * increments = -offset - timestamp (mod bus ID).
+                BigInteger modulus = bus.Id / gcd;
+                BigInteger inverse = ModularInverse(period / gcd, modulus);
+                BigInteger increments = (difference / gcd * inverse) % modulus;
+                if (increments < 0)
+                    increments += modulus;
+
+                timestamp += period * increments;
+                period *= modulus;
+            }
+
+            return timestamp;
+        }
+
+        private BigInteger ModularInverse(BigInteger value, BigInteger modulus)
+        {
+            BigInteger remainder = value % modulus;
+            BigInteger nextRemainder = modulus;
+            BigInteger coefficient = 1;
+            BigInteger nextCoefficient = 0;
+
+            while (nextRemainder != 0)
+            {
+                BigInteger quotient = remainder / nextRemainder;
+                (remainder, nextRemainder) = (nextRemainder, remainder - quotient * nextRemainder);
+                (coefficient, nextCoefficient) = (nextCoefficient, coefficient - quotient * nextCoefficient);
+            }
+
+            return (coefficient % modulus + modulus) % modulus;
+        }
     }
 }

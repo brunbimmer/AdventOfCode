@@ -26,7 +26,8 @@ namespace AdventOfCode
         /// General Solution that will perform the daily coding problem from Advent of Code
         /// </summary>
         /// <param name="path">Path to test file</param>
-        /// <returns>Total time to complete execution of solution</returns>
-        public void GetSolution(string path, bool trackTime = false);       
+        /// <param name="trackTime">Include solver timings in reported results</param>
+        /// <param name="output">Receives answers and diagnostics. Defaults to console output.</param>
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null);
     }
 }

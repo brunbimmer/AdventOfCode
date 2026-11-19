@@ -37,11 +37,9 @@ namespace AdventOfCode
 
         private long Part2_Expansion = 1_000_000;
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -54,10 +52,10 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Sum of Galaxy Pair Manhattan Distances: {totalSum}");
-            Console.WriteLine($"  Part 1: Sum of Galaxy Pair Manhattan Distances: {totalSum2}");
+            output.WritePart(1, totalSum, trackTime ? _SW.Elapsed : null, "Sum of Galaxy Pair Manhattan Distances");
+            output.WritePart(2, totalSum2, trackTime ? _SW.Elapsed : null, "Sum of Galaxy Pair Manhattan Distances");
 ;
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+
 
         }
 

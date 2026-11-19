@@ -26,11 +26,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -41,7 +39,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1 - Code at Row 2947 and Column 3029 is: {0}, Execution Time: {1}", code, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, code, trackTime ? _SW.Elapsed : null, "Code at Row 2947 and Column 3029 is");
 
             _SW.Restart();
 

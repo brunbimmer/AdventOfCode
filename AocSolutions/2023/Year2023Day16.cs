@@ -39,11 +39,9 @@ namespace AdventOfCode
 
         
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -58,8 +56,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Energized Light: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Energized Light");
+
 
             _SW.Restart();
             
@@ -67,8 +65,8 @@ namespace AdventOfCode
             result = CountMaxEnergized(input);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Max Energized Light: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, result, trackTime ? _SW.Elapsed : null, "Max Energized Light");
+
 
         }
 

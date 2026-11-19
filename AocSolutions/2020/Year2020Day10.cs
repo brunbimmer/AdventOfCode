@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -32,37 +27,77 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            int[] adapters = FileIOHelper.getInstance().ReadDataToIntArray(file);
 
             _SW.Restart();
-
-           
-            
+            int product = Part1(adapters);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, product, trackTime ? _SW.Elapsed : null, "Product of 1-jolt and 3-jolt differences");
 
 
-        }       
+            _SW.Restart();
+            long arrangements = Part2(adapters);
+            _SW.Stop();
+
+            output.WritePart(2, arrangements, trackTime ? _SW.Elapsed : null, "Number of distinct adapter arrangements");
+
+        }
+
+        private int Part1(int[] adapters)
+        {
+            int[] sortedAdapters = (int[])adapters.Clone();
+            Array.Sort(sortedAdapters);
+
+            int previous = 0;
+            int oneJoltDifferences = 0;
+            // The device is always three jolts above the highest adapter.
+            int threeJoltDifferences = 1;
+
+            foreach (int adapter in sortedAdapters)
+            {
+                int difference = adapter - previous;
+                if (difference < 1 || difference > 3)
+                    throw new InvalidOperationException("The adapters cannot form a chain using every adapter.");
+
+                if (difference == 1)
+                    oneJoltDifferences++;
+                else if (difference == 3)
+                    threeJoltDifferences++;
+
+                previous = adapter;
+            }
+
+            return oneJoltDifferences * threeJoltDifferences;
+        }
+
+        private long Part2(int[] adapters)
+        {
+            int[] sortedAdapters = (int[])adapters.Clone();
+            Array.Sort(sortedAdapters);
+
+            Dictionary<int, long> ways = new Dictionary<int, long> { [0] = 1 };
+            long arrangements = 1;
+
+            foreach (int adapter in sortedAdapters)
+            {
+                arrangements = 0;
+                for (int difference = 1; difference <= 3; difference++)
+                {
+                    if (ways.TryGetValue(adapter - difference, out long previousWays))
+                        arrangements = checked(arrangements + previousWays);
+                }
+
+                ways.Add(adapter, arrangements);
+            }
+
+            // Only the highest adapter can reach the device, which is three jolts higher.
+            return arrangements;
+        }
     }
 }

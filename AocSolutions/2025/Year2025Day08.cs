@@ -42,11 +42,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
@@ -58,16 +56,16 @@ namespace AdventOfCode
             var (boxes, edges) = PrepareData(input);
 
             _SW.Stop();
-            Console.WriteLine($"");
-            Console.WriteLine("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
+            output.WriteDiagnostic(string.Format("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW)));
 
             _SW.Restart();
 
             long part1 = SolvePart1(boxes, edges);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 1 - : {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "");
+
 
             _SW.Restart();
 
@@ -75,8 +73,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: {part2}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, part2, trackTime ? _SW.Elapsed : null, "");
+
         }
 
         private (List<Coordinate3D> boxes, List<(double distance, int a, int b)> edges) PrepareData(string[] lines)

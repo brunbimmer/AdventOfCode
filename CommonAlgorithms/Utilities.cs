@@ -12,7 +12,7 @@ namespace Common
 
     public static class BunnyAssemblyParser
     {
-        public static Dictionary<string, int> ParseInstructions(Dictionary<string, int> registers, List<string> instructions)
+        public static Dictionary<string, int> ParseInstructions(Dictionary<string, int> registers, List<string> instructions, Action<string> writeOutput = null)
         {
             int instructionPointer = 0;
 
@@ -88,7 +88,7 @@ namespace Common
                 
                     case "out":                        
                         int output = int.TryParse(parts[1], out int outVal) ? outVal : registers[parts[1]];
-                        Console.Write(output + " ");
+                        (writeOutput ?? Console.Write)(output + " ");
                         instructionPointer++;
                         break;            
                     default:

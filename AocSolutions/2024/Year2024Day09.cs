@@ -35,11 +35,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -55,8 +53,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1 (Individual block compaction): {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "(Individual block compaction)");
+
             
             _SW.Restart();
 
@@ -64,8 +62,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2 (Whole file defragmentation): {part2}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, part2, trackTime ? _SW.Elapsed : null, "(Whole file defragmentation)");
+
 
         }
 

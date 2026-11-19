@@ -35,11 +35,9 @@ namespace AdventOfCode
 
         
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -52,8 +50,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Total number of arrangements: {sum}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, sum, trackTime ? _SW.Elapsed : null, "Total number of arrangements");
+
 
             _SW.Restart();
             
@@ -61,8 +59,8 @@ namespace AdventOfCode
             sum = Solve(input, 5);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Total number of arrangements: {sum}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, sum, trackTime ? _SW.Elapsed : null, "Total number of arrangements");
+
 
         }
 

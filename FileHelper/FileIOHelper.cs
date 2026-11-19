@@ -234,7 +234,7 @@ namespace AdventFileIO
             return grid;
         }
 
-        public List<(string,string)> ReadDataAsTupleList(string file)
+        public List<(string,string)> ReadDataAsTupleList(string file, Action<string> writeDiagnostic = null)
         {
             List<(string, string)> tupleList = new();
             try
@@ -250,7 +250,7 @@ namespace AdventFileIO
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                (writeDiagnostic ?? Console.WriteLine)(ex.Message);
             }
 
             return tupleList;

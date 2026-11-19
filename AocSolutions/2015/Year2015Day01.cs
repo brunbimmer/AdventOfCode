@@ -32,11 +32,9 @@ namespace AdventOfCode
 
         
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -53,8 +51,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: What floor is Santa on: {0}", countUp - countDown);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, countUp - countDown, trackTime ? _SW.Elapsed : null, "What floor is Santa on");
+
             //Part 2
             _SW.Restart();
             _SW.Start();
@@ -74,9 +72,9 @@ namespace AdventOfCode
             }
             _SW.Stop();
 
-            Console.WriteLine("  Part 2: Position of character when Santa enters basement: {0}", pos);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-            Console.WriteLine("\n===========================================\n");
+            output.WritePart(2, pos, trackTime ? _SW.Elapsed : null, "Position of character when Santa enters basement");
+
+
         }
     }
 }

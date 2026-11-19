@@ -71,11 +71,9 @@ namespace AdventOfCode
 
         List<Blueprint> blueprints = new List<Blueprint>();
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -98,7 +96,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Total Score {0}, Execution Time: {1}", totalP1Score, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, totalP1Score, trackTime ? _SW.Elapsed : null, "Total Score");
 
             _SW.Restart();
 
@@ -113,7 +111,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Three Blueprint Multiplier {0}, Execution Time: {1}", totalP2Score, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, totalP2Score, trackTime ? _SW.Elapsed : null, "Three Blueprint Multiplier");
 
 
         }     

@@ -29,11 +29,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -65,9 +63,9 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Required wrapping paper: {0}", wrappingPaperArea);
-            Console.WriteLine("  Part 2: Total Ribben Length: {0}", ribbonLength);
-            Console.WriteLine("   Execution Time: {0} ms", _SW.ElapsedMilliseconds);
+            output.WritePart(1, wrappingPaperArea, trackTime ? _SW.Elapsed : null, "Required wrapping paper");
+            output.WritePart(2, ribbonLength, trackTime ? _SW.Elapsed : null, "Total Ribben Length");
+
 
         }
     }

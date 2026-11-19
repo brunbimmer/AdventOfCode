@@ -35,11 +35,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -47,25 +45,91 @@ namespace AdventOfCode
 
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
+            long[] stones = lines[0].Split(' ').Select(long.Parse).ToArray();
 
+            SolvePart1(stones, output, trackTime);
+            SolvePart2(stones, output, trackTime);
 
+        }
+
+        private void SolvePart1(long[] stones, IPuzzleOutput output, bool trackTime)
+        {
             _SW.Start();
 
-            long part1 = 0;
+            long part1 = CountStonesAfterBlinks(stones, 25);
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-            
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "Stone count after 25 blinks");
+
+        }
+
+        private void SolvePart2(long[] stones, IPuzzleOutput output, bool trackTime)
+        {
             _SW.Restart();
 
-            long part2 = 0;
+            long part2 = CountStonesAfterBlinks(stones, 75);
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: {part2}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, part2, trackTime ? _SW.Elapsed : null, "Stone count after 75 blinks");
+
+
+        }
+
+        private long CountStonesAfterBlinks(long[] stones, int blinks)
+        {
+            // Use memoization to track how many stones each value produces after N blinks
+            Dictionary<(long, int), long> memo = new Dictionary<(long, int), long>();
+            
+            long totalCount = 0;
+            foreach (long stone in stones)
+            {
+                totalCount += CountStones(stone, blinks, memo);
+            }
+
+            return totalCount;
+        }
+
+        private long CountStones(long value, int blinksRemaining, Dictionary<(long, int), long> memo)
+        {
+            // Base case
+            if (blinksRemaining == 0)
+                return 1;
+
+            // Check memo
+            var key = (value, blinksRemaining);
+            if (memo.ContainsKey(key))
+                return memo[key];
+
+            long result = 0;
+
+            // Apply transformation rule
+            if (value == 0)
+            {
+                result = CountStones(1, blinksRemaining - 1, memo);
+            }
+            else
+            {
+                string digits = value.ToString();
+                if (digits.Length % 2 == 0)
+                {
+                    // Split in half
+                    string leftStr = digits.Substring(0, digits.Length / 2);
+                    string rightStr = digits.Substring(digits.Length / 2);
+                    long left = long.Parse(leftStr);
+                    long right = long.Parse(rightStr);
+                    result = CountStones(left, blinksRemaining - 1, memo) + CountStones(right, blinksRemaining - 1, memo);
+                }
+                else
+                {
+                    // Multiply by 2024
+                    result = CountStones(value * 2024, blinksRemaining - 1, memo);
+                }
+            }
+
+            memo[key] = result;
+            return result;
 
 
         }

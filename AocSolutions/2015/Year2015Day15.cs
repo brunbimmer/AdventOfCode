@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Input is simple, use it directly instead of spending time reading it in.           
 
@@ -46,7 +44,7 @@ namespace AdventOfCode
            
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Total score of highest-scoring cookie {0}, Execution Time: {1}", maxSum, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, maxSum, trackTime ? _SW.Elapsed : null, "Total score of highest-scoring cookie");
 
             _SW.Restart();
 
@@ -54,7 +52,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Total score of highest-scoring cookie with 500 calories {0}, Execution Time: {1}", maxSumCalorie, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, maxSumCalorie, trackTime ? _SW.Elapsed : null, "Total score of highest-scoring cookie with 500 calories");
 
 
         }       

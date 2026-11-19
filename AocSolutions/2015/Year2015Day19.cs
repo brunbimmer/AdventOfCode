@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -60,7 +58,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Distinct Molecules {0}, Execution Time: {1}", distinctMolecules, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, distinctMolecules, trackTime ? _SW.Elapsed : null, "Number of Distinct Molecules");
 
             _SW.Restart();
 
@@ -68,7 +66,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Fewest steps to make medicine {0}, Execution Time: {1}", fewestSteps, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, fewestSteps, trackTime ? _SW.Elapsed : null, "Fewest steps to make medicine");
 
 
         }     

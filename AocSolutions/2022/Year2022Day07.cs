@@ -36,11 +36,9 @@ namespace AdventOfCode
             public int Size { get; set; }
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -62,7 +60,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: {0}, Execution Time: {1}", total, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, total, trackTime ? _SW.Elapsed : null, "");
 
             _SW.Restart();
 
@@ -72,7 +70,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: {0}, Execution Time: {1}", smallest, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, smallest, trackTime ? _SW.Elapsed : null, "");
         }       
 
         private List<Folder> ParseFileSystem(string[] input)

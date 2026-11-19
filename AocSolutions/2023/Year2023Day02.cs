@@ -38,11 +38,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -57,8 +55,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Some of the IDs of possible games: {sumofIds}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, sumofIds, trackTime ? _SW.Elapsed : null, "Some of the IDs of possible games");
+
             
             _SW.Restart();
 
@@ -66,8 +64,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Power Set Sum: {powerSetSum}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, powerSetSum, trackTime ? _SW.Elapsed : null, "Power Set Sum");
+
 
 
         }

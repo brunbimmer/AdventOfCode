@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -55,10 +53,10 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1 - Magnitude of addition problem: ");
-            Console.WriteLine("    Solution Answer: {0}", finalString);
-            Console.WriteLine("    Final Magnitude: {0}", magnitude);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
+            output.WriteDiagnostic(string.Format("    Solution Answer: {0}", finalString));
+            output.WritePart(1, magnitude, trackTime ? _SW.Elapsed : null, "Final Magnitude");
+
 
             _SW.Restart();
 
@@ -66,9 +64,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Max Magnitude from Permutations: {0}", magnitudeMax);
+            output.WritePart(2, magnitudeMax, trackTime ? _SW.Elapsed : null, "Max Magnitude from Permutations");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }    

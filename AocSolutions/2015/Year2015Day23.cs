@@ -34,11 +34,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -55,7 +53,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, registers["b"], trackTime ? _SW.Elapsed : null, "value of Register B");
 
             _SW.Restart();
 
@@ -65,7 +63,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2, value of Register B: {0}, Execution Time: {1}", registers["b"], StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, registers["b"], trackTime ? _SW.Elapsed : null, "value of Register B");
         }
 
         private void ProcessInstructionsPart1(string[] instructions)

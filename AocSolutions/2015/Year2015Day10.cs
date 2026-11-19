@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //simple input, file access not required
 
@@ -53,8 +51,8 @@ namespace AdventOfCode
 
             _SW.Stop();            
 
-            Console.WriteLine("  Part 1: When applying the Look And Say Sequence 40 times, the length of the final number is: {0}", sequence.Length);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, sequence.Length, trackTime ? _SW.Elapsed : null, "When applying the Look And Say Sequence 40 times, the length of the final number is");
+
 
             _SW.Restart();
 
@@ -67,8 +65,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: When applying the Look And Say Sequence 50 times, the length of the final number is: {0}", sequence.Length);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, sequence.Length, trackTime ? _SW.Elapsed : null, "When applying the Look And Say Sequence 50 times, the length of the final number is");
+
             
 
 

@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -49,15 +47,15 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Number of houses visited by Santa Prime: {0}", housesVisited);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, housesVisited, trackTime ? _SW.Elapsed : null, "Number of houses visited by Santa Prime");
+
 
             _SW.Restart();
 
             housesVisited = Part2(elfDirections);
 
-            Console.WriteLine("  Part 2: Number of houses visited by twin Santa's: {0}", housesVisited);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, housesVisited, trackTime ? _SW.Elapsed : null, "Number of houses visited by twin Santa's");
+
 
 
         }

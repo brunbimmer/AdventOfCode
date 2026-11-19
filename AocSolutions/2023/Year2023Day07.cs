@@ -42,11 +42,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -60,8 +58,8 @@ namespace AdventOfCode
 
             long totalWinings = PlayPoker(input, true);
 
-            Console.WriteLine($"  Part 1: Total Winnings: {totalWinings}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, totalWinings, trackTime ? _SW.Elapsed : null, "Total Winnings");
+
 
 
             _SW.Stop();
@@ -73,8 +71,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Total Winnings: {totalWinings}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, totalWinings, trackTime ? _SW.Elapsed : null, "Total Winnings");
+
         }
 
         private long PlayPoker(string[] games, bool part1)

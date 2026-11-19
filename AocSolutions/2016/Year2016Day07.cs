@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -54,7 +52,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of IPs supporting TLS {0}, Execution Time: {1}", _supportTlS, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, _supportTlS, trackTime ? _SW.Elapsed : null, "Number of IPs supporting TLS");
 
             _SW.Restart();
 
@@ -62,7 +60,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of IPs supporting SSL {0}, Execution Time: {1}", _supportSSL, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, _supportSSL, trackTime ? _SW.Elapsed : null, "Number of IPs supporting SSL");
 
         }
 

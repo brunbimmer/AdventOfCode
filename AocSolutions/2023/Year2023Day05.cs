@@ -49,11 +49,9 @@ namespace AdventOfCode
         private List<long[]> tempToHumidity = new List<long[]>();
         private List<long[]> humidityToLocation = new List<long[]>();
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -67,8 +65,8 @@ namespace AdventOfCode
 
             long lowestLocationNumber = FindLowestLocationForSeedMap(seeds);
 
-            Console.WriteLine($"  Part 1: Lowest Location: {lowestLocationNumber}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, lowestLocationNumber, trackTime ? _SW.Elapsed : null, "Lowest Location");
+
 
 
             _SW.Stop();
@@ -82,7 +80,7 @@ namespace AdventOfCode
             _SW.Stop();
 
             //Console.WriteLine($"  Part 2: Lowest Location: {lowestPart2}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+
         }
 
 

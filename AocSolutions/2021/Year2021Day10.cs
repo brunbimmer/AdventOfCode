@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -52,8 +50,8 @@ namespace AdventOfCode
              (corruptedList, score) = GetSolution1(input.ToList());                       
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Total Syntax Score: {0}", score);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, score, trackTime ? _SW.Elapsed : null, "Total Syntax Score");
+
 
             _SW.Restart();
 
@@ -63,9 +61,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Total MidPoint Score: {0}", midPointScore);
+            output.WritePart(2, midPointScore, trackTime ? _SW.Elapsed : null, "Total MidPoint Score");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }        

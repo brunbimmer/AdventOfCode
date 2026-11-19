@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
@@ -51,8 +49,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Number of Points after First Fold: {0}", graphMapPart1.Count);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, graphMapPart1.Count, trackTime ? _SW.Elapsed : null, "Number of Points after First Fold");
+
 
             _SW.Restart();
 
@@ -61,9 +59,9 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-             Console.WriteLine("Part 2: The code\n\n{0}", code);
+             output.WritePart(2, code, trackTime ? _SW.Elapsed : null, "The code");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }       

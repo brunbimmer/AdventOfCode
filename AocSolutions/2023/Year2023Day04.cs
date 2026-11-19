@@ -44,11 +44,9 @@ namespace AdventOfCode
 
         private int[] scratchCardList;
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -67,9 +65,9 @@ namespace AdventOfCode
             _SW.Stop();
 
 
-            Console.WriteLine($"  Part 1: Scratch Card Value:          {total}");
-            Console.WriteLine($"  Part 2: Number of scratch cards won: {scratchCardList.Sum()}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, total, trackTime ? _SW.Elapsed : null, "Scratch Card Value");
+            output.WritePart(2, scratchCardList.Sum(), trackTime ? _SW.Elapsed : null, "Number of scratch cards won");
+
         }
 
         int ProcessCardList(string[] cards)

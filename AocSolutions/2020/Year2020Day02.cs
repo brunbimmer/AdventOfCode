@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -32,37 +26,74 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            string[] entries = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             _SW.Restart();
-
-           
-            
+            int validPasswords = Part1(entries);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, validPasswords, trackTime ? _SW.Elapsed : null, "Number of valid passwords");
 
 
-        }       
+            _SW.Restart();
+            validPasswords = Part2(entries);
+            _SW.Stop();
+
+            output.WritePart(2, validPasswords, trackTime ? _SW.Elapsed : null, "Number of valid passwords");
+
+        }
+
+        private int Part1(string[] entries)
+        {
+            int validPasswords = 0;
+
+            foreach (string entry in entries)
+            {
+                var (minimum, maximum, letter, password) = ParseEntry(entry);
+
+                int occurrences = 0;
+                foreach (char character in password)
+                {
+                    if (character == letter)
+                        occurrences++;
+                }
+
+                if (occurrences >= minimum && occurrences <= maximum)
+                    validPasswords++;
+            }
+
+            return validPasswords;
+        }
+
+        private int Part2(string[] entries)
+        {
+            int validPasswords = 0;
+
+            foreach (string entry in entries)
+            {
+                var (firstPosition, secondPosition, letter, password) = ParseEntry(entry);
+                bool firstMatches = firstPosition > 0 && firstPosition <= password.Length
+                    && password[firstPosition - 1] == letter;
+                bool secondMatches = secondPosition > 0 && secondPosition <= password.Length
+                    && password[secondPosition - 1] == letter;
+
+                if (firstMatches ^ secondMatches)
+                    validPasswords++;
+            }
+
+            return validPasswords;
+        }
+
+        private (int First, int Second, char Letter, string Password) ParseEntry(string entry)
+        {
+            string[] parts = entry.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] bounds = parts[0].Split('-');
+            return (int.Parse(bounds[0]), int.Parse(bounds[1]), parts[1][0], parts[2]);
+        }
     }
 }

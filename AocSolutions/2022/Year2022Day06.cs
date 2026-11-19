@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -50,24 +48,24 @@ namespace AdventOfCode
             int startOfPacket = FindStart(input, 4);            
 
             _SW.Stop();            
-            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Original", startOfPacket, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, startOfPacket, trackTime ? _SW.Elapsed : null, "Start of Packet Location");
             
             _SW.Restart();
             
             int startOfPacket2 = ScanAsSpan(input, 4);                                    
             _SW.Stop();
-            Console.WriteLine("Part 1: Start of Packet Location {0}, Execution Time: {1} - Scan", startOfPacket2, StopwatchUtil.getInstance().GetTimestamp(_SW));            
+            output.WriteDiagnostic(string.Format("Part 1: Start of Packet Location {0}, Execution Time: {1} - Scan", startOfPacket2, StopwatchUtil.getInstance().GetTimestamp(_SW)));
 
             _SW.Restart();
 
             int startOfMessage = FindStart(input, 14);
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Original", startOfMessage, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, startOfMessage, trackTime ? _SW.Elapsed : null, "Start of Message Location");
             _SW.Restart();
 
             int startOfMessage2 = ScanAsSpan(input, 14);                        
-            Console.WriteLine("Part 2: Start of Message Location {0}, Execution Time: {1} - Scan", startOfMessage2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WriteDiagnostic(string.Format("Part 2: Start of Message Location {0}, Execution Time: {1} - Scan", startOfMessage2, StopwatchUtil.getInstance().GetTimestamp(_SW)));
             
             _SW.Stop();
         }       

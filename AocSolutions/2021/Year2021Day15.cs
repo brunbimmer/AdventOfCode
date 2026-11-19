@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -52,8 +50,8 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Lowest Total Risk from top left to bottom right: {0}", pathScore1);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, pathScore1, trackTime ? _SW.Elapsed : null, "Lowest Total Risk from top left to bottom right");
+
 
             _SW.Restart();
 
@@ -64,9 +62,9 @@ namespace AdventOfCode
             var pathPart2 = MapLowestPathScoreAStar(caveMap, ( 0, 0), (caveMap.Keys.Max(x => x.Item1), caveMap.Keys.Max(x => x.Item2)));
             int pathScore2 = pathPart2.Skip(1).Sum(x => caveMap[x]);
 
-            Console.WriteLine("Part 2: Lowest Total Risk from top left to bottom right in larger map: {0}", pathScore2);
+            output.WritePart(2, pathScore2, trackTime ? _SW.Elapsed : null, "Lowest Total Risk from top left to bottom right in larger map");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }       

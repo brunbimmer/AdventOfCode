@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
  
 
@@ -55,8 +53,8 @@ namespace AdventOfCode
 
             _SW.Stop();            
 
-            Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence is: {0}", numbersOnly.Sum());
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, numbersOnly.Sum(), trackTime ? _SW.Elapsed : null, "The sum of all numbers in this JSON sequence is");
+
 
             _SW.Restart();
 
@@ -64,9 +62,9 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: The sum of all numbers in this JSON sequence with RED removed is: {0}", sum);
+            output.WritePart(2, sum, trackTime ? _SW.Elapsed : null, "The sum of all numbers in this JSON sequence with RED removed is");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
             
 
 

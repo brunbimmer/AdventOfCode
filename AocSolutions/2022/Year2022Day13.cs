@@ -33,11 +33,12 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
+
+
+
             //Build BasePath and retrieve input. 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             string input = FileIOHelper.getInstance().ReadDataAsString(file);
@@ -49,14 +50,14 @@ namespace AdventOfCode
               .Select((pair, index) => CompareNodes(pair[0], pair[1]) < 0 ? index + 1 : 0)
               .Sum();
             _SW.Stop();
-            Console.WriteLine("Part 1: Decoder Key {0}, Execution Time: {1}", numOrderedPairs, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, numOrderedPairs, trackTime ? _SW.Elapsed : null, "Decoder Key");
             _SW.Restart();
             var dividerPackets = ParseInputIntoJsonNodes("[[2]]\n[[6]]").ToList();
             var newPacketList = packets.Concat(dividerPackets).ToList();
             newPacketList.Sort(CompareNodes);
             int decoderKey = (newPacketList.IndexOf(dividerPackets[0]) + 1) * (newPacketList.IndexOf(dividerPackets[1]) + 1);
             _SW.Stop();
-            Console.WriteLine("Part 2: Decoder Key {0}, Execution Time: {1}", decoderKey, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, decoderKey, trackTime ? _SW.Elapsed : null, "Decoder Key");
 
         }
 

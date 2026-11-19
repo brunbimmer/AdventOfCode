@@ -27,11 +27,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
             string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
@@ -39,12 +37,12 @@ namespace AdventOfCode
             _SW.Start();
             long part1 = SolvePart1(lines);
             _SW.Stop();
-            Console.WriteLine("Part 1 (checksum = sum of row max-min): {0}, Execution Time: {1}", part1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "Spreadsheet Checksum");
 
             _SW.Restart();
             long part2 = SolvePart2(lines);
             _SW.Stop();
-            Console.WriteLine("Part 2 (sum of divisible-pair quotients per row): {0}, Execution Time: {1}", part2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, part2, trackTime ? _SW.Elapsed : null, "Sum of the Evenly Divisible Values");
         }
 
         // Part 1: checksum = sum over rows of (max - min)

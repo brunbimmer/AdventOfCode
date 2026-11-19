@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -54,7 +52,7 @@ namespace AdventOfCode
             int steps = pathPart.Skip(1).Count();   //don't count the original location
 
             _SW.Stop();
-            Console.WriteLine("Part 1: Shortest # of steps {0}, Execution Time: {1}", steps, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, steps, trackTime ? _SW.Elapsed : null, "Shortest # of steps");
             _SW.Restart();
             List<int> PathLengths = new();
             var lowPoints = grid.Where(a => a.Value == 1).ToList();     //get all low points
@@ -68,7 +66,7 @@ namespace AdventOfCode
             }
             int shortestSteps = PathLengths.Min();
             _SW.Stop();
-            Console.WriteLine("Part 2: Least Steps from any starting point A {0}, Execution Time: {1}", shortestSteps, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, shortestSteps, trackTime ? _SW.Elapsed : null, "Least Steps from any starting point A");
 
         }
         private List<(int, int)> MapLowestPathScoreAStar(Dictionary<(int, int), int> grid, (int, int) start, (int, int) goal)

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -30,47 +27,62 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            int[] measurements = FileIOHelper.getInstance().ReadDataToIntArray(file);
-            
-            _SW.Start();
-            int increases = Part1(measurements);
-            _SW.Stop();
-
-
-
-            Console.WriteLine("  Part 1: Number of increases (Actual Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            int[] entries = FileIOHelper.getInstance().ReadDataToIntArray(file);
             
             _SW.Restart();
-
-            increases = Part2(measurements);
+            int product = Part1(entries);
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Number of increases (Sliding Measurements): {0}", increases);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, product, trackTime ? _SW.Elapsed : null, "Product of the two entries that sum to 2020");
 
+
+            _SW.Restart();
+            int tripleProduct = Part2(entries);
+            _SW.Stop();
+
+            output.WritePart(2, tripleProduct, trackTime ? _SW.Elapsed : null, "Product of the three entries that sum to 2020");
 
         }
 
-        private int Part1(int[] measurements)
+        private int Part1(int[] entries)
         {
-            return 0;
+            HashSet<int> seen = new HashSet<int>();
+
+            foreach (int entry in entries)
+            {
+                int complement = 2020 - entry;
+                if (seen.Contains(complement))
+                    return entry * complement;
+
+                seen.Add(entry);
+            }
+
+            throw new InvalidOperationException("No two expense report entries sum to 2020.");
         }
 
-        private int Part2(int[] measurements)
+        private int Part2(int[] entries)
         {
-            return 0;
+            for (int i = 0; i < entries.Length - 2; i++)
+            {
+                HashSet<int> seen = new HashSet<int>();
+
+                for (int j = i + 1; j < entries.Length; j++)
+                {
+                    int complement = 2020 - entries[i] - entries[j];
+                    if (seen.Contains(complement))
+                        return entries[i] * entries[j] * complement;
+
+                    seen.Add(entries[j]);
+                }
+            }
+
+            throw new InvalidOperationException("No three expense report entries sum to 2020.");
         }
     }
 }

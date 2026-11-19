@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -53,17 +51,17 @@ namespace AdventOfCode
 
 
 
-            Console.WriteLine("Part 1: Number of Fish after 50 days: {0}", fish);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, fish, trackTime ? _SW.Elapsed : null, "Number of Fish after 50 days");
+
 
             _SW.Restart();
 
             long fish2 = CountFish(fishInput, 256);           
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of Fish after 256 days: {0}", fish2);
+            output.WritePart(2, fish2, trackTime ? _SW.Elapsed : null, "Number of Fish after 256 days");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }        

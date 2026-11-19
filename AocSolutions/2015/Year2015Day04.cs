@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //no need to retrieve input from AOC. The input is a simple string
 
@@ -50,15 +48,15 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with five leading zero's: {1}", md5Secret, lowestNumber);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, lowestNumber, trackTime ? _SW.Elapsed : null, string.Format("Lowest Possible Number for Key [{0}] to produce MD5 has with five leading zero's", md5Secret, lowestNumber));
+
 
             _SW.Restart();
 
             lowestNumber = Part2(md5Secret);
 
-            Console.WriteLine("  Part 1: Lowest Possible Number for Key [{0}] to produce MD5 has with six leading zero's: {1}", md5Secret, lowestNumber);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, lowestNumber, trackTime ? _SW.Elapsed : null, string.Format("Lowest Possible Number for Key [{0}] to produce MD5 has with six leading zero's", md5Secret, lowestNumber));
+
 
 
         }

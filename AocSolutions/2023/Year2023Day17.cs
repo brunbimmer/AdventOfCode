@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -53,8 +51,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Lowest Heat loss: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Lowest Heat loss");
+
 
             _SW.Restart();
             
@@ -62,8 +60,8 @@ namespace AdventOfCode
             result = Solve(map, 4, 10);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Lowest Heat loss: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, result, trackTime ? _SW.Elapsed : null, "Lowest Heat loss");
+
 
         }
 

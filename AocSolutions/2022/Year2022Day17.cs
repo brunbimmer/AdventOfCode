@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -54,8 +52,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine(
-                $"Part 1: Height after 2022 drop tetris blocks: {result}, Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Height after 2022 drop tetris blocks");
 
             _SW.Restart();
 
@@ -63,8 +60,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine(
-                $"Part 2: Height after 1 trillion rocks: {result}, Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, result, trackTime ? _SW.Elapsed : null, "Height after 1 trillion rocks");
 
         }
 

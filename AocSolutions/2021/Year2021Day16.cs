@@ -54,11 +54,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -68,18 +66,18 @@ namespace AdventOfCode
 
             _SW.Start();                       
 
-            var OuterPacket = ParseStream(transmission);  
+            var OuterPacket = ParseStream(transmission, output);
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Sum of all the Version Numbers: {0}", OuterPacket.VersionSum);
-            Console.WriteLine("Part 1: Final Value: {0}", OuterPacket.Value);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, OuterPacket.VersionSum, trackTime ? _SW.Elapsed : null, "Sum of all the Version Numbers");
+            output.WritePart(2, OuterPacket.Value, trackTime ? _SW.Elapsed : null, "Final Value");
+
 
 
         }      
         
-        private Packet ParseStream(string stream)
+        private Packet ParseStream(string stream, IPuzzleOutput output)
         {
             string binaryStream = "";
 
@@ -94,7 +92,7 @@ namespace AdventOfCode
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                output.WriteDiagnostic(ex.Message);
             }
 
             int increment = 0;

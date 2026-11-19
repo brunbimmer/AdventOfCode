@@ -34,11 +34,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //no need to retrieve input from AOC. The input is a simple string
  
@@ -57,8 +55,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Difference between string literals and # of actual characters: {0}", value);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, value, trackTime ? _SW.Elapsed : null, "Difference between string literals and # of actual characters");
+
 
             _SW.Restart();
 
@@ -67,8 +65,8 @@ namespace AdventOfCode
 
             int newValue = words.Sum(w => w.Replace("\\", "AA").Replace("\"", "BB").Length + 2 - w.Length);
 
-            Console.WriteLine("  Part 2: Difference between encoded strings and original # of string literals: {0}", newValue);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, newValue, trackTime ? _SW.Elapsed : null, "Difference between encoded strings and original # of string literals");
+
 
 
         }

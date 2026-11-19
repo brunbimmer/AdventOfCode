@@ -35,11 +35,9 @@ namespace AdventOfCode
         List<(CompassDirection direction, long distance)> instructionsPart2 = new();
 
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -52,8 +50,8 @@ namespace AdventOfCode
             long result = GetDigArea(instructionsPart1);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Volume of Lava: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Volume of Lava");
+
 
             _SW.Restart();
             
@@ -61,8 +59,8 @@ namespace AdventOfCode
             long result2 = GetDigArea(instructionsPart2);
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Volume of Lava: {result2}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, result2, trackTime ? _SW.Elapsed : null, "Volume of Lava");
+
 
         }
 

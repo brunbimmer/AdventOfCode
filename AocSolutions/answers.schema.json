@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Verified Advent of Code answers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["puzzles"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "puzzles": {
+      "type": "array",
+      "description": "One entry per year and day. Duplicate year/day entries are rejected by the runner.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["year", "day"],
+        "properties": {
+          "year": {
+            "type": "integer",
+            "minimum": 2015
+          },
+          "day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          },
+          "part1": {
+            "$ref": "#/$defs/answer"
+          },
+          "part2": {
+            "$ref": "#/$defs/answer"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "answer": {
+      "type": ["string", "null"],
+      "description": "The verified answer as a string. Use null or omit the property while the answer is unknown."
+    }
+  }
+}

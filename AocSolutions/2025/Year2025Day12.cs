@@ -30,11 +30,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
@@ -45,16 +43,16 @@ namespace AdventOfCode
             var (shapes, regions) = ParseInput(input);
 
             _SW.Stop();
-            Console.WriteLine($"  Parsed {shapes.Count} shapes and {regions.Count} regions");
-            Console.WriteLine("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WriteDiagnostic($"  Parsed {shapes.Count} shapes and {regions.Count} regions");
+            output.WriteDiagnostic(string.Format("  Execution Time to Prepare Data: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW)));
 
             _SW.Restart();
 
             long part1 = SolvePart1(shapes, regions);
 
             _SW.Stop();
-            Console.WriteLine($"  Part 1 - Regions that fit all presents: {part1}");
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, part1, trackTime ? _SW.Elapsed : null, "Regions that fit all presents");
+
 
         }
 

@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AdventFileIO;
-using Common;
 
 namespace AdventOfCode
 {
@@ -33,43 +24,48 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //No file...input in the puzzle.
 
             int presents = 29000000;
 
-            _SW.Start();                
-            
-            int min = int.MaxValue;
-	        int[] houses = new int[200000000];
-	        for(int i = 1; i < presents / 10; ++i)
-		        for(int j = i; j > 0 && j < houses.Length && j < min; j = unchecked(j + i))
-			        if((houses[j] += i * 10) >= presents)
-			            min = Math.Min(min, j);
-            
+            _SW.Restart();
+            int min = FindFirstHouse(presents, 10, int.MaxValue);
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Smallest House # {0}, Execution Time: {1}", min, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, min, trackTime ? _SW.Elapsed : null, "Smallest House #");
 
             _SW.Restart();
 
-           	int min2 = int.MaxValue;
-	        int[] houses2 = new int[200000000];
-	        for(int i = 1; i < presents / 10; ++i)
-		        for(int j = i, c = 0; c < 50 && j < houses2.Length && j < min2; j = unchecked(j + i), ++c)
-			        if((houses2[j] += i * 11) >= presents)
-				        min2 = Math.Min(min2, j);
-            
+            int min2 = FindFirstHouse(presents, 11, 50);
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Smallest House # {0}, Execution Time: {1}", min2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, min2, trackTime ? _SW.Elapsed : null, "Smallest House #");
+        }
 
+        private int FindFirstHouse(int target, int presentsPerElf, int maxVisits)
+        {
+            // This house is guaranteed enough presents from its own elf.
+            int bestHouse = (target - 1) / presentsPerElf + 1;
+            int[] presentsAtHouse = new int[bestHouse];
 
-        }       
+            for (int elf = 1; elf < bestHouse; elf++)
+            {
+                int delivered = elf * presentsPerElf;
+                for (int house = elf, visits = 0; house < bestHouse && visits < maxVisits; house += elf, visits++)
+                {
+                    // Compare before adding so accumulated presents cannot overflow.
+                    if (presentsAtHouse[house] >= target - delivered)
+                        bestHouse = house;
+                    else
+                        presentsAtHouse[house] += delivered;
+                }
+            }
+
+            return bestHouse;
+        }
     }
 }

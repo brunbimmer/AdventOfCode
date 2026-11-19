@@ -49,18 +49,16 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            ReadFile(file);
+            ReadFile(file, output);
 
             _SW.Start();
             
@@ -69,22 +67,22 @@ namespace AdventOfCode
 
 
 
-            Console.WriteLine("Part 1: Number of overlapping points for horizontal and vertical lines: {0}", OverlappingPoints);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, OverlappingPoints, trackTime ? _SW.Elapsed : null, "Number of overlapping points for horizontal and vertical lines");
+
 
             _SW.Restart();
 
             ParseInputForOverlappingPoints();
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Number of overlapping points for horizontal/vertical and diagonal lines: {0}", OverlappingPoints);
+            output.WritePart(2, OverlappingPoints, trackTime ? _SW.Elapsed : null, "Number of overlapping points for horizontal/vertical and diagonal lines");
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
 
 
         }
 
-        private void ReadFile(string filename)
+        private void ReadFile(string filename, IPuzzleOutput output)
         {
             try
             {
@@ -113,7 +111,7 @@ namespace AdventOfCode
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                output.WriteDiagnostic(ex.Message);
             }
         }      
 

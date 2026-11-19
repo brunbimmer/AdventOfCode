@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -48,15 +46,15 @@ namespace AdventOfCode
 
             int length = Solve(input);
 
-            Console.WriteLine($"  Part 1: Length of longest path: {length}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, length, trackTime ? _SW.Elapsed : null, "Length of longest path");
+
 
             _SW.Stop();
 
             int tiles = SolvePart2(input);
 
-            Console.WriteLine($"  Part 2: Number of Tiles enclosed by loop: {tiles}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, tiles, trackTime ? _SW.Elapsed : null, "Number of Tiles enclosed by loop");
+
         }
 
         public int Solve(string[] lines)

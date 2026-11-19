@@ -38,11 +38,9 @@ namespace AdventOfCode
 
         Regex re = new("^(?'wfName'.+){(?'steps'.*),(?'defaultTarget'.+)}");
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -55,8 +53,8 @@ namespace AdventOfCode
             long result = SolvePartOne();
             _SW.Stop();
 
-            Console.WriteLine($"  Part 1: Sum of all Accepted parts: {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, result, trackTime ? _SW.Elapsed : null, "Sum of all Accepted parts");
+
 
             _SW.Restart();
             
@@ -64,8 +62,8 @@ namespace AdventOfCode
             result = SolvePartTwo();
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Distinct combinations of ratings : {result}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, result, trackTime ? _SW.Elapsed : null, "Distinct combinations of ratings");
+
 
         }
 

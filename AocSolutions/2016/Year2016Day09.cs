@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -53,7 +51,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Decompressed Length {0}, Execution Time: {1}", length, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, length, trackTime ? _SW.Elapsed : null, "Decompressed Length");
 
             _SW.Restart();
 
@@ -61,7 +59,7 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2: New Decompressed Length {0}, Execution Time: {1}", newLength, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, newLength, trackTime ? _SW.Elapsed : null, "New Decompressed Length");
 
 
         }

@@ -44,11 +44,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Reset starting parameters if solution is run consecutively in same session. 
             sum = 0;         
@@ -89,11 +87,11 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Sum of Signal Strengths {0}, Execution Time: {1}", sum, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, sum, trackTime ? _SW.Elapsed : null, "Sum of Signal Strengths");
 
-            Console.WriteLine("Part 2:");
 
-            Console.WriteLine(buffer.ToString());
+
+            output.WritePart(2, buffer.ToString());
         }     
         
         private void DoCycleOperation()

@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Numerics;
 using AdventFileIO;
-using Common;
 
 namespace AdventOfCode
 {
     [AdventOfCode(Year = 2020, Day = 25)]
     public class Year2020Day25 : IAdventOfCode
     {
+        private const long Modulus = 20_201_227;
+        private const long SubjectNumber = 7;
+
         private int _Year;
         private int _Day;
         private string _OverrideFile;
@@ -32,37 +30,36 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            long[] publicKeys = FileIOHelper.getInstance().ReadDataAsLines(file)
+                .Where(line => !string.IsNullOrWhiteSpace(line)).Select(long.Parse).ToArray();
+            if (publicKeys.Length != 2 || publicKeys.Any(key => key <= 0 || key >= Modulus))
+                throw new FormatException($"Exactly two public keys between 1 and {Modulus - 1} are required.");
 
             _SW.Restart();
-
-           
-            
+            int cardLoopSize = FindLoopSize(publicKeys[0]);
+            long encryptionKey = (long)BigInteger.ModPow(publicKeys[1], cardLoopSize, Modulus);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WriteDiagnostic($"Card loop size: {cardLoopSize}");
+            output.WritePart(1, encryptionKey, trackTime ? _SW.Elapsed : null, "Encryption key");
+        }
 
+        private int FindLoopSize(long publicKey)
+        {
+            long value = 1;
+            for (int loopSize = 0; loopSize < Modulus; loopSize++)
+            {
+                if (value == publicKey)
+                    return loopSize;
+                value = value * SubjectNumber % Modulus;
+            }
 
-        }       
+            throw new InvalidOperationException("The public key cannot be produced by transforming subject number 7.");
+        }
     }
 }

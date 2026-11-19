@@ -36,11 +36,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
  
 
@@ -61,11 +59,11 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: Shortest route: {0}", shortestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, shortestRoute, trackTime ? _SW.Elapsed : null, "Shortest route");
 
-            Console.WriteLine("  Part 2: Longest route: {0}", longestRoute);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+
+            output.WritePart(2, longestRoute, trackTime ? _SW.Elapsed : null, "Longest route");
+
 
             
 

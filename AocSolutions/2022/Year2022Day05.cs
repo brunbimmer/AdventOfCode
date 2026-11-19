@@ -33,11 +33,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -53,7 +51,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 1: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, stackTops, trackTime ? _SW.Elapsed : null, "Crates at top of each stack");
 
             _SW.Restart();
 
@@ -63,7 +61,7 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Crates at top of each stack {0}, Execution Time: {1}", stackTops, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, stackTops, trackTime ? _SW.Elapsed : null, "Crates at top of each stack");
 
 
         }       

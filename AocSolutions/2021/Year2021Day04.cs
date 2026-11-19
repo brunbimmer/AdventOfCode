@@ -48,18 +48,16 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
 
-            ReadFile(file);
+            ReadFile(file, output);
 
             _SW.Start();
             PlayBingoGame();
@@ -67,8 +65,8 @@ namespace AdventOfCode
 
 
 
-            Console.WriteLine("Part 1: Sum of Unmarked Cards in Winner Board ({0}) * Last Number Called ({1}): {2}", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, sumOfUnmarkedNumbers * lastNumberCalled, trackTime ? _SW.Elapsed : null, string.Format("Sum of Unmarked Cards in Winner Board ({0}) * Last Number Called ({1})", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled));
+
 
             _SW.Restart();
 
@@ -78,13 +76,13 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("Part 2: Sum of Unmarked Cards in Last Winning Board ({0}) * Last Number Called ({1}): {2}", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, sumOfUnmarkedNumbers * lastNumberCalled, trackTime ? _SW.Elapsed : null, string.Format("Sum of Unmarked Cards in Last Winning Board ({0}) * Last Number Called ({1})", sumOfUnmarkedNumbers, lastNumberCalled, sumOfUnmarkedNumbers * lastNumberCalled));
+
 
 
         }
 
-        private void ReadFile(string filename)
+        private void ReadFile(string filename, IPuzzleOutput output)
         {
             try
             {
@@ -140,7 +138,7 @@ namespace AdventOfCode
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                output.WriteDiagnostic(ex.Message);
             }
         }
 

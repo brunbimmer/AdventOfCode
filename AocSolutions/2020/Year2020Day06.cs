@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AdventFileIO;
 using Common;
 
@@ -32,37 +27,73 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
-
-            //Build BasePath and retrieve input. 
- 
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             string file = FileIOHelper.getInstance().InitFileInput(_Year, _Day, _OverrideFile ?? path);
-
-            //Dictionary<(int, int), int> octopusGrid = FileIOHelper.getInstance().GetDataAsMap(file);
-
-            _SW.Start();                       
-
-
-
-            
-            _SW.Stop();
-
-            //Console.WriteLine("Part 1: {0}, Execution Time: {1}", result1, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            string[] lines = FileIOHelper.getInstance().ReadDataAsLines(file);
 
             _SW.Restart();
-
-           
-            
+            int total = Part1(lines);
             _SW.Stop();
 
-            //Console.WriteLine("Part 2: {0}, Execution Time: {1}", result2, StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, total, trackTime ? _SW.Elapsed : null, "Sum of questions anyone answered yes to");
 
 
-        }       
+            _SW.Restart();
+            total = Part2(lines);
+            _SW.Stop();
+
+            output.WritePart(2, total, trackTime ? _SW.Elapsed : null, "Sum of questions everyone answered yes to");
+
+        }
+
+        private int Part1(string[] lines)
+        {
+            HashSet<char> answers = new HashSet<char>();
+            int total = 0;
+
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    total += answers.Count;
+                    answers.Clear();
+                }
+                else
+                {
+                    answers.UnionWith(line);
+                }
+            }
+
+            // Include the final group even when the file has no trailing blank line.
+            return total + answers.Count;
+        }
+
+        private int Part2(string[] lines)
+        {
+            HashSet<char> answers = null;
+            int total = 0;
+
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    total += answers?.Count ?? 0;
+                    answers = null;
+                }
+                else if (answers == null)
+                {
+                    answers = new HashSet<char>(line);
+                }
+                else
+                {
+                    answers.IntersectWith(line);
+                }
+            }
+
+            return total + (answers?.Count ?? 0);
+        }
     }
 }

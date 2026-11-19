@@ -36,11 +36,9 @@ namespace AdventOfCode
 
         private readonly record struct Node(string Id, string Left, string Right);
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
 
@@ -55,8 +53,8 @@ namespace AdventOfCode
 
             long steps = Travel(directions, nodes);
 
-            Console.WriteLine($"  Part 1: Number of steps to reach destination: {steps}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, steps, trackTime ? _SW.Elapsed : null, "Number of steps to reach destination");
+
 
 
             _SW.Stop();
@@ -68,8 +66,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"  Part 2: Number of steps to reach destination as a ghost: {steps}");
-            Console.WriteLine($"   Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(2, steps, trackTime ? _SW.Elapsed : null, "Number of steps to reach destination as a ghost");
+
         }
 
         private long Travel(string directions, IDictionary<string, Node> nodes)

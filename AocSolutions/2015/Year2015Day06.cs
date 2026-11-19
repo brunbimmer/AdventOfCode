@@ -31,11 +31,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
  
 
@@ -52,8 +50,8 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine("  Part 1: The number of lights that are turned on after Santa's instruction: {0}", lightsOn);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, lightsOn, trackTime ? _SW.Elapsed : null, "The number of lights that are turned on after Santa's instruction");
+
 
             _SW.Restart();
 
@@ -61,8 +59,8 @@ namespace AdventOfCode
 
             long brightness = Part2(lines, grid);
 
-            Console.WriteLine("  Part 2: Total brightness of lights as per Santa's instructions: {0}", brightness);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(2, brightness, trackTime ? _SW.Elapsed : null, "Total brightness of lights as per Santa's instructions");
+
 
 
         }

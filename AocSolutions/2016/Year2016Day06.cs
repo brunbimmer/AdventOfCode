@@ -34,11 +34,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -71,9 +69,9 @@ namespace AdventOfCode
 
             _SW.Stop();
 
-            Console.WriteLine($"Part 1: Code based on most common letter per column: {code1}");
-            Console.WriteLine($"Part 2: Code based on least common letter per column: {code2}");
-            Console.WriteLine($"    Execution Time: {StopwatchUtil.getInstance().GetTimestamp(_SW)}");
+            output.WritePart(1, code1, trackTime ? _SW.Elapsed : null, "Code based on most common letter per column");
+            output.WritePart(2, code2, trackTime ? _SW.Elapsed : null, "Code based on least common letter per column");
+
 
 
         }       

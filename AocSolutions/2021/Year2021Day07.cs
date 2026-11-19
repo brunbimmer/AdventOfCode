@@ -32,11 +32,9 @@ namespace AdventOfCode
             _SW = new Stopwatch();
         }
 
-        public void GetSolution(string path, bool trackTime = false)
+        public void GetSolution(string path, bool trackTime = false, IPuzzleOutput output = null)
         {
-            Console.WriteLine("===========================================");
-            Console.WriteLine($"Launching Puzzle for Dec. {_Day}, {_Year}");
-            Console.WriteLine("===========================================");
+            output ??= new ConsolePuzzleOutput(trackTime);
 
             //Build BasePath and retrieve input. 
  
@@ -58,25 +56,27 @@ namespace AdventOfCode
             
             _SW.Stop();
 
-            Console.WriteLine("Fuel Cost - Part 1 (Median: {0}): {1}", centerOfMass, fuelCost);
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
+            output.WritePart(1, fuelCost, trackTime ? _SW.Elapsed : null, "Fuel Cost");
+            output.WriteDiagnostic(string.Format("Fuel Cost - Part 1 (Median: {0}): {1}", centerOfMass, fuelCost));
+            output.WriteDiagnostic(string.Format("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW)));
 
             _SW.Restart();
 
             fuelCost = GetFuelCost(average, crabPositions, false);
 
-            Console.WriteLine("Fuel Cost - Part 2 (Average: {0}): {1}", average, fuelCost);
+            output.WritePart(2, fuelCost, description: "Fuel Cost using average position");
+            output.WriteDiagnostic(string.Format("Fuel Cost - Part 2 (Average: {0}): {1}", average, fuelCost));
 
             fuelCost = GetFuelCost(centerOfMass, crabPositions, false);
 
-            Console.WriteLine("Fuel Cost - Part 2 (Center of Mass: {0}): {1}", centerOfMass, fuelCost);
+            output.WriteDiagnostic(string.Format("Fuel Cost - Part 2 (Center of Mass: {0}): {1}", centerOfMass, fuelCost));
             
             _SW.Stop();
 
-            Console.WriteLine("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW));
-            Console.WriteLine("");
-            Console.WriteLine("I am showing two possible fuel cost answers to the Part 2. One using average and another using center of mass.");
-            Console.WriteLine("One of these options will result in the lower fuel cost. I am displaying both for comparision purposes.");
+            output.WriteDiagnostic(string.Format("   Execution Time: {0}", StopwatchUtil.getInstance().GetTimestamp(_SW)));
+            output.WriteDiagnostic("");
+            output.WriteDiagnostic("I am showing two possible fuel cost answers to the Part 2. One using average and another using center of mass.");
+            output.WriteDiagnostic("One of these options will result in the lower fuel cost. I am displaying both for comparision purposes.");
 
 
         }        
